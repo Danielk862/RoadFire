@@ -1,0 +1,6 @@
+@MS.RoadFire.Api_HostAddress = http://localhost:5076
+
+GET {{MS.RoadFire.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
