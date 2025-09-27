@@ -1,9 +1,11 @@
 using MudBlazor.Services;
 using MS.RoadFire.UI.Components;
+using MS.RoadFire.CrossCutting.LocRegister;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add MudBlazor services
+builder.Services.AddRegister();
 builder.Services.AddMudServices();
 builder.Services.AddServerSideBlazor().AddCircuitOptions(opt => { opt.DetailedErrors = true; });
 
