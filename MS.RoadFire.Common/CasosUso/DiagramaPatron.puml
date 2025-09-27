@@ -1,0 +1,88 @@
+@startuml Patron
+skinparam packageStyle rectangle
+skinparam packageTitleFontSize 20
+skinparam packageTitleFontColor black
+skinparam shadowing false
+left to right direction
+
+' -------------------------
+' CAPA DE PRESENTACIÓN
+' -------------------------
+package "Presentación (UI)" as UI {
+  class UsuarioController
+  class PedidoController
+  class ProductoController
+  class InventarioController
+  class ProveedorController
+  class ClienteController
+  class NotificacionController
+  class CategoriaController
+}
+
+' -------------------------
+' CAPA DE APLICACIÓN
+' -------------------------
+package "Aplicación (Servicios)" as APP {
+  class UsuarioService
+  class PedidoService
+  class ProductoService
+  class InventarioService
+  class ProveedorService
+  class ClienteService
+  class NotificacionService
+  class CategoriaService
+}
+
+' -------------------------
+' CAPA DE DOMINIO
+' -------------------------
+package "Dominio (Entidades)" as DOMAIN {
+  class Empleado
+  class Usuario
+  class Rol
+  class Notificacion
+  class Bodega
+  class Categoria
+  class Producto
+  class Proveedor
+  class Cliente
+  class Movimientos
+  class DetalleMovimientos
+  class Existencia
+  class Prediccion
+  class Pedido_Compra
+  class Pedido_Venta
+  class PedidoDetalle_Compra
+  class PedidoDetalle_Venta
+}
+
+' -------------------------
+' CAPA DE INFRAESTRUCTURA
+' -------------------------
+package "Infraestructura (Repositorios)" as INFRA {
+  class UsuarioRepository
+  class RolRepository
+  class NotificacionRepository
+  class BodegaRepository
+  class CategoriaRepository
+  class ProductoRepository
+  class ProveedorRepository
+  class ClienteRepository
+  class MovimientoRepository
+  class DetalleMovimientosRepository
+  class ExistenciaRepository
+  class PrediccionRepository
+  class PedidoCompraRepository
+  class PedidoVentaRepository
+  class PedidoDetalleCompraRepository
+  class PedidoDetalleVentaRepository
+}
+
+' -------------------------
+' RELACIONES ENTRE CAPAS
+' -------------------------
+UI --> APP : usa servicios
+APP --> DOMAIN : gestiona entidades
+APP --> INFRA : accede a datos
+
+@enduml

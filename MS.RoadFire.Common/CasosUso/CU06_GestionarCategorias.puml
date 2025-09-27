@@ -1,0 +1,30 @@
+@startuml CU06_GestionarCategorias
+|Administrador|
+start
+:Abrir módulo Categorías;
+:Seleccionar crear/editar/eliminar/asignar;
+if (crear?) then (sí)
+  :Ingresar nombre y descripción;
+  if (nombre único?) then (sí)
+    :Guardar categoría;
+  else (no)
+    :Notificar duplicado;
+  endif
+elseif (editar?) then (sí)
+  :Modificar y guardar;
+elseif (eliminar?) then (sí)
+  if (categoria con productos?) then (sí)
+    :Solicitar reasignación o confirmación;
+  else (no)
+    :Eliminar categoría;
+  endif
+endif
+:Mostrar lista actualizada;
+note right
+  Reglas de negocio:
+  - Categoría "General" no puede eliminarse.
+  - No crear categorías sin nombre o sin trazabilidad de cambios.
+end note
+
+stop
+@enduml

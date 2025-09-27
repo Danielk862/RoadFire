@@ -1,0 +1,32 @@
+@startuml CU07_GestionarUsuarios
+|Administrador|
+start
+:Abrir módulo Usuarios;
+:Crear/Editar/Eliminar/Listar usuario;
+if (crear?) then (sí)
+  :Ingresar datos usuario;
+  if (duplicado?) then (sí)
+    :Bloquear guardado;
+  else (no)
+    :Guardar y opcional invitar por correo;
+  endif
+elseif (editar?) then (sí)
+  :Modificar datos/roles;
+  :Validar y guardar;
+elseif (eliminar?) then (sí)
+  :Aplicar política eliminar/desactivar;
+elseif (listar?) then (sí)
+  :Visualizar tabla usuarios;
+endif
+
+:Actualizar usuarios;
+note right
+  Reglas de negocio:
+  - Usuario con correo único.
+  - Cada usuario debe tener al menos un rol.
+  - Usuarios inactivos no acceden.
+  - Política de eliminación/desactivación con retención de datos.
+end note
+
+stop
+@enduml

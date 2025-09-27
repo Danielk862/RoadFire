@@ -1,0 +1,30 @@
+@startuml CU05_GenerarReportes
+|Usuario|
+start
+:Abrir módulo Reportes;
+if (¿Tiene permiso?) then (sí)
+  :Seleccionar tipo de reporte y filtros;
+  if (rango de fechas válido?) then (sí)
+    if (existen datos?) then (sí)
+      :Mostrar vista previa con indicadores;
+      :Exportar PDF/CSV/XLSX o guardar plantilla;
+    else (no)
+      :Mostrar "Sin resultados";
+    endif
+  else (no)
+    :Solicitar corrección de fechas;
+  endif
+else (no)
+  :Denegar acceso;
+endif
+
+:Generar reporte;
+note right
+  Reglas de negocio:
+  - Límite máximo de filas/tiempo exportación.
+  - Fechas coherentes con zona horaria.
+  - Respetar permisos de visibilidad de cada rol.
+end note
+
+stop
+@enduml

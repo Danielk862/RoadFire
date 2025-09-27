@@ -1,0 +1,43 @@
+@startuml CU02_RegistrarEntrada
+|Operario|
+start
+:Seleccionar "Nueva entrada";
+if (¿Tiene permiso registrar entradas?) then (sí)
+  :Seleccionar producto;
+  :Ingresar cantidad, fecha, docSoporte, proveedor, bodega, notas;
+  if (validar campos?) then (sí)
+    if (producto activo?) then (sí)
+      if (doc soporte duplicado?) then (sí)
+        :Advertir duplicado y solicitar confirmación/cambio;
+        if (confirmación?) then (sí)
+          :Registrar entrada;
+        else (no)
+          stop
+        endif
+      else (no)
+        :Registrar entrada;
+      endif
+      :Incrementar stock;
+      :Registrar movimiento en historial;
+      :Mostrar confirmación;
+    else (no)
+      :Bloquear o sugerir activar producto;
+    endif
+  else (no)
+    :Impedir guardado y mostrar errores;
+  endif
+else (no)
+  :Denegar acción;
+endif
+
+:Finalizar registro entrada;
+note right
+  Reglas de negocio:
+  - Cantidad > 0.
+  - Fecha de entrada no posterior al día actual salvo autorización.
+  - Documento soporte único por proveedor-fecha-bodega (salvo política distinta).
+  - Soporte de múltiples bodegas permitido.
+end note
+
+stop
+@enduml

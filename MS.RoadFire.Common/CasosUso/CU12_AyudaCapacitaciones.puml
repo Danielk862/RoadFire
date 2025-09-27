@@ -1,0 +1,27 @@
+@startuml CU12_AyudaCapacitaciones
+|Usuario|
+start
+:Abrir módulo Ayuda/Capacitación;
+if (contenidos cargados?) then (sí)
+  :Navegar temas o buscar;
+  :Reproducir tutorial o descargar manual;
+  :Marcar completado y registrar progreso;
+else (no)
+  :Sugerir materiales relacionados o mostrar "Sin contenido";
+endif
+
+if (Administrador crea contenido?) then (sí)
+  :Crear/editar/publicar contenido con versionado;
+endif
+
+:Finalizar uso de ayuda;
+note right
+  Reglas de negocio:
+  - Archivos permitidos (PDF, MP4).
+  - Tamaño máximo controlado.
+  - Versionado obligatorio.
+  - Cumplir licenciamiento y derechos de autor.
+end note
+
+stop
+@enduml

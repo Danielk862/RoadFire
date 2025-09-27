@@ -1,0 +1,26 @@
+@startuml CU09_ImportarCSV
+|Administrador|
+start
+:Abrir función Importar CSV;
+:Seleccionar archivo;
+:Validar formato y datos;
+if (errores críticos?) then (sí)
+  :Rechazar archivo y detallar causas;
+else (no)
+  :Previsualizar errores/advertencias;
+  :Corregir o confirmar importación;
+  :Insertar/Actualizar en lote;
+  :Mostrar resumen;
+endif
+
+:Finalizar importación CSV;
+note right
+  Reglas de negocio:
+  - Archivo CSV en UTF-8.
+  - Definir delimitador y separador decimal.
+  - Límite máximo de filas por carga.
+  - Fallo crítico revierte importación.
+end note
+
+stop
+@enduml

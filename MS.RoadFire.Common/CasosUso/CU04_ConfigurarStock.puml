@@ -1,0 +1,29 @@
+@startuml CU04_ConfigurarStock
+|Encargado|
+start
+:Abrir configuración Parámetros de stock;
+if (¿Permiso editar parámetros?) then (sí)
+  :Seleccionar producto o edición masiva;
+  :Ingresar min y max;
+  if (validar coherencia valores?) then (sí)
+    :Guardar cambios;
+    :Recalcular estado stock;
+    :Actualizar sugerencias de compra;
+    :Registrar historial de cambios;
+  else (no)
+    :Mostrar errores y no guardar;
+  endif
+else (no)
+  :Denegar acción;
+endif
+
+:Parámetros actualizados;
+note right
+  Reglas de negocio:
+  - Mantener historial de cambios (quién/cuándo).
+  - Parámetros globales o por bodega.
+  - Cambios aplican de inmediato en alertas y sugerencias.
+end note
+
+stop
+@enduml

@@ -1,0 +1,21 @@
+@startuml CU10_ConfigurarNotificaciones
+|Supervisor|
+start
+:Abrir módulo Notificaciones;
+:Seleccionar evento;
+:Definir límites/reglas;
+:Elegir canal y destinatarios;
+:Redactar plantilla;
+:Guardar reglas;
+
+:Notificaciones configuradas;
+note right
+    Reglas de negocio:
+    - Configurar ventanas de silencio.
+    - Reintentos automáticos en caso de fallo.
+    - Baja de notificaciones según política.
+    - Respetar permisos de visibilidad.
+end note
+
+stop
+@enduml

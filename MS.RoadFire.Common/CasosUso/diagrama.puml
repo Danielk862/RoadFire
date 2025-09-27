@@ -1,0 +1,219 @@
+@startuml Diagrama de Clases con Arquitectura en Capas (N-tier)
+top to bottom direction
+title Diagrama de Clases con Arquitectura en Capas (N-tier)
+
+/'
+Patrón de diseño: Arquitectura en Capas (N-tier)
+Capas:
+- Presentación: Interacción con el usuario, notificaciones.
+- Aplicación: Casos de uso, lógica de negocio.
+- Dominio: Entidades principales del negocio.
+- Infraestructura: Persistencia y servicios técnicos.
+'/
+
+/' Definición de paquetes por capas '/
+package "Capa de Presentación" {
+  class Usuario {
+    -idUsuario: INT
+    -nombre: VARCHAR
+    -contraseña: VARCHAR
+    -email: VARCHAR
+    -rol: INT
+    +autenticar()
+    +actualizarPerfil()
+  }
+
+  class Notificacion {
+    -idNotificacion: INT
+    -tipo: VARCHAR
+    -mensaje: VARCHAR
+    -fecha: DATETIME
+    -estado: ENUM
+    -idUsuario: INT
+    +enviar()
+    +marcarLeida()
+  }
+}
+
+package "Capa de Aplicación" {
+  class Movimientos {
+    -idMovimiento: INT
+    -idProducto: INT
+    -fecha: DATE
+    -tipo: ENUM
+    -cantidad: INT
+    -valorUnitario: DECIMAL
+    +registrarEntrada()
+    +registrarSalida()
+  }
+
+  class Prediccion {
+    -idPrediccion: INT
+    -idProducto: INT
+    -fechaMovimiento: DATE
+    -usuario: INT
+    -confianza: DECIMAL
+    -ultimaActualizacion: DATE
+    +generarPrediccion()
+    +actualizarPrediccion()
+  }
+}
+
+package "Capa de Dominio" {
+  class Empleado {
+    -idEmpleado: INT
+    -nombre: VARCHAR
+    -direccion: VARCHAR
+    -telefono: VARCHAR
+    -celular: VARCHAR
+    -email: VARCHAR
+    +actualizarDatos()
+  }
+
+  class Rol {
+    -idRol: INT
+    -nombre: VARCHAR
+    -descripcion: VARCHAR
+    +asignarPermisos()
+    +actualizarDescripcion()
+  }
+
+  class Bodega {
+    -idBodega: INT
+    -nombre: VARCHAR
+    -ubicacion: VARCHAR
+    +listarProductos()
+  }
+
+  class Categoria {
+    -idCategoria: INT
+    -nombre: VARCHAR
+    -descripcion: VARCHAR
+    +crearCategoria()
+    +actualizarCategoria()
+  }
+
+  class Proveedor {
+    -idProveedor: INT
+    -nombre: VARCHAR
+    -direccion: VARCHAR
+    -telefono: VARCHAR
+    -email: VARCHAR
+    +registrarPedidoCompra()
+    +actualizarDatos()
+  }
+
+  class Cliente {
+    -idCliente: INT
+    -nombre: VARCHAR
+    -direccion: VARCHAR
+    -telefono: VARCHAR
+    -email: VARCHAR
+    +realizarPedido()
+    +consultarEstadoPedido()
+    +actualizarDatos()
+  }
+
+  class Producto {
+    -idProducto: INT
+    -nombre: VARCHAR
+    -descripcion: VARCHAR
+    -precio: DECIMAL
+    -stock: INT
+    +actualizarStock()
+  }
+
+  class Existencia {
+    -idExistencia: INT
+    -idProducto: INT
+    -idBodega: INT
+    -cantidad: INT
+    -valor: DECIMAL
+    +actualizarCantidad()
+    +consultarDisponibilidad()
+  }
+
+  class DetalleMovimientos {
+    -idDetalle: INT
+    -idMovimiento: INT
+    -idProducto: INT
+    -cantidad: INT
+    -valorUnitario: DECIMAL
+    +calcularSubtotal()
+  }
+
+  class Pedido_Compra {
+    -idPedido: INT
+    -numero: VARCHAR
+    -idProveedor: INT
+    -idUsuario: INT
+    -fechaCreacion: DATE
+    -fechaEntrega: DATE
+    -total: DECIMAL
+    -estado: ENUM
+    +generarFactura()
+    +actualizarEstadoPedido()
+  }
+
+  class PedidoDetalle_Compra {
+    -idDetalle: INT
+    -idPedido: INT
+    -idProducto: INT
+    -cantidad: INT
+    -precioUnitario: DECIMAL
+    +guardar()
+  }
+
+  class Pedido_Venta {
+    -idVenta: INT
+    -numero: VARCHAR
+    -idCliente: INT
+    -idUsuario: INT
+    -fechaCreacion: DATE
+    -fechaEntrega: DATE
+    -total: DECIMAL
+    -estado: ENUM
+    +generarFactura()
+    +actualizarEstadoVenta()
+    +registrarPago()
+  }
+
+  class PedidoDetalle_Venta {
+    -idDetalle: INT
+    -idVenta: INT
+    -idProducto: INT
+    -cantidad: INT
+    -precioUnitario: DECIMAL
+    +guardar()
+  }
+}
+
+package "Capa de Infraestructura" {
+  class Repositorio {
+    +guardar()
+    +actualizar()
+    +eliminar()
+    +consultar()
+  }
+}
+
+/' Relaciones corregidas con sugerencias '/
+Usuario "1" -- "1" Rol
+Usuario "1" -- "*" Notificacion
+
+Bodega "1" -- "*" Existencia
+Categoria "1" -- "*" Producto
+Proveedor "1" -- "*" Pedido_Compra
+Cliente "1" -- "*" Pedido_Venta
+Producto "1" -- "*" Existencia
+Producto "1" -- "*" DetalleMovimientos
+Producto "1" -- "*" PedidoDetalle_Compra
+Producto "1" -- "*" PedidoDetalle_Venta
+Producto "1" -- "*" Prediccion
+
+Existencia "1" -- "*" DetalleMovimientos
+
+Pedido_Compra "1" -- "*" PedidoDetalle_Compra
+Pedido_Venta "1" -- "*" PedidoDetalle_Venta
+
+@enduml
