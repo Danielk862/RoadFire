@@ -87,6 +87,7 @@ namespace MS.RoadFire.Application.Services
                     response.Code = HttpStatusCode.BadRequest;
                     response.Messages = MessagesResource.NotDeleteData;
                 }
+                response.Data = result;
             }
             catch (Exception ex)
             {
