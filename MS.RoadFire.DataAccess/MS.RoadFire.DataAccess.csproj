@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Repositories\" />
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MS.RoadFire.Common\MS.RoadFire.Common.csproj" />
+    <ProjectReference Include="..\MS.RoadFire.DataAccess.Contracts\MS.RoadFire.DataAccess.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

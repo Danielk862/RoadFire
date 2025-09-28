@@ -7,7 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MS.RoadFire.Application.Contracts\MS.RoadFire.Application.Contracts.csproj" />
     <ProjectReference Include="..\MS.RoadFire.Common\MS.RoadFire.Common.csproj" />
+    <ProjectReference Include="..\MS.RoadFire.CrossCutting\MS.RoadFire.CrossCutting.csproj" />
+    <ProjectReference Include="..\MS.RoadFire.DataAccess\MS.RoadFire.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

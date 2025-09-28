@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\MS.RoadFire.Business\MS.RoadFire.Business.csproj" />
+    <ProjectReference Include="..\MS.RoadFire.DataAccess.Contracts\MS.RoadFire.DataAccess.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
