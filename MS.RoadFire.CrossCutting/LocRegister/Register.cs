@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Application.Services;
+using MS.RoadFire.Business.Mappers;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
 using MS.RoadFire.DataAccess.Repositories;
 using Newtonsoft.Json;
@@ -21,7 +22,8 @@ namespace MS.RoadFire.CrossCutting.LocRegister
 
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IRoleServices, RoleServices>();
+            services.AddTransient(typeof(IGenericServices<,>), typeof(GenericServices<,>));
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<ISecurityServices, SecurityServices>();

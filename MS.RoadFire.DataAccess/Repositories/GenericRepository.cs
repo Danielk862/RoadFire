@@ -52,7 +52,19 @@ namespace MS.RoadFire.DataAccess.Repositories
 
             if (data != null)
             {
-                _entity.Remove(data);
+                var type = typeof(T);
+                var property = type.GetProperty("State") ?? type.GetProperty("IsActive");
+
+                if (property != null)
+                {
+                    if (property.PropertyType == typeof(bool))
+                        property.SetValue(data, false);
+                    else if (property.PropertyType == typeof(int))
+                        property.SetValue(data, 0);
+                    else if (property.PropertyType == typeof(string))
+                        property.SetValue(data, "Inactivo");
+                }
+                _entity.Update(data);
                 await _context.SaveChangesAsync();
                 return true;
             }

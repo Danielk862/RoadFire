@@ -1,37 +1,37 @@
-﻿using MS.RoadFire.Application.Contracts.Interfaces;
-using MS.RoadFire.Business.Mappers;
-using MS.RoadFire.Business.Models;
+﻿using AutoMapper;
+using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
-using MS.RoadFire.DataAccess.Contracts.Entities;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
 using System.Net;
 
 namespace MS.RoadFire.Application.Services
 {
-    public class RoleServices : IRoleServices
+    public class GenericServices<TEntity, TDto> : IGenericServices<TEntity, TDto> where TEntity : class where TDto : class
     {
         #region Internals
-        private readonly IGenericRepository<Role> _genericRepository;
+        private readonly IGenericRepository<TEntity> _genericRepository;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public RoleServices(IGenericRepository<Role> genericRepository)
+        public GenericServices(IGenericRepository<TEntity> genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
+            _mapper = mapper;
         }
         #endregion
 
         #region Methods
-        public async Task<ResponseDto<RoleDto>> AddAsync(RoleDto model)
+        public async Task<ResponseDto<TDto>> AddAsync(TDto model)
         {
-            ResponseDto<RoleDto> response = new ResponseDto<RoleDto>();
+            ResponseDto<TDto> response = new ResponseDto<TDto>();
 
             try
             {
-                var request = RoleMapper.Map(model);
+                var request = _mapper.Map<TEntity>(model);
                 var result = await _genericRepository.AddAsync(request);
-                
+
                 response.Data = model;
             }
             catch (Exception ex)
@@ -57,6 +57,7 @@ namespace MS.RoadFire.Application.Services
                     response.Code = HttpStatusCode.BadRequest;
                     response.Messages = MessagesResource.NotDeleteData;
                 }
+                response.Data = result;
             }
             catch (Exception ex)
             {
@@ -66,14 +67,14 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<List<RoleDto>>> GetAllAsync()
+        public async Task<ResponseDto<List<TDto>>> GetAllAsync()
         {
-            ResponseDto<List<RoleDto>> response = new ResponseDto<List<RoleDto>>();
+            ResponseDto<List<TDto>> response = new ResponseDto<List<TDto>>();
 
             try
             {
                 var result = await _genericRepository.GetAllAsync();
-                response.Data = result.Select(x => x.Map()).ToList();
+                response.Data = _mapper.Map<List<TDto>>(result);
             }
             catch (Exception ex)
             {
@@ -83,16 +84,16 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<RoleDto>> GetAsync(int id)
+        public async Task<ResponseDto<TDto>> GetAsync(int id)
         {
-            ResponseDto<RoleDto> response = new ResponseDto<RoleDto>();
+            ResponseDto<TDto> response = new ResponseDto<TDto>();
 
             try
             {
-                var rol = await _genericRepository.GetAsync(id);
+                var data = await _genericRepository.GetAsync(id);
 
-                if (rol != null)
-                    response.Data = RoleMapper.Map(rol);
+                if (data != null)
+                    response.Data = _mapper.Map<TDto>(data);
             }
             catch (Exception ex)
             {
@@ -102,13 +103,13 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<RoleDto>> UpdateAsync(RoleDto model)
+        public async Task<ResponseDto<TDto>> UpdateAsync(TDto model)
         {
-            ResponseDto<RoleDto> response = new ResponseDto<RoleDto>();
+            ResponseDto<TDto> response = new ResponseDto<TDto>();
 
             try
             {
-                var request = RoleMapper.Map(model);
+                var request = _mapper.Map<TEntity>(model);
                 var result = await _genericRepository.UpdateAsync(request);
                 response.Data = model;
             }

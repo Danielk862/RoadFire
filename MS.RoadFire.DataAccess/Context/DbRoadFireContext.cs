@@ -7,7 +7,9 @@ namespace MS.RoadFire.DataAccess.Context
     {
         public DbRoadFireContext(DbContextOptions<DbRoadFireContext> options) : base(options) { }
 
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -15,7 +17,9 @@ namespace MS.RoadFire.DataAccess.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Employee>().HasIndex(x => x.Id).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<Role>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Username).IsUnique();
             DisableCascading(modelBuilder);

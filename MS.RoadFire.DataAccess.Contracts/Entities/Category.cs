@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MS.RoadFire.DataAccess.Contracts.Entities
 {
-    [Table("Roles")]
-    public class Role
+    [Table("Categories")]
+    public class Category
     {
         [Key]
         [Required]

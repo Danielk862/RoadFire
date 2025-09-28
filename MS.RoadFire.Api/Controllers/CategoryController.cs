@@ -7,14 +7,14 @@ namespace MS.RoadFire.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class RolesController : Controller
+    public class CategoryController : Controller
     {
         #region Internals
-        private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IGenericServices<Category, CategoryDto> _genericServices;
         #endregion
 
         #region Constructor
-        public RolesController(IGenericServices<Role, RoleDto> genericServices)
+        public CategoryController(IGenericServices<Category, CategoryDto> genericServices)
         {
             _genericServices = genericServices;
         }
@@ -36,14 +36,14 @@ namespace MS.RoadFire.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(RoleDto model)
+        public async Task<IActionResult> AddAsync(CategoryDto model)
         {
             var result = await _genericServices.AddAsync(model);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(RoleDto model)
+        public async Task<IActionResult> UpdateAsync(CategoryDto model)
         {
             var result = await _genericServices.UpdateAsync(model);
             return StatusCode((int)result.Code, result);
