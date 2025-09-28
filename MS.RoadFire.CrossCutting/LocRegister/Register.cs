@@ -24,11 +24,13 @@ namespace MS.RoadFire.CrossCutting.LocRegister
             services.AddScoped<IRoleServices, RoleServices>();
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<ISecurityServices, SecurityServices>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<ISecurityRepository, SecurityRepository>();
         }
 
         private static void AddJsonDefaultSettings()

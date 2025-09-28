@@ -18,6 +18,17 @@ namespace MS.RoadFire.DataAccess.Context
             modelBuilder.Entity<Employee>().HasIndex(x => x.Id).IsUnique();
             modelBuilder.Entity<Role>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Username).IsUnique();
+            DisableCascading(modelBuilder);
+        }
+
+        private void DisableCascading(ModelBuilder modelBuilder)
+        {
+            var relationships = modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys());
+
+            foreach (var item in relationships)
+            {
+                item.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
     }
 }

@@ -53,9 +53,12 @@ namespace MS.RoadFire.Application.Services
                     return response;
                 }
 
+                if (!validEmployee.Data.IsActive)
+                    request.State = false;
+
                 var result = await _genericRepository.AddAsync(request);
                 model.RoleName = validRol.Data.Name;
-                response.Data = model;
+                response.Data = request.Map();
             }
             catch (Exception ex)
             {
@@ -131,9 +134,27 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var request = UserMapper.Map(model);
-                var result = await _genericRepository.UpdateAsync(request);
-                response.Data = model;
+                var validEmployee = await _employeeServices.GetAsync(model.EmployeeId);
+                var validRol = await _roleServices.GetAsync(model.RoleId);
+                var user = await _genericRepository.GetAsync(model.Id);
+                user.CreatedAt = user.CreatedAt;
+                user.UpdatedAt = DateTime.Now;
+                user.Password = model.Password;
+
+                if (!validEmployee.Data!.IsActive && validEmployee.Data != null)
+                    user.State = false;
+
+                var validate = await ValidData(user, model);
+
+                if (!validate.Item1)
+                {
+                    response.Code = HttpStatusCode.BadRequest;
+                    response.Messages = validate.Item2;
+                    return response;
+                }
+
+                var result = await _genericRepository.UpdateAsync(user);
+                response.Data = user.Map();
             }
             catch (Exception ex)
             {
@@ -142,6 +163,21 @@ namespace MS.RoadFire.Application.Services
             }
 
             return response;
+        }
+        #endregion
+
+        #region Private methods
+        private async Task<(bool, string)> ValidData(User user, UserDto model)
+        {
+            await Task.CompletedTask;
+            if (user.Username != model.Username)
+                return (false, "El usuario no se puede modificar");
+            else if (user.EmployeeId != model.EmployeeId)
+                return (false, "El empleado no se puede modificar");
+            else if (user.RoleId != model.RoleId)
+                return (false, "El rol no se puede modificar");
+            else
+                return (true, string.Empty);
         }
         #endregion
     }

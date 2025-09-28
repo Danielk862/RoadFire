@@ -13,12 +13,14 @@ namespace MS.RoadFire.Application.Services
     {
         #region Internals
         private readonly IGenericRepository<Employee> _genericRepository;
+        private readonly IGenericRepository<User> _genericUserRepository;
         #endregion
 
         #region Constructor
-        public EmployeeServices(IGenericRepository<Employee> genericRepository)
+        public EmployeeServices(IGenericRepository<Employee> genericRepository, IGenericRepository<User> genericUserRepository)
         {
             _genericRepository = genericRepository;
+            _genericUserRepository = genericUserRepository;
         }
         #endregion
 
@@ -130,6 +132,15 @@ namespace MS.RoadFire.Application.Services
                 {
                     var request = EmployeeMapper.Map(model);
                     var result = await _genericRepository.UpdateAsync(request);
+
+                    if (!request.IsActive)
+                    {
+                        var listUser = await _genericUserRepository.GetAllAsync();
+                        var user = listUser.Where(x => x.EmployeeId == request.Id).FirstOrDefault();
+                        user!.State = false;
+                        _ = await _genericUserRepository.UpdateAsync(user);
+                    }
+
                     response.Data = model;
                 }
                 else if (!valid.Item1)
@@ -157,8 +168,8 @@ namespace MS.RoadFire.Application.Services
         private async Task<(bool, string)> IsFieldLengthValid(EmployeeDto model)
         {
             await Task.CompletedTask;
-            if (model.Phone.Length > 10 || model.Phone.Length < 7)
-                return (false, "El número telefónico debe ser máximo de 10 y mínimo de 7 caracteres");
+            if (model.Phone.Length > 10)
+                return (false, "El número telefónico debe ser máximo de 10 caracteres");
             else if (model.Mobile.Length != 10)
                 return (false, "El número celular debe ser máximo y mínimo de 10 caracteres");
             else if (model.Email.Length > 100)

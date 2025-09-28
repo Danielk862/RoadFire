@@ -19,12 +19,11 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         public string Password { get; set; } = string.Empty;
 
         [Required]
-        public bool State { get; set; }
-
-        [Required]
         public DateTime CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
+
+        public bool State { get; set; }
 
         public int EmployeeId { get; set; }
         public int RoleId { get; set; }

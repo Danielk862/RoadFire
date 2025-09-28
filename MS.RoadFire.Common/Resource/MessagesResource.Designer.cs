@@ -79,6 +79,15 @@ namespace MS.RoadFire.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El usuario y/o la contraseña ingresados son incorrectos o el usuario esta inactivo..
+        /// </summary>
+        public static string IncorrectLogin {
+            get {
+                return ResourceManager.GetString("IncorrectLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El registro no pudo ser eliminado. Por favor, inténtelo nuevamente..
         /// </summary>
         public static string NotDeleteData {

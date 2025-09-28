@@ -138,4 +138,7 @@
   <data name="RolInvalid" xml:space="preserve">
     <value>Por favor, ingresa un código de rol valido.</value>
   </data>
+  <data name="IncorrectLogin" xml:space="preserve">
+    <value>El usuario y/o la contraseña ingresados son incorrectos o el usuario esta inactivo.</value>
+  </data>
 </root>

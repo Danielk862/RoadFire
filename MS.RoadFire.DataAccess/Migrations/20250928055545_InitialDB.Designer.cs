@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS.RoadFire.DataAccess.Migrations
 {
     [DbContext(typeof(DbRoadFireContext))]
-    [Migration("20250928051901_InitialDB")]
+    [Migration("20250928055545_InitialDB")]
     partial class InitialDB
     {
         /// <inheritdoc />
