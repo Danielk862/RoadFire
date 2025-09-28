@@ -1,0 +1,68 @@
+﻿@page "/GestionUsuarios"
+@using MudBlazor
+
+<div class="home-background">
+    <div class="admin-container">
+
+        <!-- BOTÓN VOLVER ARRIBA IZQUIERDA -->
+        <button class="volver-btn" @onclick="Volver">&lt; VOLVER</button>
+
+        <!-- CONTENEDOR DE BOTONES -->
+        <div class="acciones-container">
+            <MudButton Variant="Variant.Filled" Color="Color.Warning">+ AGREGAR USUARIO</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning">+ MODIFICAR USUARIO</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning">+ ELIMINAR USUARIO</MudButton>
+        </div>
+
+        <!-- 📊 TABLA VACÍA -->
+        <MudTable Items="@usuarios" Class="tabla-usuarios" Dense="true" Hover="true" Bordered="true" Striped="true">
+            <HeaderContent>
+                <MudTh>Cod Empleado</MudTh>
+                <MudTh>Nombre</MudTh>
+                <MudTh>Correo</MudTh>
+                <MudTh>Cargo</MudTh>
+                <MudTh>Usuario</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd>@context.CodEmpleado</MudTd>
+                <MudTd>@context.Nombre</MudTd>
+                <MudTd>@context.Correo</MudTd>
+                <MudTd>@context.Cargo</MudTd>
+                <MudTd>@context.Usuario</MudTd>
+                <MudTd>@context.Estado</MudTd>
+            </RowTemplate>
+
+            <NoRecordsContent>
+                <MudTr>
+                    <MudTd ColSpan="6" Class="text-center"> No hay datos disponibles :(</MudTd>
+                </MudTr>
+            </NoRecordsContent>
+        </MudTable>
+
+
+    </div>
+</div>
+
+@inject NavigationManager Navigation
+
+@code {
+	//esta clase es temporal para la tabla ya que no hay backend
+    public class UsuarioTemp
+    {
+        public int CodEmpleado { get; set; } 
+        public string Nombre { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
+        public string Cargo { get; set; } = string.Empty;
+        public string Usuario { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
+    }
+
+    private List<UsuarioTemp> usuarios = new(); // Lista vacía temporal
+
+    private void Volver()
+    {
+        Navigation.NavigateTo("/MenuUsuarios");
+    }
+}
