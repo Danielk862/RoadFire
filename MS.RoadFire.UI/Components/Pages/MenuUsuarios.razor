@@ -1,0 +1,39 @@
+﻿@page "/MenuUsuarios"
+
+<div class="home-background">
+    <div class="usuarios-container">
+
+        <!-- Botón Volver -->
+        <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="volver-btn" OnClick="Volver">
+            &lt; Volver
+        </MudButton>
+
+        <!-- Opciones de gestión -->
+        <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="usuarios-btn" OnClick="IrAAdministrarUsuarios">
+            Administrar usuarios
+        </MudButton>
+
+        <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="usuarios-btn" OnClick="IrAAdministrarRoles">
+            Administrar Roles
+        </MudButton>
+    </div>
+</div>
+
+@inject NavigationManager Navigation
+
+@code {
+    private void Volver()
+    {
+        Navigation.NavigateTo("/MenuAdmin");
+    }
+
+    private void IrAAdministrarUsuarios()
+    {
+        Navigation.NavigateTo("/GestionUsuarios");
+    }
+
+    private void IrAAdministrarRoles()
+    {
+        Navigation.NavigateTo("/GestionRoles");
+    }
+}

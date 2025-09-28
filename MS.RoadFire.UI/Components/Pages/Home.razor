@@ -1,59 +1,91 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Inicio - Road Fire</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 9 Template!</MudText>
+<div class="home-background">
+    <MudPaper Class="login-card" Elevation="10">
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-6 font-bold">
+            🏍️ Bienvenido a <strong>Road Fire</strong>
+        </MudText>
 
-<MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Start">
-    You can find documentation and examples on our website here:
-    <MudLink Href="https://mudblazor.com" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>www.mudblazor.com</b>
-    </MudLink>
-</MudAlert>
+        <EditForm Model="@loginModel" OnValidSubmit="Login">
+            <MudTextField @bind-Value="loginModel.Username"
+                          Label="Ingrese su cuenta o usuario"
+                          Variant="Variant.Outlined"
+                          Class="mb-4 input-rounded"
+                          Required="true" />
 
-<br />
-<MudText Typo="Typo.h5" GutterBottom="true">Interactivity in this Template</MudText>
-<br />
-<MudText Typo="Typo.body2">
-    When you opt for the "Global" Interactivity Location, <br />
-    the render modes are defined in App.razor and consequently apply to all child components.<br />
-    In this case, providers are globally set in the MainLayout.<br />
-    <br />
-    On the other hand, if you choose the "Per page/component" Interactivity Location,<br />
-    it is necessary to include the <br />
-    <br />
-    &lt;MudPopoverProvider /&gt; <br />
-    &lt;MudDialogProvider /&gt; <br />
-    &lt;MudSnackbarProvider /&gt; <br />
-    <br />
-    components on every interactive page.<br />
-    <br />
-    If a render mode is not specified for a page, it defaults to Server-Side Rendering (SSR),<br />
-    similar to this page. While MudBlazor allows pages to be rendered in SSR,<br />
-    please note that interactive features, such as buttons and dropdown menus, will not be functional.
-</MudText>
+            <MudTextField @bind-Value="loginModel.Password"
+                          Label="Password"
+                          InputType="InputType.Password"
+                          Variant="Variant.Outlined"
+                          Class="mb-4 input-rounded"
+                          Required="true" />
 
-<br />
-<MudText Typo="Typo.h5" GutterBottom="true">What's New in Blazor with the Release of .NET 9</MudText>
-<br />
+            <MudSelect T="string"
+                       Label="Seleccione su Rol"
+                       @bind-Value="loginModel.Role"
+                       Class="mb-6 input-rounded"
+                       Required="true">
+                <MudSelectItem Value="@RolAdmin"> Administrador</MudSelectItem>
+                <MudSelectItem Value="@RolOperativo"> Operativo</MudSelectItem>
+            </MudSelect>
 
-<MudText Typo="Typo.h6" GutterBottom="true">Prerendering</MudText>
-<MudText Typo="Typo.body2" GutterBottom="true">
-    If you're exploring the features of .NET 9 Blazor,<br /> you might be pleasantly surprised to learn that each page is prerendered on the server,<br /> regardless of the selected render mode.<br /><br />
-    This means that you'll need to inject all necessary services on the server,<br /> even when opting for the wasm (WebAssembly) render mode.<br /><br />
-    This prerendering functionality is crucial to ensuring that WebAssembly mode feels fast and responsive,<br /> especially when it comes to initial page load times.<br /><br />
-    For more information on how to detect prerendering and leverage the RenderContext, you can refer to the following link:
-    <MudLink Href="https://github.com/dotnet/aspnetcore/issues/51468#issuecomment-1783568121" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        More details
-    </MudLink>
-</MudText>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Warning"
+                       Class="btn-ingresar"
+                       ButtonType="ButtonType.Submit">
+                INGRESAR
+            </MudButton>
+        </EditForm>
 
-<br />
-<MudText Typo="Typo.h6" GutterBottom="true">InteractiveAuto</MudText>
-<MudText Typo="Typo.body2">
-    A discussion on how to achieve this can be found here:
-    <MudLink Href="https://github.com/dotnet/aspnetcore/issues/51468#issue-1950424116" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        More details
-    </MudLink>
-</MudText>
+        @if (loginError is not null)
+        {
+            <MudText Typo="Typo.caption" Color="Color.Error" Align="Align.Center" Class="mt-2">
+                @loginError
+            </MudText>
+        }
+    </MudPaper>
+</div>
+
+@code {
+	// se crean el rol y la contra constante para poder navegar antes de conectar a un backend
+    private const string RolAdmin = "admin";
+    private const string RolOperativo = "operativo";
+
+    private LoginModel loginModel = new();
+    private string? loginError;
+
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+
+    private void Login()
+    {
+        if (loginModel.Username == "admin" &&
+            loginModel.Password == "1234" &&
+            loginModel.Role == RolAdmin)
+        {
+            Navigation.NavigateTo("/MenuAdmin");
+            return;
+        }
+
+        loginError = "Usuario, contraseña o rol incorrectos.";
+
+        if (loginModel.Username == "operativo" &&
+            loginModel.Password == "1234" &&
+            loginModel.Role == RolOperativo)
+        {
+            Navigation.NavigateTo("/MenuOperativo");
+            return;
+        }
+
+        loginError = "Usuario, contraseña o rol incorrectos.";
+    }
+
+    public class LoginModel
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+    }
+}

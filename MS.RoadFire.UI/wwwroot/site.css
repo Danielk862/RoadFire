@@ -1,0 +1,198 @@
+﻿/* Fondo pantalla inicio */
+.home-background {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("/Imagenes/pagehome.png") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del login */
+.login-card {
+    background: rgba(0, 0, 0, 0.65);
+    padding: 3rem;
+    border-radius: 30px;
+    width: 420px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    color: white;
+    text-align: center;
+}
+
+/* Campos redondeados */
+.input-rounded .mud-input-root {
+    border-radius: 30px !important;
+}
+
+/* Botón grande y llamativo */
+.btn-ingresar {
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 0.9rem;
+    border-radius: 50px;
+}
+
+/* Contenedor translúcido centrado */
+.admin-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    width: 80%;
+    max-width: 900px;
+    margin: 2rem;
+    border-radius: 25px;
+    padding: 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* Grid de botones */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 300px);
+    grid-gap: 20px 100px;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.menu-btn {
+    width: 300px;
+    height: 55px;
+    font-weight: bold;
+    border-radius: 25px;
+    font-size: 1.1rem;
+}
+
+/* Tarjeta de usuario */
+.user-card {
+    background: #f4a742;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    width: 550px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.user-info {
+    text-align: left;
+}
+
+    .user-info h3 {
+        margin: 0;
+        font-weight: bold;
+    }
+
+.logout-btn {
+    margin-top: 1rem;
+    border-radius: 25px;
+    padding: 0.7rem 2rem;
+    font-size: 1rem;
+}
+
+.user-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+}
+
+/* 🔹 Contenedor principal de la vista de Usuarios */
+.usuarios-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    width: 80%;
+    max-width: 900px;
+    margin: 2rem auto;
+    border-radius: 25px;
+    padding: 4rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    gap: 2rem;
+}
+
+/* 🔹 Botones grandes centrados en Usuarios */
+.usuarios-btn {
+    width: 350px;
+    height: 65px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 35px;
+    text-transform: uppercase;
+    margin: 0.8rem 0;
+}
+
+/* 🔙 Botón volver */
+.volver-btn {
+    align-self: flex-start;
+    margin-bottom: 2rem;
+    border-radius: 25px;
+    padding: 0.7rem 2rem;
+    font-weight: bold;
+}
+
+/* Contenedor general */
+.gestion-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    width: 90%;
+    max-width: 1200px;
+    padding: 2rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Botón Volver */
+.btn-volver {
+    align-self: flex-start;
+    margin-bottom: 1rem;
+    border-radius: 30px;
+    padding: 0.6rem 1.5rem;
+}
+
+/* Botones de acción */
+.acciones-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+    .acciones-container .mud-button {
+        font-weight: bold;
+        border-radius: 20px;
+        padding: 0.8rem 2rem;
+    }
+
+.tabla-usuarios {
+    width: 100%;
+    margin-top: 2rem;
+    background: white;
+    border: 2px solid black;
+    border-collapse: collapse;
+    border-radius: 10px;
+}
+
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        color: black;
+        border: 1px solid black;
+        padding: 0.8rem;
+        text-align: center;
+    }
+
+    .tabla-usuarios th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
