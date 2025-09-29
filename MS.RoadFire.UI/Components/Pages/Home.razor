@@ -1,4 +1,9 @@
 ﻿@page "/"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@using System.Net;
+
 
 <PageTitle>Inicio - Road Fire</PageTitle>
 
@@ -22,14 +27,14 @@
                           Class="mb-4 input-rounded"
                           Required="true" />
 
-            <MudSelect T="string"
+@*             <MudSelect T="string"
                        Label="Seleccione su Rol"
                        @bind-Value="loginModel.Role"
                        Class="mb-6 input-rounded"
                        Required="true">
                 <MudSelectItem Value="@RolAdmin"> Administrador</MudSelectItem>
                 <MudSelectItem Value="@RolOperativo"> Operativo</MudSelectItem>
-            </MudSelect>
+            </MudSelect> *@
 
             <MudButton Variant="Variant.Filled"
                        Color="Color.Warning"
@@ -48,44 +53,41 @@
     </MudPaper>
 </div>
 
-@code {
-	// se crean el rol y la contra constante para poder navegar antes de conectar a un backend
-    private const string RolAdmin = "admin";
-    private const string RolOperativo = "operativo";
 
+
+
+
+@code {
     private LoginModel loginModel = new();
     private string? loginError;
 
     [Inject] private NavigationManager Navigation { get; set; } = default!;
+    [Inject] private IRepository repository { get; set; } = default!;
 
 
-    private void Login()
+    private async Task Login()
     {
-        if (loginModel.Username == "admin" &&
-            loginModel.Password == "1234" &&
-            loginModel.Role == RolAdmin)
+        var url = $"api/Security/Login?username={loginModel.Username}&password={loginModel.Password}";
+
+        var response = await repository.PostAsync<object, ResponseDto<UserDto>>(url, null!);
+
+        if (!response.Error && response.Response != null && response.Response.Code == HttpStatusCode.OK)
         {
+            var user = response.Response.Data;
+  
             Navigation.NavigateTo("/MenuAdmin");
-            return;
         }
-
-        loginError = "Usuario, contraseña o rol incorrectos.";
-
-        if (loginModel.Username == "operativo" &&
-            loginModel.Password == "1234" &&
-            loginModel.Role == RolOperativo)
+        else
         {
-            Navigation.NavigateTo("/MenuOperativo");
-            return;
+            loginError = response.Response?.Messages ?? "Usuario o contraseña incorrectos.";
         }
-
-        loginError = "Usuario, contraseña o rol incorrectos.";
     }
+
 
     public class LoginModel
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
     }
 }
+
