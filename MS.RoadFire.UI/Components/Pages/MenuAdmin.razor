@@ -1,0 +1,57 @@
+﻿@page "/MenuAdmin"
+
+<div class="home-background">
+    <div class="admin-container">
+        <div class="menu-grid">
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INGRESO Y SALIDA</MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">COMPRAS</MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">PROVEEDOR</MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">VENTAS</MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
+
+            <!-- por ahora programar estos con el back -->
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAInventarios">
+                INVENTARIOS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">CLIENTE</MudButton>
+
+            <!--por ahora programar estos con el back-->
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAUsuarios">
+                USUARIOS
+            </MudButton>
+        </div>
+
+        <div class="user-card">
+            <div class="user-info">
+                <h3>FRANCISCO MEDINA</h3>
+                <p>01/06/2025</p>
+                <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="logout-btn" OnClick="Logout">
+                    CERRAR SESIÓN
+                </MudButton>
+            </div>
+            <img src="/Imagenes/user.png" class="user-img" />
+        </div>
+    </div>
+</div>
+
+@inject NavigationManager Navigation
+
+@code {
+    private void Logout()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void IrAUsuarios()
+    {
+        Navigation.NavigateTo("/MenuUsuarios");
+    }
+
+    private void IrAInventarios()
+    {
+        Navigation.NavigateTo("/MenuInventario");
+    }
+}
