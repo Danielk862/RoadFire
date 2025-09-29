@@ -12,6 +12,9 @@ namespace MS.RoadFire.Business.Mappers
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Role, RoleDto>().ReverseMap();
+            CreateMap<Stock, StockDto>().ReverseMap();
+            CreateMap<Transaction, TransactionDto>().ReverseMap();
+            CreateMap<TransactionDetail, TransactionDetailDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
         }
     }

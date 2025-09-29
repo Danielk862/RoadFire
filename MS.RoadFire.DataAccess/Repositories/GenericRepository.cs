@@ -45,7 +45,6 @@ namespace MS.RoadFire.DataAccess.Repositories
             return model;
         }
 
-
         public async Task<bool> DeleteAsync(int id)
         {
             var data = await _entity.FindAsync(id);

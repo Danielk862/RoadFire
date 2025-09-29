@@ -140,5 +140,14 @@ namespace MS.RoadFire.Common.Resource {
                 return ResourceManager.GetString("Success", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El usuario no existe..
+        /// </summary>
+        public static string UserNotExist {
+            get {
+                return ResourceManager.GetString("UserNotExist", resourceCulture);
+            }
+        }
     }
 }

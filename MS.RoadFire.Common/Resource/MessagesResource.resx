@@ -144,4 +144,7 @@
   <data name="CategoryInvalid" xml:space="preserve">
     <value>Por favor, ingresar un código de categoría valido.</value>
   </data>
+  <data name="UserNotExist" xml:space="preserve">
+    <value>El usuario no existe.</value>
+  </data>
 </root>

@@ -135,7 +135,7 @@ namespace MS.RoadFire.DataAccess.Context
             if (!_dataContext.Products.Any())
             {
                 var oild = await _dataContext.Categories.FirstOrDefaultAsync(r => r.Name == "Aceites");
-                var chain = await _dataContext.Roles.FirstOrDefaultAsync(r => r.Name == "Cadenas");
+                var chain = await _dataContext.Categories.FirstOrDefaultAsync(r => r.Name == "Cadenas");
 
                 if (oild == null || chain == null)
                     throw new Exception("categorias no encontrados para el seed de productos.");
