@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
-using MS.RoadFire.Business.Mappers;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
@@ -13,16 +12,17 @@ namespace MS.RoadFire.Application.Services
     public class SecurityServices : ISecurityServices
     {
         #region Internals
-        private readonly ISecurityRepository _securityRepository;
         private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IGenericRepository<User> _genericUser;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public SecurityServices(ISecurityRepository securityRepository, IGenericServices<Role, RoleDto> genericServices, IMapper mapper)
+        public SecurityServices(IGenericServices<Role, RoleDto> genericServices,
+            IGenericRepository<User> genericUser, IMapper mapper)
         {
-            _securityRepository = securityRepository;
             _genericServices = genericServices;
+            _genericUser = genericUser;
             _mapper = mapper;
         }
         #endregion
@@ -34,7 +34,7 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var login = await _securityRepository.Login(username, password);
+                var login = await _genericUser.Get(x => x.Username == username && x.Password == password && x.State);
 
                 if (login == null)
                 {

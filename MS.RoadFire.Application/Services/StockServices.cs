@@ -13,16 +13,14 @@ namespace MS.RoadFire.Application.Services
         #region Internals
         private readonly IGenericRepository<Stock> _genericRepository;
         private readonly IGenericRepository<Product> _productgeneric;
-        private readonly IStockRepository _stockRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public StockServices(IGenericRepository<Stock> genericRepository, IGenericRepository<Product> productgeneric, IStockRepository stockRepository, IMapper mapper)
+        public StockServices(IGenericRepository<Stock> genericRepository, IGenericRepository<Product> productgeneric, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _productgeneric = productgeneric;
-            _stockRepository = stockRepository;
             _mapper = mapper;
         }
         #endregion
@@ -59,7 +57,7 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var result = await _stockRepository.GetAsync(productId);
+                var result = await _genericRepository.Get(x => x.ProductId == productId);
                 var stock = _mapper.Map<StockDto>(result);
                 var product = await _productgeneric.GetAsync(stock.ProductId);
                 stock.ProductDescription = product.Description;

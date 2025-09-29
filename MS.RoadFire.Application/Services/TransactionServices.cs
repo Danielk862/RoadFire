@@ -17,20 +17,18 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<Product> _genericProductRepository;
         private readonly IGenericRepository<User> _userrepository;
         private readonly IMapper _mapper;
-        private readonly ITransactionRepository _transactionRepository;
         #endregion
 
         #region Constructor
         public TransactionServices(IGenericRepository<Transaction> genericRepository, IGenericRepository<User> userrepository,
             IGenericRepository<TransactionDetail> genericTransactionDetailRepository, IGenericRepository<Product> genericProductRepository,
-            IMapper mapper, ITransactionRepository transactionRepository)
+            IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericTransactionDetailRepository = genericTransactionDetailRepository;
             _genericProductRepository = genericProductRepository;
             _userrepository = userrepository;
             _mapper = mapper;
-            _transactionRepository = transactionRepository;
         }
 
         #endregion
@@ -95,7 +93,7 @@ namespace MS.RoadFire.Application.Services
 
                 foreach (var item in data)
                 {
-                    var transactionDetail = await _transactionRepository.GetTransactionAsync(item.Id);
+                    var transactionDetail = await _genericTransactionDetailRepository.GetAll(x => x.TransactionId ==  item.Id);
                     transactions = _mapper.Map<TransactionDto>(item);
                     List<TransactionDetailDto> transactionDetailDtos = new List<TransactionDetailDto>();
 
@@ -132,7 +130,7 @@ namespace MS.RoadFire.Application.Services
                 List<TransactionDetailDto> transactionDetailDtos = new List<TransactionDetailDto>();
 
                 var data = await _genericRepository.GetAsync(id);
-                var transactionDetail = await _transactionRepository.GetTransactionAsync(id);
+                var transactionDetail = await _genericTransactionDetailRepository.GetAll(x => x.TransactionId == id);
 
                 foreach (var item in transactionDetail)
                 {

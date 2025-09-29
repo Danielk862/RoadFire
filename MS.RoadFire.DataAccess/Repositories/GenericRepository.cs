@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS.RoadFire.DataAccess.Context;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
+using System.Linq.Expressions;
 
 namespace MS.RoadFire.DataAccess.Repositories
 {
@@ -68,6 +69,17 @@ namespace MS.RoadFire.DataAccess.Repositories
                 return true;
             }
             return false; 
+        }
+
+        public async Task<T> Get(Expression<Func<T, bool>> expression)
+        {
+            var result = await _entity.AsNoTracking().Where(expression).FirstOrDefaultAsync();
+            return result!;
+        }
+
+        public async Task<List<T>> GetAll(Expression<Func<T, bool>> expression)
+        {
+            return await _entity.AsNoTracking().Where(expression).ToListAsync();
         }
         #endregion
     }

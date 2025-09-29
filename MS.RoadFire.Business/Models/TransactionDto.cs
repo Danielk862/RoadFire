@@ -1,6 +1,4 @@
-﻿using MS.RoadFire.DataAccess.Contracts.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MS.RoadFire.Business.Models
 {
@@ -8,7 +6,6 @@ namespace MS.RoadFire.Business.Models
     {
         public int Id { get; set; }
 
-        [JsonIgnore]
         public DateTime Date { get; set; }
 
         [Required]

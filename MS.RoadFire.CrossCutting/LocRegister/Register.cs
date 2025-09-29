@@ -35,9 +35,6 @@ namespace MS.RoadFire.CrossCutting.LocRegister
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<ISecurityRepository, SecurityRepository>();
-            services.AddScoped<IStockRepository, StockRepository>();
-            services.AddScoped<ITransactionRepository, TransactionRepository>();
         }
 
         private static void AddJsonDefaultSettings()
