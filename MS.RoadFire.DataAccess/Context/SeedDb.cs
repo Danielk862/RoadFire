@@ -18,6 +18,8 @@ namespace MS.RoadFire.DataAccess.Context
             await CheckEmployeesAsync();
             await CheckRolesAsync();
             await CheckUsersAsync();
+            await CheckCategoriesAsync();
+            await CheckProductsAsync();
         }
 
         private async Task CheckRolesAsync()
@@ -103,6 +105,59 @@ namespace MS.RoadFire.DataAccess.Context
                     Username = "calvarez"
                 });
             }
+            await _dataContext.SaveChangesAsync();
+        }
+
+        private async Task CheckCategoriesAsync()
+        {
+            if (!_dataContext.Categories.Any())
+            {
+                _dataContext.Categories.Add(new Category
+                {
+                    Id = 1,
+                    Name = "Aceites",
+                    Description = "Toda la linea de aceites",
+                    IsActive = true
+                });
+                _dataContext.Categories.Add(new Category
+                {
+                    Id = 2,
+                    Name = "Cadenas",
+                    Description = "Cadenas para todo tipo de motocicleta",
+                    IsActive = true
+                });
+            }
+            await _dataContext.SaveChangesAsync();
+        }
+
+        private async Task CheckProductsAsync()
+        {
+            if (!_dataContext.Products.Any())
+            {
+                var oild = await _dataContext.Categories.FirstOrDefaultAsync(r => r.Name == "Aceites");
+                var chain = await _dataContext.Roles.FirstOrDefaultAsync(r => r.Name == "Cadenas");
+
+                if (oild == null || chain == null)
+                    throw new Exception("categorias no encontrados para el seed de productos.");
+
+                _dataContext.Products.Add(new Product
+                {
+                    Id = 1,
+                    Sku = "ACL125",
+                    Description = "Aceite Mobile 3500",
+                    Price = 32000,
+                    CategoryId = oild.Id
+                });
+                _dataContext.Products.Add(new Product
+                {
+                    Id = 1,
+                    Sku = "CD2020",
+                    Description = "Cadena pulsar 180",
+                    Price = 120000,
+                    CategoryId = chain.Id
+                });
+            }
+            await _dataContext.SaveChangesAsync();
             await _dataContext.SaveChangesAsync();
         }
     }

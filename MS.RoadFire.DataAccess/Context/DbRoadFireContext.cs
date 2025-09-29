@@ -11,6 +11,9 @@ namespace MS.RoadFire.DataAccess.Context
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Stock> Stock { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TransactionDetail> TransactionDetails { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,6 +24,9 @@ namespace MS.RoadFire.DataAccess.Context
             modelBuilder.Entity<Employee>().HasIndex(x => x.Id).IsUnique();
             modelBuilder.Entity<Product>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<Role>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<Stock>().HasIndex(x => x.ProductId).IsUnique();
+            modelBuilder.Entity<Transaction>().HasIndex(x => x.Id).IsUnique();
+            modelBuilder.Entity<TransactionDetail>().HasIndex(x => x.Id).IsUnique();
             modelBuilder.Entity<User>().HasIndex(x => x.Username).IsUnique();
             DisableCascading(modelBuilder);
         }
