@@ -1,16 +1,12 @@
-﻿using MS.RoadFire.Application.Contracts.Interfaces;
+﻿using AutoMapper;
+using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Mappers;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MS.RoadFire.Application.Services
 {
@@ -18,14 +14,16 @@ namespace MS.RoadFire.Application.Services
     {
         #region Internals
         private readonly ISecurityRepository _securityRepository;
-        private readonly IRoleServices _roleServices;
+        private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public SecurityServices(ISecurityRepository securityRepository, IRoleServices roleServices)
+        public SecurityServices(ISecurityRepository securityRepository, IGenericServices<Role, RoleDto> genericServices, IMapper mapper)
         {
             _securityRepository = securityRepository;
-            _roleServices = roleServices;
+            _genericServices = genericServices;
+            _mapper = mapper;
         }
         #endregion
 
@@ -44,8 +42,8 @@ namespace MS.RoadFire.Application.Services
                     response.Messages = MessagesResource.IncorrectLogin;
                     return response;
                 }
-                var userLogin = login!.Map();
-                var rol = await _roleServices.GetAsync(login.RoleId);
+                var userLogin = _mapper.Map<UserDto>(login);
+                var rol = await _genericServices.GetAsync(login.RoleId);
                 userLogin.RoleName = rol.Data!.Name;
                 response.Data = userLogin;
             }

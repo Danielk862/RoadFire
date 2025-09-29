@@ -61,6 +61,15 @@ namespace MS.RoadFire.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Por favor, ingresar un código de categoría valido..
+        /// </summary>
+        public static string CategoryInvalid {
+            get {
+                return ResourceManager.GetString("CategoryInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Por favor, ingresa un correo electrónico válido..
         /// </summary>
         public static string EmailInvalid {

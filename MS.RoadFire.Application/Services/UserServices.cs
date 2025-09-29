@@ -1,5 +1,5 @@
-﻿using MS.RoadFire.Application.Contracts.Interfaces;
-using MS.RoadFire.Business.Mappers;
+﻿using AutoMapper;
+using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
@@ -14,15 +14,18 @@ namespace MS.RoadFire.Application.Services
         #region Internals
         private readonly IGenericRepository<User> _genericRepository;
         private readonly IEmployeeServices _employeeServices;
-        private readonly IRoleServices _roleServices;
+        private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public UserServices(IGenericRepository<User> genericRepository, IEmployeeServices employeeServices, IRoleServices roleServices)
+        public UserServices(IGenericRepository<User> genericRepository, IEmployeeServices employeeServices, IGenericServices<Role, RoleDto> genericServices,
+            IMapper mapper)
         {
             _genericRepository = genericRepository;
             _employeeServices = employeeServices;
-            _roleServices = roleServices;
+            _genericServices = genericServices;
+            _mapper = mapper;
         }
         #endregion
 
@@ -33,11 +36,11 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var request = UserMapper.Map(model);
+                var request = _mapper.Map<User>(model);
                 request.CreatedAt = DateTime.Now;
                 request.UpdatedAt = DateTime.Now;
                 var validEmployee = await _employeeServices.GetAsync(model.EmployeeId);
-                var validRol = await _roleServices.GetAsync(model.RoleId);
+                var validRol = await _genericServices.GetAsync(model.RoleId);
 
                 if (validEmployee.Data == null)
                 {
@@ -57,8 +60,9 @@ namespace MS.RoadFire.Application.Services
                     request.State = false;
 
                 var result = await _genericRepository.AddAsync(request);
-                model.RoleName = validRol.Data.Name;
-                response.Data = request.Map();
+                var register = _mapper.Map<UserDto>(result);
+                register.RoleName = validRol.Data.Name;
+                response.Data = register;
             }
             catch (Exception ex)
             {
@@ -83,6 +87,7 @@ namespace MS.RoadFire.Application.Services
                     response.Code = HttpStatusCode.BadRequest;
                     response.Messages = MessagesResource.NotDeleteData;
                 }
+                response.Data = result;
             }
             catch (Exception ex)
             {
@@ -99,7 +104,7 @@ namespace MS.RoadFire.Application.Services
             try
             {
                 var result = await _genericRepository.GetAllAsync();
-                response.Data = result.Select(x => x.Map()).ToList();
+                response.Data = _mapper.Map<List<UserDto>>(result);
             }
             catch (Exception ex)
             {
@@ -118,7 +123,7 @@ namespace MS.RoadFire.Application.Services
                 var user = await _genericRepository.GetAsync(id);
 
                 if (user != null)
-                    response.Data = UserMapper.Map(user);
+                    response.Data = _mapper.Map<UserDto>(user);
             }
             catch (Exception ex)
             {
@@ -135,7 +140,7 @@ namespace MS.RoadFire.Application.Services
             try
             {
                 var validEmployee = await _employeeServices.GetAsync(model.EmployeeId);
-                var validRol = await _roleServices.GetAsync(model.RoleId);
+                var validRol = await _genericServices.GetAsync(model.RoleId);
                 var user = await _genericRepository.GetAsync(model.Id);
                 user.CreatedAt = user.CreatedAt;
                 user.UpdatedAt = DateTime.Now;
@@ -154,7 +159,9 @@ namespace MS.RoadFire.Application.Services
                 }
 
                 var result = await _genericRepository.UpdateAsync(user);
-                response.Data = user.Map();
+                var register = _mapper.Map<UserDto>(result);
+                register.RoleName = validRol.Data!.Name;
+                response.Data = register;
             }
             catch (Exception ex)
             {
@@ -174,8 +181,8 @@ namespace MS.RoadFire.Application.Services
                 return (false, "El usuario no se puede modificar");
             else if (user.EmployeeId != model.EmployeeId)
                 return (false, "El empleado no se puede modificar");
-            else if (user.RoleId != model.RoleId)
-                return (false, "El rol no se puede modificar");
+            //else if (user.RoleId != model.RoleId)
+            //    return (false, "El rol no se puede modificar");
             else
                 return (true, string.Empty);
         }

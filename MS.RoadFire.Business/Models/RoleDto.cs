@@ -15,5 +15,7 @@ namespace MS.RoadFire.Business.Models
         [Required(ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.Required))]
         [StringLength(100, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 1)]
         public string Description { get; set; } = string.Empty;
+
+        public bool IsActive { get; set; }
     }
 }

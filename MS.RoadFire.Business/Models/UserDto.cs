@@ -1,5 +1,6 @@
 ﻿using MS.RoadFire.Common.Resource;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MS.RoadFire.Business.Models
 {
@@ -20,6 +21,8 @@ namespace MS.RoadFire.Business.Models
 
         public int EmployeeId { get; set; }
         public int RoleId { get; set; }
+
+        [JsonIgnore]
         public string RoleName { get; set; } = string.Empty;
     }
 }

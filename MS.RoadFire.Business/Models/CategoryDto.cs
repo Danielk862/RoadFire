@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MS.RoadFire.DataAccess.Contracts.Entities
+namespace MS.RoadFire.Business.Models
 {
-    [Table("Roles")]
-    public class Role
+    public class CategoryDto
     {
-        [Key]
-        [Required]
         public int Id { get; set; }
 
         [Required]

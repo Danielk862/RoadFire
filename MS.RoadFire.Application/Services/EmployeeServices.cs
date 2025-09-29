@@ -1,5 +1,5 @@
-﻿using MS.RoadFire.Application.Contracts.Interfaces;
-using MS.RoadFire.Business.Mappers;
+﻿using AutoMapper;
+using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
@@ -14,13 +14,15 @@ namespace MS.RoadFire.Application.Services
         #region Internals
         private readonly IGenericRepository<Employee> _genericRepository;
         private readonly IGenericRepository<User> _genericUserRepository;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public EmployeeServices(IGenericRepository<Employee> genericRepository, IGenericRepository<User> genericUserRepository)
+        public EmployeeServices(IGenericRepository<Employee> genericRepository, IGenericRepository<User> genericUserRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericUserRepository = genericUserRepository;
+            _mapper = mapper;
         }
         #endregion
 
@@ -36,9 +38,9 @@ namespace MS.RoadFire.Application.Services
 
                 if (valid.Item1 && email.Item1)
                 {
-                    var request = EmployeeMapper.Map(model);
+                    var request = _mapper.Map<Employee>(model);
                     var result = await _genericRepository.AddAsync(request);
-                    response.Data = model;
+                    response.Data = _mapper.Map<EmployeeDto>(result);
                 }
                 else if (!valid.Item1)
                 {
@@ -74,6 +76,7 @@ namespace MS.RoadFire.Application.Services
                     response.Code = HttpStatusCode.BadRequest;
                     response.Messages = MessagesResource.NotDeleteData;
                 }
+                response.Data = result;
             }
             catch (Exception ex)
             {
@@ -90,7 +93,7 @@ namespace MS.RoadFire.Application.Services
             try
             {
                 var result = await _genericRepository.GetAllAsync();
-                response.Data = result.Select(x => x.Map()).ToList();
+                response.Data = _mapper.Map<List<EmployeeDto>>(result);
             }
             catch (Exception ex)
             {
@@ -109,7 +112,7 @@ namespace MS.RoadFire.Application.Services
                 var employee = await _genericRepository.GetAsync(id);
 
                 if (employee != null)
-                    response.Data = EmployeeMapper.Map(employee);
+                    response.Data = _mapper.Map<EmployeeDto>(employee);
             }
             catch (Exception ex)
             {
@@ -130,7 +133,7 @@ namespace MS.RoadFire.Application.Services
 
                 if (valid.Item1 && email.Item1)
                 {
-                    var request = EmployeeMapper.Map(model);
+                    var request = _mapper.Map<Employee>(model);
                     var result = await _genericRepository.UpdateAsync(request);
 
                     if (!request.IsActive)
@@ -141,7 +144,7 @@ namespace MS.RoadFire.Application.Services
                         _ = await _genericUserRepository.UpdateAsync(user);
                     }
 
-                    response.Data = model;
+                    response.Data = _mapper.Map<EmployeeDto>(result);
                 }
                 else if (!valid.Item1)
                 {

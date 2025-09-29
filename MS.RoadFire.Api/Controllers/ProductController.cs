@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
-using MS.RoadFire.DataAccess.Contracts.Entities;
 
 namespace MS.RoadFire.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class RolesController : Controller
+    public class ProductController : Controller
     {
         #region Internals
-        private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IProductServices _productServices;
         #endregion
 
         #region Constructor
-        public RolesController(IGenericServices<Role, RoleDto> genericServices)
+        public ProductController(IProductServices productServices)
         {
-            _genericServices = genericServices;
+            _productServices = productServices;
         }
         #endregion
 
@@ -24,35 +23,35 @@ namespace MS.RoadFire.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var result = await _genericServices.GetAllAsync();
+            var result = await _productServices.GetAllAsync();
             return StatusCode((int)result.Code, result);
         }
 
         [HttpGet("id")]
         public async Task<IActionResult> GetAsync(int id)
         {
-            var result = await _genericServices.GetAsync(id);
+            var result = await _productServices.GetAsync(id);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(RoleDto model)
+        public async Task<IActionResult> AddAsync(ProductDto model)
         {
-            var result = await _genericServices.AddAsync(model);
+            var result = await _productServices.AddAsync(model);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(RoleDto model)
+        public async Task<IActionResult> UpdateAsync(ProductDto model)
         {
-            var result = await _genericServices.UpdateAsync(model);
+            var result = await _productServices.UpdateAsync(model);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var result = await _genericServices.DeleteAsync(id);
+            var result = await _productServices.DeleteAsync(id);
             return StatusCode((int)result.Code, result);
         }
         #endregion

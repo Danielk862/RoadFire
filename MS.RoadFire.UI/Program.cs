@@ -1,13 +1,13 @@
-using MudBlazor.Services;
 using MS.RoadFire.UI.Components;
 using MS.RoadFire.CrossCutting.LocRegister;
 using MS.RoadFire.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRegister();
 builder.Services.AddMudServices();
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri("https://localhost:7214/") });
 builder.Services.AddServerSideBlazor().AddCircuitOptions(opt => { opt.DetailedErrors = true; });
 
 builder.Services.AddRazorComponents()
