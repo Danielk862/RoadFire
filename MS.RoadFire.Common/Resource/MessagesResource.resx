@@ -141,4 +141,7 @@
   <data name="IncorrectLogin" xml:space="preserve">
     <value>El usuario y/o la contraseña ingresados son incorrectos o el usuario esta inactivo.</value>
   </data>
+  <data name="CategoryInvalid" xml:space="preserve">
+    <value>Por favor, ingresar un código de categoría valido.</value>
+  </data>
 </root>

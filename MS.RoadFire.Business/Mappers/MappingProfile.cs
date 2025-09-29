@@ -9,8 +9,9 @@ namespace MS.RoadFire.Business.Mappers
         public MappingProfile()
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
         }
     }

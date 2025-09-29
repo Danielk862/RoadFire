@@ -25,8 +25,9 @@ namespace MS.RoadFire.CrossCutting.LocRegister
             services.AddTransient(typeof(IGenericServices<,>), typeof(GenericServices<,>));
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
             services.AddScoped<IEmployeeServices, EmployeeServices>();
-            services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<IProductServices, ProductServices>();
             services.AddScoped<ISecurityServices, SecurityServices>();
+            services.AddScoped<IUserServices, UserServices>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
