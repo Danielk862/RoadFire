@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="8.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MS.RoadFire.Common\MS.RoadFire.Common.csproj" />
     <ProjectReference Include="..\MS.RoadFire.DataAccess.Contracts\MS.RoadFire.DataAccess.Contracts.csproj" />
   </ItemGroup>
