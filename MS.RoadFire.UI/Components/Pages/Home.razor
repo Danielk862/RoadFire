@@ -3,6 +3,7 @@
 @using MS.RoadFire.Common.Helpers
 @using MS.RoadFire.UI.Repositories
 @using System.Net;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 
 <PageTitle>Inicio - Road Fire</PageTitle>
@@ -61,6 +62,8 @@
     private LoginModel loginModel = new();
     private string? loginError;
 
+    @inject ProtectedLocalStorage localStorage
+
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private IRepository repository { get; set; } = default!;
 
@@ -74,9 +77,15 @@
         if (!response.Error && response.Response != null && response.Response.Code == HttpStatusCode.OK)
         {
             var user = response.Response.Data;
-  
-            Navigation.NavigateTo("/MenuAdmin");
+            //var user = response.Response.Data!;
+
+            if (user != null)
+            {
+                await localStorage.SetAsync("usuarioActual", user);
+                Navigation.NavigateTo("/MenuAdmin");
+            }
         }
+
         else
         {
             loginError = response.Response?.Messages ?? "Usuario o contraseña incorrectos.";

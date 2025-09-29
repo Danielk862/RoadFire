@@ -1,0 +1,90 @@
+﻿@page "/GestionRoles"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@inject RolesRepository rolesRepository
+
+
+<div class="home-background">
+    <div class="roles-wrapper">
+
+        <!-- Botón Volver -->
+        <div class="top-bar">
+            <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="volver-btn" OnClick="Back">
+                &lt; Volver
+            </MudButton>
+        </div>
+
+        <!-- Botones principales -->
+        <div class="actions-bar">
+            <MudButton Variant="Variant.Filled" Color="Color.Success" Class="btn-accion" OnClick="NewRole">Nuevo Rol</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Error" Class="btn-accion" OnClick="DeleteRole">Eliminar Rol</MudButton>
+        </div>
+
+        <!-- Tabla -->
+        <MudTable Items="@roles" Dense="true" Hover="true" Bordered="true" Elevation="2">
+            <HeaderContent>
+                <MudTh>ID Rol</MudTh>
+                <MudTh>Nombre</MudTh>
+                <MudTh>Descripción</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="ID Rol">@context.Id</MudTd>
+                <MudTd DataLabel="Nombre">@context.Name</MudTd>
+                <MudTd DataLabel="Descripción">@context.Description</MudTd>
+                <MudTd DataLabel="Estado">@(context.IsActive ? "Activo" : "Inactivo")</MudTd>
+            </RowTemplate>
+        </MudTable>
+
+    </div>
+</div>
+
+@inject NavigationManager Navigation
+
+
+
+
+@code {
+    private List<RoleDto> roles = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarRolesAsync();
+    }
+
+    private async Task CargarRolesAsync()
+    {
+        var response = await rolesRepository.GetAllAsync(); 
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            roles = response.Response.Data;
+        }
+        else
+        {
+            roles = new List<RoleDto>(); // tabla vacía si no hay datos
+        }
+    }
+
+
+
+    // Método para volver al menú anterior
+    private void Back()
+    {
+        Navigation.NavigateTo("/MenuUsuarios");
+    }
+
+    // Método para crear un nuevo rol 
+    private void NewRole()
+    {
+		Navigation.NavigateTo("/NewRol");
+    }
+
+    // Método para eliminar un rol 
+    private void DeleteRole()
+    {
+        Console.WriteLine("Eliminar rol clicado");
+
+    }
+}

@@ -12,6 +12,9 @@ builder.Services.AddScoped(_ => new HttpClient
 });
 
 builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddScoped<RolesRepository>();
+
+builder.Services.AddMudServices();
 
 builder.Services.AddServerSideBlazor().AddCircuitOptions(opt => { opt.DetailedErrors = true; });
 
