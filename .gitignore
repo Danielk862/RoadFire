@@ -416,3 +416,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Ignorar configuraciones locales personalizadas
+MS.RoadFire.Api/appsettings.json
+MS.RoadFire.UI/appsettings.json

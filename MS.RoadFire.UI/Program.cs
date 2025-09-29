@@ -1,6 +1,8 @@
 using MudBlazor.Services;
 using MS.RoadFire.UI.Components;
 using MS.RoadFire.CrossCutting.LocRegister;
+using MS.RoadFire.DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,12 @@ builder.Services.AddServerSideBlazor().AddCircuitOptions(opt => { opt.DetailedEr
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Add DbContext with SQL Server provider
+var connectionString = builder.Configuration.GetConnectionString("RoadFireContext");
+
+builder.Services.AddDbContext<DbRoadFireContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
