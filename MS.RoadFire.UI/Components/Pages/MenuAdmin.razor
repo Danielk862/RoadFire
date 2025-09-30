@@ -18,6 +18,11 @@
                 INVENTARIOS
             </MudButton>
 
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAEmpleados">
+                EMPLEADOS
+            </MudButton>
+
+
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">CLIENTE</MudButton>
 
             <!--por ahora programar estos con el back-->
@@ -67,6 +72,11 @@
     private void IrAInventarios()
     {
         Navigation.NavigateTo("/MenuInventario");
+    }
+
+    private void IrAEmpleados()
+    {
+        Navigation.NavigateTo("/GestionEmpleados");
     }
 
     private string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");

@@ -1,0 +1,153 @@
+﻿@page "/AgregarEmployee"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject EmployeesRepository EmployeeRepository
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="nuevo-employee-container">
+
+        <!-- Botón Volver -->
+        <button class="volver-btn" @onclick="Volver">&lt; VOLVER</button>
+
+        <MudPaper Class="employee-form" Elevation="6">
+
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">
+                ➕ Crear Nuevo Empleado
+            </MudText>
+
+            <MudForm @ref="form" Model="@nuevoEmpleado">
+
+                <MudTextField @bind-Value="nuevoEmpleado.FirtsName"
+                              Label="Primer Nombre"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El primer nombre es obligatorio." />
+
+                <MudTextField @bind-Value="nuevoEmpleado.SecondName"
+                              Label="Segundo Nombre"
+                              Variant="Variant.Outlined" />
+
+                <MudTextField @bind-Value="nuevoEmpleado.Surname"
+                              Label="Primer Apellido"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El primer apellido es obligatorio." />
+
+                <MudTextField @bind-Value="nuevoEmpleado.SecondSurname"
+                              Label="Segundo Apellido"
+                              Variant="Variant.Outlined" />
+
+                <MudDatePicker Date="@nuevoEmpleado.BornDate"
+                               DateChanged="value => nuevoEmpleado.BornDate = value ?? DateTime.Now"
+                               Label="Fecha de Nacimiento"
+                               Variant="Variant.Outlined"
+                               Required="true"
+                               RequiredError="La fecha de nacimiento es obligatoria." />
+
+                <MudTextField @bind-Value="nuevoEmpleado.Address"
+                              Label="Dirección"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="La dirección es obligatoria." />
+
+                <MudTextField @bind-Value="nuevoEmpleado.Email"
+                              Label="Correo Electrónico"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El correo es obligatorio." />
+
+                <MudTextField @bind-Value="nuevoEmpleado.Mobile"
+                              Label="Teléfono Móvil"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El teléfono es obligatorio." />
+
+                <MudTextField @bind-Value="nuevoEmpleado.Phone"
+                              Label="Teléfono Fijo"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El teléfono es obligatorio." />
+
+
+                <MudCheckBox T="bool" @bind-Checked="nuevoEmpleado.IsActive" Label="Activo" Class="mt-3" />
+
+                <div class="form-buttons mt-4">
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="ConfirmarCreacionAsync">
+                        Crear Empleado
+                    </MudButton>
+
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Dark"
+                               OnClick="Cancelar">
+                        Cancelar
+                    </MudButton>
+                </div>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private MudForm? form;
+    private EmployeeDto nuevoEmpleado = new();
+    private bool isLoading = false;
+    private string? mensaje;
+
+    private void Volver() => Navigation.NavigateTo("/GestionEmpleados");
+
+    private async Task ConfirmarCreacionAsync()
+    {
+        bool? confirmacion = await DialogService.ShowMessageBox(
+            "Confirmación",
+            "¿Estás seguro de crear este empleado?",
+            yesText: "Aceptar",
+            cancelText: "Cancelar"
+        );
+
+        if (confirmacion == true)
+        {
+            await CrearEmpleado();
+        }
+    }
+
+    private async Task CrearEmpleado()
+    {
+        await form!.Validate();
+
+        if (!form.IsValid)
+        {
+            mensaje = "Por favor, complete todos los campos obligatorios.";
+            return;
+        }
+
+        isLoading = true;
+        mensaje = null;
+
+        var response = await EmployeeRepository.AddAsync(nuevoEmpleado);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            mensaje = "✅ Empleado creado exitosamente.";
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/GestionEmpleados"); 
+        }
+        else
+        {
+            mensaje = response.Response?.Messages ?? "❌ Error al crear el empleado.";
+        }
+
+        isLoading = false;
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/GestionEmpleados");
+    }
+}

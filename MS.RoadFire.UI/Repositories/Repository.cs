@@ -86,5 +86,10 @@ namespace MS.RoadFire.UI.Repositories
             var response = await responseHttp.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<T>(response, _jsonDefaultOptions)!;
         }
+
+        public Task<HttpResponseWrapper<T2>> UpdateAsync<T1, T2>(string v, T1 employee)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

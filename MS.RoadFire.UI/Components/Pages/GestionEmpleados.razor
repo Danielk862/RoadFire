@@ -1,0 +1,113 @@
+﻿@page "/GestionEmpleados"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@inject EmployeesRepository EmployeeRepository
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="admin-container">
+
+        <!-- Botón Volver -->
+        <button class="volver-btn" @onclick="Volver">&lt; VOLVER</button>
+
+        <!-- Opciones de gestión -->
+        <div class="acciones-container">
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="AgregarEmployee">+ AGREGAR EMPLOYEE</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="ModificarEmployee">+ MODIFICAR EMPLOYEE</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="EliminarEmployee">+ ELIMINAR EMPLOYEE</MudButton>
+        </div>
+
+        <!-- 📊 TABLA -->
+        <MudTable Items="@employees" Dense="true" Hover="true" Bordered="true" Elevation="2" @bind-SelectedItem="_seleccionado">
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>Nombre</MudTh>
+                <MudTh>Apellido</MudTh>
+                <MudTh>Fecha Nacimiento</MudTh>
+                <MudTh>Dirección</MudTh>
+                <MudTh>Email</MudTh>
+                <MudTh>Phone</MudTh>
+                <MudTh>Móvil</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.FirtsName @context.SecondName</MudTd>
+                <MudTd>@context.Surname @context.SecondSurname</MudTd>
+                <MudTd>@context.BornDate.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd>@context.Address</MudTd>
+                <MudTd>@context.Email</MudTd>
+                <MudTd>@context.Phone</MudTd>
+                <MudTd>@context.Mobile</MudTd>
+                <MudTd>@(context.IsActive ? "Activo" : "Inactivo")</MudTd>
+            </RowTemplate>
+
+            <NoRecordsContent>
+                <MudTr>
+                    <MudTd ColSpan="9" Class="text-center"> No hay empleados disponibles :(</MudTd>
+                </MudTr>
+            </NoRecordsContent>
+        </MudTable>
+    </div>
+</div>
+
+@code {
+    private List<EmployeeDto> employees = new();
+    private EmployeeDto? _seleccionado;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEmployeesAsync();
+    }
+
+    private async Task CargarEmployeesAsync()
+    {
+        var response = await EmployeeRepository.GetAllAsync();
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            employees = response.Response.Data;
+        }
+        else
+        {
+            employees = new List<EmployeeDto>();
+        }
+    }
+
+    private void Volver() => Navigation.NavigateTo("/MenuAdmin");
+
+    private void AgregarEmployee() => Navigation.NavigateTo("/AgregarEmployee");
+
+    private void ModificarEmployee()
+    {
+        if (_seleccionado is null) return;
+        Navigation.NavigateTo($"/ModificarEmployee/{_seleccionado.Id}");
+    }
+
+    private async void EliminarEmployee()
+    {
+        if (_seleccionado is null) return;
+
+        bool? ok = await DialogService.ShowMessageBox(
+            "Confirmación",
+            $"¿Está seguro de eliminar el empleado '{_seleccionado.FirtsName} {_seleccionado.Surname}' (ID: {_seleccionado.Id})?",
+            yesText: "Eliminar",
+            cancelText: "Cancelar");
+
+        if (ok != true) return;
+
+        var resp = await EmployeeRepository.DeleteAsync(_seleccionado.Id);
+        if (!resp.Error)
+        {
+            await CargarEmployeesAsync();
+            _seleccionado = null;
+        }
+        else
+        {
+            Console.WriteLine("❌ Error al eliminar empleado");
+        }
+    }
+}
