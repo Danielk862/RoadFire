@@ -16,6 +16,9 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         public string Description { get; set; } = string.Empty;
 
         [Required]
+        public string Type { get; set; } = string.Empty;
+
+        [Required]
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]

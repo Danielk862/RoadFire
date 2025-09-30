@@ -1,4 +1,6 @@
 ﻿@page "/MenuAdmin"
+@using MS.RoadFire.Business.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 <div class="home-background">
     <div class="admin-container">
@@ -26,8 +28,10 @@
 
         <div class="user-card">
             <div class="user-info">
-                <h3>FRANCISCO MEDINA</h3>
-                <p>01/06/2025</p>
+                <h3>@(user ?? "Usuario desconocido")</h3>
+
+                <p>@fechaActual</p>
+
                 <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="logout-btn" OnClick="Logout">
                     CERRAR SESIÓN
                 </MudButton>
@@ -38,8 +42,21 @@
 </div>
 
 @inject NavigationManager Navigation
+@inject ProtectedLocalStorage localStorage
+
 
 @code {
+    private string? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await localStorage.GetAsync<string>("user");
+        if (result.Success)
+        {
+            user = result.Value!;
+        }
+    }
+
     private void Logout()
     {
         Navigation.NavigateTo("/");
@@ -54,4 +71,7 @@
     {
         Navigation.NavigateTo("/MenuInventario");
     }
+
+    private string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+
 }

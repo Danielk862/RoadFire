@@ -8,7 +8,14 @@ builder.Services.AddRegister();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
+    foreach (var xmlFile in xmlFiles)
+    {
+        c.IncludeXmlComments(xmlFile, includeControllerXmlComments: true);
+    }
+});
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddDbContext<DbRoadFireContext>(x => x.UseSqlServer("name = RoadFireContext"));
 

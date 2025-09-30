@@ -3,6 +3,7 @@
 @using MS.RoadFire.Common.Helpers
 @using MS.RoadFire.UI.Repositories
 @using System.Net;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 
 <PageTitle>Inicio - Road Fire</PageTitle>
@@ -53,13 +54,11 @@
     </MudPaper>
 </div>
 
-
-
-
-
 @code {
     private LoginModel loginModel = new();
     private string? loginError;
+
+    @inject ProtectedLocalStorage localStorage
 
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private IRepository repository { get; set; } = default!;
@@ -74,15 +73,38 @@
         if (!response.Error && response.Response != null && response.Response.Code == HttpStatusCode.OK)
         {
             var user = response.Response.Data;
-  
-            Navigation.NavigateTo("/MenuAdmin");
+            //var user = response.Response.Data!;
+
+            if (user != null && user.RoleName.Equals("Administrador"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuAdmin");
+            }
+            else if (user != null && user.RoleName.Equals("Ventas"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuOperativo");
+            }
+            else if (user != null && user.RoleName.Equals("Compras"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuAdmin");
+            }
+            else if (user != null && user.RoleName.Equals("Inventario"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuInventario");
+            }
+            else
+            {
+                loginError = "Rol no encontrado.";
+            }
         }
-        else
+        else 
         {
             loginError = response.Response?.Messages ?? "Usuario o contraseña incorrectos.";
         }
     }
-
 
     public class LoginModel
     {

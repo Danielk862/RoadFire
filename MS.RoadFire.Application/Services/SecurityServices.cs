@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
-using MS.RoadFire.Business.Mappers;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
@@ -13,16 +12,19 @@ namespace MS.RoadFire.Application.Services
     public class SecurityServices : ISecurityServices
     {
         #region Internals
-        private readonly ISecurityRepository _securityRepository;
         private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IGenericRepository<User> _genericUser;
+        private readonly IGenericRepository<Employee> _genericEmployee;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public SecurityServices(ISecurityRepository securityRepository, IGenericServices<Role, RoleDto> genericServices, IMapper mapper)
+        public SecurityServices(IGenericServices<Role, RoleDto> genericServices,
+            IGenericRepository<User> genericUser, IGenericRepository<Employee> genericEmployee, IMapper mapper)
         {
-            _securityRepository = securityRepository;
             _genericServices = genericServices;
+            _genericUser = genericUser;
+            _genericEmployee = genericEmployee;
             _mapper = mapper;
         }
         #endregion
@@ -34,7 +36,7 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var login = await _securityRepository.Login(username, password);
+                var login = await _genericUser.Get(x => x.Username == username && x.Password == password && x.State);
 
                 if (login == null)
                 {
@@ -44,7 +46,9 @@ namespace MS.RoadFire.Application.Services
                 }
                 var userLogin = _mapper.Map<UserDto>(login);
                 var rol = await _genericServices.GetAsync(login.RoleId);
+                var empleyoee = await _genericEmployee.Get(x => x.Id == userLogin.EmployeeId);
                 userLogin.RoleName = rol.Data!.Name;
+                userLogin.EmployeeName = $"{empleyoee.FirtsName} {empleyoee.Surname}";
                 response.Data = userLogin;
             }
             catch (Exception ex)
