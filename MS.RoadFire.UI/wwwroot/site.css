@@ -328,3 +328,78 @@
     margin-top: 25px;
     font-size: 1rem;
 }
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+/* 📦 Botones principales */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.menu-btn {
+    width: 300px;
+    height: 50px;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white !important;
+}
+
+/* 🧑 Tarjeta de usuario */
+
+.user-card {
+    width: 480px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 165, 0, 0.9);
+    border-radius: 25px;
+    /* 👇 NUEVO: separación desde los botones */
+    margin-top: 3rem; /* Puedes ajustar 2rem, 3rem, 4rem según la distancia que necesites */
+}
+
+.user-info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.user-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.user-date {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* 📸 Avatar */
+.user-avatar {
+    border-radius: 15px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+/* 🔙 Botón de cerrar sesión */
+.logout-btn {
+    width: 250px;
+    height: 45px;
+    font-weight: bold;
+    border-radius: 25px;
+    background: black !important;
+    color: white !important;
+}

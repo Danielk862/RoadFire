@@ -83,7 +83,7 @@
             else if (user != null && user.RoleName.Equals("Ventas"))
             {
                 await localStorage.SetAsync("user", user.EmployeeName);
-                Navigation.NavigateTo("/MenuOperativo");
+                Navigation.NavigateTo("/MenuRolVentas");
             }
             else if (user != null && user.RoleName.Equals("Compras"))
             {
