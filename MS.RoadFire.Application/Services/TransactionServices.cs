@@ -16,18 +16,20 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<TransactionDetail> _genericTransactionDetailRepository;
         private readonly IGenericRepository<Product> _genericProductRepository;
         private readonly IGenericRepository<User> _userrepository;
+        private readonly IStockServices _stockServices;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public TransactionServices(IGenericRepository<Transaction> genericRepository, IGenericRepository<User> userrepository,
             IGenericRepository<TransactionDetail> genericTransactionDetailRepository, IGenericRepository<Product> genericProductRepository,
-            IMapper mapper)
+            IStockServices stockServices, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericTransactionDetailRepository = genericTransactionDetailRepository;
             _genericProductRepository = genericProductRepository;
             _userrepository = userrepository;
+            _stockServices = stockServices;
             _mapper = mapper;
         }
 
@@ -51,11 +53,30 @@ namespace MS.RoadFire.Application.Services
                     return response;
                 }
 
-                transactionDto.Date = DateTime.Now;
+                foreach (var item in transactionDto.TransactionDetailDtos!)
+                {
+                    var stock = new StockDto()
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        ValueUnit = item.UnitValue
+                    };
+
+                    var resultStock = await _stockServices.StockValidate(stock, transactionDto.Type);
+
+                    if (resultStock.Code != HttpStatusCode.OK)
+                    {
+                        response.Code = resultStock.Code;
+                        response.Messages = resultStock.Messages;
+                        return response;
+                    }
+                }
+
+                    transactionDto.Date = DateTime.Now;
                 var data = await _genericRepository.AddAsync(_mapper.Map<Transaction>(transactionDto));
 
                 foreach (var item in transactionDto.TransactionDetailDtos!)
-                {
+                {  
                     var price = await _genericProductRepository.GetAsync(item.ProductId);
                     item.TransactionId = data.Id;
                     item.UnitValue = price.Price;

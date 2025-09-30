@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.Constants;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
@@ -32,7 +33,7 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var result = await _genericRepository.GetAllAsync();                
+                var result = await _genericRepository.GetAllAsync();
                 var listStock = _mapper.Map<List<StockDto>>(result);
 
                 foreach (var item in listStock)
@@ -63,6 +64,64 @@ namespace MS.RoadFire.Application.Services
                 stock.ProductDescription = product.Description;
                 stock.Total = stock.Quantity * stock.ValueUnit;
                 response.Data = stock;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ResponseDto<StockDto>> StockValidate(StockDto stockDto, string type)
+        {
+            ResponseDto<StockDto> response = new ResponseDto<StockDto>();
+
+            try
+            { 
+                var isExists = await _genericRepository.Get(x => x.ProductId == stockDto.ProductId);
+                var product = await _productgeneric.Get(x => x.Id == stockDto.ProductId);
+
+                if (isExists == null)
+                {
+                    if (type.Equals(TypeTransactionConstants.Input) || type.Equals(TypeTransactionConstants.Purchase))
+                    {
+                        var data = _mapper.Map<Stock>(stockDto);
+                        data.Product = null;
+                        var save = await _genericRepository.AddAsync(data);
+                        response.Data = stockDto;
+                        return response;
+                    }
+                    else
+                    {
+                        response.Code = HttpStatusCode.BadRequest;
+                        response.Messages = $"El producto {product.Description} no tiene stock suficiente.";
+                    }
+                }
+                else
+                {
+                    if (type.Equals(TypeTransactionConstants.Output) || type.Equals(TypeTransactionConstants.Sales))
+                    {
+                        if (isExists.Quantity < stockDto.Quantity)
+                        {
+                            response.Code = HttpStatusCode.BadRequest;
+                            response.Messages = $"El producto {product.Description} no tiene stock suficiente.";
+                        }
+                        else if (isExists.Quantity > 0)
+                        {
+                            isExists.Quantity = isExists.Quantity - stockDto.Quantity;
+                            var update = await _genericRepository.UpdateAsync(isExists);
+                            response.Data = _mapper.Map<StockDto>(update);
+                        }
+                    }
+
+                    if (type.Equals(TypeTransactionConstants.Input) || type.Equals(TypeTransactionConstants.Purchase))
+                    {
+                        isExists.Quantity = isExists.Quantity + stockDto.Quantity;
+                        var update = await _genericRepository.UpdateAsync(isExists);
+                        response.Data = _mapper.Map<StockDto>(update);
+                    }
+                }
             }
             catch (Exception ex)
             {
