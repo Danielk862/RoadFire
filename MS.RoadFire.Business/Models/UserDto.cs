@@ -36,13 +36,18 @@ namespace MS.RoadFire.Business.Models
         /// </summary>
         /// <example>1</example>
         public int EmployeeId { get; set; }
+
+        /// <summary>
+        /// Nombre empleado
+        /// </summary>
+        /// <example>Daniel Gómez</example>
+        public string EmployeeName { get; set; } = string.Empty;
         /// <summary>
         /// id rol
         /// </summary>
         /// <example>1</example>
         public int RoleId { get; set; }
 
-        [JsonIgnore]
         public string RoleName { get; set; } = string.Empty;
     }
 }

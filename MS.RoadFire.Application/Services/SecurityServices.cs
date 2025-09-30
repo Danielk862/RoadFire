@@ -14,15 +14,17 @@ namespace MS.RoadFire.Application.Services
         #region Internals
         private readonly IGenericServices<Role, RoleDto> _genericServices;
         private readonly IGenericRepository<User> _genericUser;
+        private readonly IGenericRepository<Employee> _genericEmployee;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public SecurityServices(IGenericServices<Role, RoleDto> genericServices,
-            IGenericRepository<User> genericUser, IMapper mapper)
+            IGenericRepository<User> genericUser, IGenericRepository<Employee> genericEmployee, IMapper mapper)
         {
             _genericServices = genericServices;
             _genericUser = genericUser;
+            _genericEmployee = genericEmployee;
             _mapper = mapper;
         }
         #endregion
@@ -44,7 +46,9 @@ namespace MS.RoadFire.Application.Services
                 }
                 var userLogin = _mapper.Map<UserDto>(login);
                 var rol = await _genericServices.GetAsync(login.RoleId);
+                var empleyoee = await _genericEmployee.Get(x => x.Id == userLogin.EmployeeId);
                 userLogin.RoleName = rol.Data!.Name;
+                userLogin.EmployeeName = $"{empleyoee.FirtsName} {empleyoee.Surname}";
                 response.Data = userLogin;
             }
             catch (Exception ex)

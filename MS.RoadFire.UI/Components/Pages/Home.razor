@@ -54,10 +54,6 @@
     </MudPaper>
 </div>
 
-
-
-
-
 @code {
     private LoginModel loginModel = new();
     private string? loginError;
@@ -79,19 +75,36 @@
             var user = response.Response.Data;
             //var user = response.Response.Data!;
 
-            if (user != null)
+            if (user != null && user.RoleName.Equals("Administrador"))
             {
-                await localStorage.SetAsync("usuarioActual", user);
+                await localStorage.SetAsync("user", user.EmployeeName);
                 Navigation.NavigateTo("/MenuAdmin");
             }
+            else if (user != null && user.RoleName.Equals("Ventas"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuOperativo");
+            }
+            else if (user != null && user.RoleName.Equals("Compras"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuAdmin");
+            }
+            else if (user != null && user.RoleName.Equals("Inventario"))
+            {
+                await localStorage.SetAsync("user", user.EmployeeName);
+                Navigation.NavigateTo("/MenuInventario");
+            }
+            else
+            {
+                loginError = "Rol no encontrado.";
+            }
         }
-
-        else
+        else 
         {
             loginError = response.Response?.Messages ?? "Usuario o contraseña incorrectos.";
         }
     }
-
 
     public class LoginModel
     {

@@ -29,12 +29,26 @@ namespace MS.RoadFire.DataAccess.Context
                 _dataContext.Roles.Add(new Role
                 {
                     Name = "Administrador",
-                    Description = "Rol encargado de administrar el sistema"
+                    Description = "Rol encargado de administrar el sistema",
+                    IsActive = true
                 });
                 _dataContext.Roles.Add(new Role
                 {
                     Name = "Ventas",
-                    Description = "Rol encargado de las ventas"
+                    Description = "Rol encargado de las ventas",
+                    IsActive = true
+                });
+                _dataContext.Roles.Add(new Role
+                {
+                    Name = "Compras",
+                    Description = "Rol encargado de las compras",
+                    IsActive = true
+                });
+                _dataContext.Roles.Add(new Role
+                {
+                    Name = "Inventario",
+                    Description = "Rol encargado del inventario",
+                    IsActive = true
                 });
             }
             await _dataContext.SaveChangesAsync();
