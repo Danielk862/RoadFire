@@ -4,8 +4,6 @@ using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMudServices();
-
 builder.Services.AddScoped(_ => new HttpClient
 {
     BaseAddress = new Uri("https://localhost:7214/") //  API
@@ -30,6 +28,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapStaticAssets();
 

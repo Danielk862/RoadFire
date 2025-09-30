@@ -252,3 +252,79 @@
     display: flex;
     justify-content: space-between;
 }
+
+/* 🌆 Fondo general */
+.page-background {
+    background: url('/imagenes/fondo-fire.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 📦 Tarjeta del formulario */
+.eliminar-card {
+    width: 550px;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.55); /* Transparente */
+    backdrop-filter: blur(15px); /* efecto de vidrio */
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    color: #fff;
+    position: relative;
+    text-align: center;
+}
+
+/* 🔙 Botón volver */
+.top-bar {
+    position: absolute;
+    top: -20px;
+    left: -10px;
+}
+
+.volver-btn {
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+/* 🧾 Título */
+.titulo {
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* 📤 Input */
+.input-field {
+    width: 100%;
+    margin-bottom: 25px;
+    color: white;
+}
+
+/* 🔘 Botones */
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.btn-eliminar {
+    background-color: #2e7d32 !important; /* Verde éxito */
+    width: 48%;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.btn-cancelar {
+    width: 48%;
+    font-weight: bold;
+}
+
+/* 📢 Mensaje */
+.mensaje-alerta {
+    margin-top: 25px;
+    font-size: 1rem;
+}

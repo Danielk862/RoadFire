@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MS.RoadFire.UI.Repositories
 {
@@ -13,6 +12,7 @@ namespace MS.RoadFire.UI.Repositories
 
         Task<HttpResponseWrapper<object>> PutAsync<T>(string url, T data);
 
-        Task<HttpResponseWrapper<object>> DeleteAsync(string url);
+        // Cambiar este método a genérico:
+        Task<HttpResponseWrapper<T>> DeleteAsync<T>(string url);
     }
 }

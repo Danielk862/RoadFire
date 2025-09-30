@@ -27,9 +27,9 @@ namespace MS.RoadFire.UI.Repositories
             return await _repository.PostAsync<RoleDto, ResponseDto<RoleDto>>("api/Roles/Add", role);
         }
 
-        public async Task<HttpResponseWrapper<object>> DeleteAsync(int id)
+        public async Task<HttpResponseWrapper<T>> DeleteAsync<T>(int id)
         {
-            return await _repository.DeleteAsync($"api/Roles/Delete?id={id}");
+            return await _repository.DeleteAsync<T>($"api/Roles/Delete/id?id={id}");
         }
     }
 }
