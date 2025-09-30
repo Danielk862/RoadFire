@@ -1,0 +1,120 @@
+﻿@page "/ActualizarUsuario/{id:int}"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager Navigation
+@inject UsuariosRepository usuariosRepository
+@inject RolesRepository rolesRepository
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="nuevo-rol-container">
+        <MudPaper Class="rol-form" Elevation="6">
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">✏️ Actualizar Usuario</MudText>
+
+            <MudForm @ref="form" Model="@model">
+                <MudTextField @bind-Value="model.Username" 
+                    Label="Nombre de usuario" 
+                    Variant="Variant.Outlined" 
+                    Required="true" />
+                <MudTextField @bind-Value="newPassword"
+                    Label="Nueva contraseña (opcional)"
+                    Variant="Variant.Outlined"
+                    InputType="InputType.Password" />
+                <MudNumericField T="int" @bind-Value="model.EmployeeId" 
+                    Label="ID Empleado" 
+                    Variant="Variant.Outlined" 
+                    Required="true" />
+                <MudSelect @bind-Value="model.RoleId" 
+                    Label="Rol" Variant="Variant.Outlined" 
+                    Required="true">
+                    @foreach (var r in roles)
+                    {
+                        <MudSelectItem Value="@r.Id">@r.Name</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudCheckBox T="bool"
+                    @bind-Checked="model.State"
+                    Label="Activo"
+                    Class="mt-3" />
+
+                <div class="form-buttons mt-4">
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Guardar" Disabled="@isLoading">Guardar Cambios</MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Dark" OnClick="Cancelar">Cancelar</MudButton>
+                </div>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private MudForm? form;
+    private UserDto model = new();
+    private List<RoleDto> roles = new();
+    private string? mensaje;
+    private bool isLoading;
+    private string newPassword = "";   // solo para edición local
+    private bool loaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // cargar roles
+        var rr = await rolesRepository.GetAllAsync();
+        roles = (!rr.Error && rr.Response?.Data != null) ? rr.Response.Data : new();
+
+        // cargar usuario
+        var ur = await usuariosRepository.GetByIdAsync(id);
+        if (!ur.Error && ur.Response?.Data != null)
+        {            
+            model = ur.Response.Data;
+            loaded = true;
+            StateHasChanged();
+        }
+        else
+        {
+            mensaje = ur.Response?.Messages ?? "No se pudo cargar el usuario.";
+        }
+    }
+
+    private async Task Guardar()
+    {
+        await form!.Validate();
+        if (!form.IsValid) { mensaje = "Complete los campos obligatorios."; return; }
+
+        isLoading = true; 
+        mensaje = null;
+
+        // Solo actualizar contraseña si el usuario escribió una nueva
+        if (!string.IsNullOrWhiteSpace(newPassword))
+        {
+            model.Password = newPassword;
+            // opcional: limpiar para no dejarla en memoria
+            newPassword = "";     }
+
+
+        var resp = await usuariosRepository.UpdateAsync(model);
+        if (!resp.Error && resp.Response?.Data != null)
+        {
+            mensaje = "✅ Usuario actualizado.";
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/GestionUsuarios");
+        }
+        else
+        {
+            mensaje = resp.Response?.Messages ?? "❌ Error al actualizar.";
+        }
+
+        isLoading = false;
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/GestionUsuarios");
+    }
+}

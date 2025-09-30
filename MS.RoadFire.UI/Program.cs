@@ -13,6 +13,7 @@ builder.Services.AddScoped(_ => new HttpClient
 
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<RolesRepository>();
+builder.Services.AddScoped<UsuariosRepository>();
 
 builder.Services.AddMudServices();
 

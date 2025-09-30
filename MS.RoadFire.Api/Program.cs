@@ -17,7 +17,8 @@ builder.Services.AddSwaggerGen(c =>
     }
 });
 builder.Services.AddTransient<SeedDb>();
-builder.Services.AddDbContext<DbRoadFireContext>(x => x.UseSqlServer("name = RoadFireContext"));
+builder.Services.AddDbContext<DbRoadFireContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RoadFireContext")));
 
 var app = builder.Build();
 

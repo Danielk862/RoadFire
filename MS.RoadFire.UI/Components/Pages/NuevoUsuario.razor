@@ -1,0 +1,140 @@
+﻿@page "/NuevoUsuario"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager Navigation
+@inject UsuariosRepository usuariosRepository
+@inject RolesRepository rolesRepository
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="nuevo-rol-container">
+        <MudPaper Class="rol-form" Elevation="6">
+
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">
+                ➕ Crear Nuevo Usuario
+            </MudText>
+
+            <MudForm @ref="form" Model="@nuevoUsuario">
+                <!-- Username -->
+                <MudTextField @bind-Value="nuevoUsuario.Username"
+                              Label="Nombre de usuario"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El nombre de usuario es obligatorio." />
+
+                <!-- Password -->
+                <MudTextField @bind-Value="nuevoUsuario.Password"
+                              Label="Contraseña"
+                              Variant="Variant.Outlined"
+                              InputType="InputType.Password"
+                              Required="true"
+                              RequiredError="La contraseña es obligatoria." />
+
+                <!-- EmployeeId -->
+                <MudNumericField T="int" @bind-Value="nuevoUsuario.EmployeeId"
+                                 Label="ID Empleado"
+                                 Variant="Variant.Outlined"
+                                 Required="true"
+                                 RequiredError="El ID de empleado es obligatorio." />
+
+                <!-- RoleId -->
+                <!-- Lista desplegable con roles-->
+                <MudSelect @bind-Value="nuevoUsuario.RoleId"
+                           Label="Rol"
+                           Variant="Variant.Outlined"
+                           Required="true"
+                           RequiredError="El rol es obligatorio.">    
+                    @foreach (var r in roles)
+                    {
+                        <MudSelectItem Value="@r.Id">@r.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <!-- Estado -->
+                <MudCheckBox T="bool"
+                    @bind-Checked="nuevoUsuario.State"
+                    Label="Activo"
+                    Class="mt-3" />
+
+                <!-- Botones -->
+                <div class="form-buttons mt-4">
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" Disabled="@isLoading" OnClick="ConfirmarCreacionAsync">
+                        Crear Usuario
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Dark" OnClick="Cancelar">
+                        Cancelar
+                    </MudButton>
+                </div>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private MudForm? form;
+    private UserDto nuevoUsuario = new() { State = true };
+    private List<RoleDto> roles = new(); //Para listar roles
+    private bool isLoading = false;
+    private string? mensaje;
+
+	// Cargar roles al iniciar
+    protected override async Task OnInitializedAsync()
+    {
+        var respRoles = await rolesRepository.GetAllAsync();
+        if (!respRoles.Error && respRoles.Response?.Data != null)
+            roles = respRoles.Response.Data;
+        else
+            roles = new();
+    }
+
+    private async Task ConfirmarCreacionAsync()
+    {
+        bool? ok = await DialogService.ShowMessageBox(
+            "Confirmación",
+            "¿Estás seguro de crear este usuario?",
+            yesText: "Aceptar",
+            cancelText: "Cancelar"
+        );
+
+        if (ok == true)
+            await CrearUsuario();
+    }
+
+    private async Task CrearUsuario()
+    {
+        await form!.Validate();
+        if (!form.IsValid)
+        {
+            mensaje = "Por favor, complete todos los campos obligatorios.";
+            return;
+        }
+
+        isLoading = true;
+        mensaje = null;
+
+        var response = await usuariosRepository.AddAsync(nuevoUsuario);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            mensaje = "✅ Usuario creado exitosamente.";
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/GestionUsuarios");
+        }
+        else
+        {
+            mensaje = response.Response?.Messages ?? "❌ Error al crear el usuario.";
+        }
+
+        isLoading = false;
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/GestionUsuarios");
+    }
+}

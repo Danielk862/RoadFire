@@ -1,44 +1,49 @@
 ﻿@page "/GestionUsuarios"
 @using MudBlazor
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@inject UsuariosRepository usuariosRepository
+@inject RolesRepository rolesRepository
+@inject IDialogService DialogService
 
 <div class="home-background">
     <div class="admin-container">
 
-        <!-- BOTÓN VOLVER ARRIBA IZQUIERDA -->
-        <button class="volver-btn" @onclick="Volver">&lt; VOLVER</button>
+        <!-- Botón Volver -->
+        <div class="top-bar">
+            <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="volver-btn" OnClick="Back">
+                &lt; Volver
+            </MudButton>
+        </div>
 
         <!-- CONTENEDOR DE BOTONES -->
         <div class="acciones-container">
-            <MudButton Variant="Variant.Filled" Color="Color.Warning">+ AGREGAR USUARIO</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Warning">+ MODIFICAR USUARIO</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Warning">+ ELIMINAR USUARIO</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="btn-accion" OnClick="NewUser">Agregar Usuario</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="btn-accion" Disabled="@(_seleccionado is null)" OnClick="UpdateUser">Modificar Usuario</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="btn-accion" Disabled="@(_seleccionado is null)" OnClick="DeleteUser">Eliminar Usuario</MudButton>
         </div>
 
-        <!-- 📊 TABLA VACÍA -->
-        <MudTable Items="@usuarios" Class="tabla-usuarios" Dense="true" Hover="true" Bordered="true" Striped="true">
+        <!-- 📊 TABLA -->
+        <MudTable Items="@usuarios" Dense="true" Hover="true" Bordered="true" Elevation="2"
+            @bind-SelectedItem="_seleccionado">
             <HeaderContent>
-                <MudTh>Cod Empleado</MudTh>
-                <MudTh>Nombre</MudTh>
-                <MudTh>Correo</MudTh>
-                <MudTh>Cargo</MudTh>
-                <MudTh>Usuario</MudTh>
+                <MudTh>ID Usuario</MudTh>
+                <MudTh>Nombre Usuario</MudTh>
+                <MudTh>ID Empleado</MudTh>
+                <MudTh>ID Rol</MudTh>
+                <MudTh>Rol</MudTh>
                 <MudTh>Estado</MudTh>
             </HeaderContent>
 
             <RowTemplate>
-                <MudTd>@context.CodEmpleado</MudTd>
-                <MudTd>@context.Nombre</MudTd>
-                <MudTd>@context.Correo</MudTd>
-                <MudTd>@context.Cargo</MudTd>
-                <MudTd>@context.Usuario</MudTd>
-                <MudTd>@context.Estado</MudTd>
+                <MudTd DataLabel="ID Usuario">@context!.Id</MudTd>
+                <MudTd DataLabel="Nombre Usuario">@context!.Username</MudTd>
+                <MudTd DataLabel="ID Empleado">@context!.EmployeeId</MudTd>
+                <MudTd DataLabel="ID Rol">@context!.RoleId</MudTd>
+                <MudTd DataLabel="Rol">@GetRoleName(context!)</MudTd>
+                <MudTd DataLabel="Estado">@(context!.State ? "Activo" : "Inactivo")</MudTd>
             </RowTemplate>
-
-            <NoRecordsContent>
-                <MudTr>
-                    <MudTd ColSpan="6" Class="text-center"> No hay datos disponibles :(</MudTd>
-                </MudTr>
-            </NoRecordsContent>
         </MudTable>
 
 
@@ -48,21 +53,86 @@
 @inject NavigationManager Navigation
 
 @code {
-	//esta clase es temporal para la tabla ya que no hay backend
-    public class UsuarioTemp
+
+    private List<UserDto> usuarios = new();
+
+	//Para nombres de roles para evitar múltiples llamadas (Temporal no esta llegando de API/BD)
+    private Dictionary<int, string> roleNames = new();
+
+    private string GetRoleName(UserDto u) =>
+        !string.IsNullOrWhiteSpace(u.RoleName)
+            ? u.RoleName
+            : (roleNames.TryGetValue(u.RoleId, out var n) ? n : u.RoleId.ToString());
+
+    protected override async Task OnInitializedAsync()
     {
-        public int CodEmpleado { get; set; } 
-        public string Nombre { get; set; } = string.Empty;
-        public string Correo { get; set; } = string.Empty;
-        public string Cargo { get; set; } = string.Empty;
-        public string Usuario { get; set; } = string.Empty;
-        public string Estado { get; set; } = string.Empty;
+        await CargarUsuariosAsync();
+
+        var rr = await rolesRepository.GetAllAsync();
+        roleNames = (!rr.Error && rr.Response?.Data != null)
+            ? rr.Response.Data.ToDictionary(r => r.Id, r => r.Name)
+            : new();
     }
 
-    private List<UsuarioTemp> usuarios = new(); // Lista vacía temporal
+    private async Task CargarUsuariosAsync()
+    {
+		var response = await usuariosRepository.GetAllAsync();
 
-    private void Volver()
+        if (!response.Error && response.Response?.Data != null)
+        {
+            usuarios = response.Response.Data;
+        }
+        else
+        {
+            usuarios = new List<UserDto>(); // tabla vacía si no hay datos
+        }
+    }
+
+    // Método para volver al menú anterior
+    private void Back()
     {
         Navigation.NavigateTo("/MenuUsuarios");
     }
+    // Método para crear un nuevo usuario
+    private void NewUser()
+    {
+        Navigation.NavigateTo("/NuevoUsuario");
+    }
+
+    // Método para Modificar un usuario
+    private UserDto? _seleccionado;
+
+    private void UpdateUser()
+    {
+        if (_seleccionado is null) return;
+        Navigation.NavigateTo($"/ActualizarUsuario/{_seleccionado.Id}");
+    }
+
+    // Método para eliminar un usuario
+    private async Task DeleteUser()
+    {
+        if (_seleccionado is null) return;
+
+        bool? ok = await DialogService.ShowMessageBox(
+            "Confirmación",
+            $"¿Esta seguro de eliminar el usuario '{_seleccionado.Username}' (ID: {_seleccionado.Id})?",
+            yesText: "Eliminar",
+            cancelText: "Cancelar");
+
+        if (ok != true) return;
+
+        var resp = await usuariosRepository.DeleteAsync(_seleccionado.Id);
+        if (!resp.Error)
+        {
+            // refrescar lista
+            await CargarUsuariosAsync();
+            _seleccionado = null;
+        }
+        else
+        {
+            // opcional: mostrar mensaje si tu Response trae texto
+            Console.WriteLine("Error al eliminar usuario");
+        }
+    }
+
 }

@@ -13,6 +13,8 @@ namespace MS.RoadFire.UI.Repositories
 
         Task<HttpResponseWrapper<object>> PutAsync<T>(string url, T data);
 
+        Task<HttpResponseWrapper<TResponse>> PutAsync<TRequest, TResponse>(string url, TRequest data);
+
         Task<HttpResponseWrapper<object>> DeleteAsync(string url);
     }
 }
