@@ -1,0 +1,146 @@
+﻿@page "/EditCategory"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager NavManager
+@inject CategoriesRepository categoriesRepository
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="roles-wrapper">
+        <MudPaper Class="rol-form" Elevation="6">
+
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">
+                ✏️ Editar Categoría por ID
+            </MudText>
+
+            <!-- Paso 1: Buscar categoría -->
+            <MudForm @ref="buscarForm">
+                <MudTextField @bind-Value="categoriaId"
+                              Label="ID de la Categoría"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El ID es obligatorio." />
+
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="BuscarCategoriaAsync" Class="mt-3">
+                    🔎 Buscar Categoría
+                </MudButton>
+            </MudForm>
+
+            @if (categoriaEditada != null)
+            {
+                <MudDivider Class="my-4" />
+                <MudText Typo="Typo.h6" Align="Align.Center">✏️ Editar información de la categoría</MudText>
+
+                <!-- Paso 2: Editar categoría -->
+                <MudForm @ref="form" Model="@categoriaEditada">
+                    <MudTextField @bind-Value="categoriaEditada.Name"
+                                  Label="Nombre de la Categoría"
+                                  Variant="Variant.Outlined"
+                                  Required="true"
+                                  RequiredError="El nombre es obligatorio." />
+
+                    <MudTextField @bind-Value="categoriaEditada.Description"
+                                  Label="Descripción"
+                                  Variant="Variant.Outlined"
+                                  Required="true"
+                                  RequiredError="La descripción es obligatoria." />
+
+                    <MudCheckBox T="bool" @bind-Checked="categoriaEditada.IsActive" Label="Activo" Class="mt-3" />
+
+                    <div class="form-buttons mt-4">
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="ConfirmarEdicionAsync">
+                            💾 Guardar Cambios
+                        </MudButton>
+
+                        <MudButton Variant="Variant.Outlined" Color="Color.Dark" OnClick="Cancelar">
+                            Cancelar
+                        </MudButton>
+                    </div>
+                </MudForm>
+            }
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private MudForm? buscarForm;
+    private MudForm? form;
+    private int categoriaId;
+    private CategoryDto? categoriaEditada;
+    private string? mensaje;
+    private bool isLoading = false;
+
+    private async Task BuscarCategoriaAsync()
+    {
+        await buscarForm!.Validate();
+        if (!buscarForm.IsValid) return;
+
+        mensaje = null;
+        var response = await categoriesRepository.GetByIdAsync(categoriaId);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            categoriaEditada = response.Response.Data;
+            mensaje = "✅ Categoría cargada correctamente. Puedes editar los campos.";
+        }
+        else
+        {
+            categoriaEditada = null;
+            mensaje = "❌ No se encontró ninguna categoría con ese ID.";
+        }
+    }
+
+    private async Task ConfirmarEdicionAsync()
+    {
+        bool? confirmacion = await DialogService.ShowMessageBox(
+            "Confirmación",
+            "¿Deseas guardar los cambios en esta categoría?",
+            yesText: "Guardar",
+            cancelText: "Cancelar"
+        );
+
+        if (confirmacion == true)
+        {
+            await GuardarCambios();
+        }
+    }
+
+    private async Task GuardarCambios()
+    {
+        await form!.Validate();
+
+        if (!form.IsValid)
+        {
+            mensaje = "⚠️ Completa todos los campos obligatorios.";
+            return;
+        }
+
+        isLoading = true;
+        mensaje = null;
+
+        var response = await categoriesRepository.UpdateAsync(categoriaEditada!);
+
+        if (!response.Error && response.HttpResponseMessage.IsSuccessStatusCode)
+        {
+            mensaje = "✅ Categoría actualizada exitosamente.";
+            await Task.Delay(1500);
+            NavManager.NavigateTo("/Catalog", forceLoad: true);
+        }
+        else
+        {
+            mensaje = "❌ Error al actualizar la categoría.";
+        }
+
+        isLoading = false;
+    }
+
+    private void Cancelar()
+    {
+        NavManager.NavigateTo("/Catalog");
+    }
+}

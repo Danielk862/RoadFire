@@ -1,0 +1,95 @@
+﻿@page "/CreateCategory"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+@inject CategoriesRepository categoriesRepository
+
+<div class="home-background">
+    <MudPaper Class="roles-wrapper" Elevation="12">
+
+        <!-- Botón Volver -->
+        <div class="top-bar">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="volver-btn" OnClick="Volver">
+                &lt; Volver
+            </MudButton>
+        </div>
+
+        <!-- Título -->
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="titulo">➕ Crear Nueva Categoría</MudText>
+
+        <!-- Formulario -->
+        <EditForm Model="@nuevaCategoria" OnValidSubmit="CrearCategoriaAsync" Class="form-container">
+            
+            <MudTextField @bind-Value="nuevaCategoria.Name"
+                          Label="Nombre de la Categoría"
+                          Variant="Variant.Outlined"
+                          Required="true"
+                          RequiredError="El nombre es obligatorio."
+                          Class="input-field" />
+
+            <MudTextField @bind-Value="nuevaCategoria.Description"
+                          Label="Descripción"
+                          Variant="Variant.Outlined"
+                          Required="true"
+                          RequiredError="La descripción es obligatoria."
+                          Class="input-field" />
+
+            <MudCheckBox T="bool" @bind-Checked="nuevaCategoria.IsActive" Label="Activo" Class="mt-3" />
+
+            <!-- Botones -->
+            <div class="btn-container">
+                <MudButton Variant="Variant.Filled" Color="Color.Success" ButtonType="ButtonType.Submit" Class="btn-eliminar">
+                    Crear Categoría
+                </MudButton>
+
+                <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="Cancelar" Class="btn-cancelar">
+                    Cancelar
+                </MudButton>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <MudAlert Severity="@(creacionExitosa ? Severity.Success : Severity.Error)" Class="mensaje-alerta">
+                @mensaje
+            </MudAlert>
+        }
+    </MudPaper>
+</div>
+
+@code {
+    private CategoryDto nuevaCategoria = new() { IsActive = true };
+
+    private string mensaje = string.Empty;
+    private bool creacionExitosa = false;
+
+    private async Task CrearCategoriaAsync()
+    {
+        var response = await categoriesRepository.AddAsync(nuevaCategoria);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            mensaje = "✅ Categoría creada exitosamente.";
+            creacionExitosa = true;
+            await Task.Delay(1200);
+            NavManager.NavigateTo("/Catalog", forceLoad: true);
+        }
+        else
+        {
+            mensaje = "❌ Ocurrió un error al crear la categoría.";
+            creacionExitosa = false;
+        }
+    }
+
+    private void Volver()
+    {
+        NavManager.NavigateTo("/Catalog");
+    }
+
+    private void Cancelar()
+    {
+        nuevaCategoria = new CategoryDto();
+    }
+}

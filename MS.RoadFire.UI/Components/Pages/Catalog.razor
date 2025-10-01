@@ -42,12 +42,13 @@
                 <MudTd DataLabel="Nombre">@context.Name</MudTd>
                 <MudTd DataLabel="Descripción">@context.Description</MudTd>
                 <MudTd DataLabel="Estado">@(context.IsActive ? "Activo" : "Inactivo")</MudTd>
-               
+
 
             </RowTemplate>
         </MudTable>
     </div>
 </div>
+
 
 @code {
     private List<CategoryDto> categorias = new();
@@ -77,15 +78,18 @@
 
     private void Create()
     {
+		NavManager.NavigateTo("/CreateCategory");
     }
 
     private void Edit()
     {
+		NavManager.NavigateTo("/EditCategory");
       
     }
 
     private void  Delete()
     {
+		NavManager.NavigateTo("/DeleteCategory");
        
     }
 }

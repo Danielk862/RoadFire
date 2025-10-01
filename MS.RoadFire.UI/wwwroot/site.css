@@ -248,5 +248,26 @@
         transform: translateY(-3px);
         box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.5);
     }
+/* Contenedor interno del formulario */
+.form-container {
+    max-width: 400px; /* 📏 Ancho máximo del formulario */
+    margin: 0 auto; /* 📍 Centra el formulario */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Campos más pequeños */
+.input-field {
+    width: 100%;
+}
+
+/* Opcional: Ajusta el paper para que no crezca demasiado */
+.rol-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 20px;
+}
 
 /* 🧾*/

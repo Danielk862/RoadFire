@@ -1,0 +1,124 @@
+﻿@page "/DeleteCategory"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager NavManager
+@inject CategoriesRepository categoriesRepository
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="roles-wrapper">
+        <MudPaper Class="rol-form" Elevation="6">
+
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">
+                🗑️ Eliminar Categoría por ID
+            </MudText>
+
+            <!-- Paso 1: Buscar categoría -->
+            <MudForm @ref="buscarForm">
+                <MudTextField @bind-Value="categoriaId"
+                              Label="ID de la Categoría"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El ID es obligatorio." />
+
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="BuscarCategoriaAsync" Class="mt-3">
+                    🔎 Buscar Categoría
+                </MudButton>
+            </MudForm>
+
+            @if (categoriaEncontrada != null)
+            {
+                <MudDivider Class="my-4" />
+                <MudText Typo="Typo.h6" Align="Align.Center">📄 Información de la categoría</MudText>
+
+                <!-- Mostrar datos sin permitir edición -->
+                <MudTextField Value="@categoriaEncontrada.Name" Label="Nombre" Variant="Variant.Outlined" Disabled="true" />
+                <MudTextField Value="@categoriaEncontrada.Description" Label="Descripción" Variant="Variant.Outlined" Disabled="true" />
+                <MudCheckBox T="bool" Checked="@categoriaEncontrada.IsActive" Label="Activo" Disabled="true" />
+
+                <div class="form-buttons mt-4">
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="ConfirmarEliminacionAsync">
+                        🗑️ Eliminar Categoría
+                    </MudButton>
+
+                    <MudButton Variant="Variant.Outlined" Color="Color.Dark" OnClick="Cancelar">
+                        Cancelar
+                    </MudButton>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private MudForm? buscarForm;
+    private int categoriaId;
+    private CategoryDto? categoriaEncontrada;
+    private string? mensaje;
+    private bool isLoading = false;
+
+    // ✅ Mismo método de búsqueda que en EditCategory
+    private async Task BuscarCategoriaAsync()
+    {
+        await buscarForm!.Validate();
+        if (!buscarForm.IsValid) return;
+
+        mensaje = null;
+        var response = await categoriesRepository.GetByIdAsync(categoriaId);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            categoriaEncontrada = response.Response.Data;
+            mensaje = "✅ Categoría encontrada. Puedes eliminarla.";
+        }
+        else
+        {
+            categoriaEncontrada = null;
+            mensaje = "❌ No se encontró ninguna categoría con ese ID.";
+        }
+    }
+
+    // ✅ Confirmar antes de eliminar
+    private async Task ConfirmarEliminacionAsync()
+    {
+        bool? confirmacion = await DialogService.ShowMessageBox(
+            "Confirmación",
+            "⚠️ ¿Estás seguro de eliminar esta categoría? Esta acción no se puede deshacer.",
+            yesText: "Eliminar",
+            cancelText: "Cancelar"
+        );
+
+        if (confirmacion == true)
+        {
+            await EliminarCategoria();
+        }
+    }
+
+    private async Task EliminarCategoria()
+    {
+        if (categoriaEncontrada == null) return;
+
+        var response = await categoriesRepository.DeleteAsync(categoriaEncontrada.Id);
+
+        if (!response.Error && response.HttpResponseMessage.IsSuccessStatusCode)
+        {
+            mensaje = "✅ Categoría eliminada exitosamente.";
+            await Task.Delay(1500);
+            NavManager.NavigateTo("/Catalog", forceLoad: true);
+        }
+        else
+        {
+            mensaje = "❌ Error al eliminar la categoría.";
+        }
+    }
+
+    private void Cancelar()
+    {
+        NavManager.NavigateTo("/Catalog");
+    }
+}

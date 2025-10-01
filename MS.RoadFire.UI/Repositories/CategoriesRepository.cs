@@ -20,7 +20,7 @@ namespace MS.RoadFire.UI.Repositories
 
         public async Task<HttpResponseWrapper<ResponseDto<CategoryDto>>> GetByIdAsync(int id)
         {
-            return await _repository.GetAsync<ResponseDto<CategoryDto>>($"api/Category/Get?id={id}");
+            return await _repository.GetAsync<ResponseDto<CategoryDto>>($"api/Category/Get/id?id={id}");
         }
 
         public async Task<HttpResponseWrapper<ResponseDto<CategoryDto>>> AddAsync(CategoryDto category)
@@ -53,7 +53,7 @@ namespace MS.RoadFire.UI.Repositories
         // ✅ Eliminar categoría por ID
         public async Task<HttpResponseWrapper<ResponseDto<bool>>> DeleteAsync(int id)
         {
-            return await _repository.DeleteAsync<ResponseDto<bool>>($"api/Category/Delete?id={id}");
+            return await _repository.DeleteAsync<ResponseDto<bool>>($"api/Category/Delete/id?id={id}");
         }
     }
 }
