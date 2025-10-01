@@ -10,17 +10,22 @@ namespace MS.RoadFire.Api.Controllers
     public class RolesController : Controller
     {
         #region Internals
+
         private readonly IGenericServices<Role, RoleDto> _genericServices;
-        #endregion
+
+        #endregion Internals
 
         #region Constructor
+
         public RolesController(IGenericServices<Role, RoleDto> genericServices)
         {
             _genericServices = genericServices;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
+
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -45,6 +50,7 @@ namespace MS.RoadFire.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(RoleDto model)
         {
+            Console.WriteLine($"📨 UpdateAsync recibido: Id={model.Id}, Nombre={model.Name}, IsActive={model.IsActive}");
             var result = await _genericServices.UpdateAsync(model);
             return StatusCode((int)result.Code, result);
         }
@@ -55,6 +61,7 @@ namespace MS.RoadFire.Api.Controllers
             var result = await _genericServices.DeleteAsync(id);
             return StatusCode((int)result.Code, result);
         }
-        #endregion
+
+        #endregion Methods
     }
 }

@@ -56,21 +56,29 @@
 
     private async Task EliminarRolAsync()
     {
-        var response = await rolesRepository.DeleteAsync<ResponseDto<bool>>(rolIdModel.Id);
+        // 1. Obtener el rol actual
 
-        if (response.HttpResponseMessage.StatusCode == HttpStatusCode.NoContent)
+        Console.WriteLine($"ID recibido en EliminarRolAsync: {rolIdModel.Id}");
+
+        var getResponse = await rolesRepository.GetByIdAsync(rolIdModel.Id);
+        if (getResponse.Error || getResponse.Response?.Data == null)
         {
-            mensaje = "✅ Rol eliminado exitosamente.";
-            eliminacionExitosa = true;
-            rolIdModel = new EliminarRolModel();
-            await Task.Delay(800);
-            Navigation.NavigateTo("/GestionRoles", forceLoad: true);
+            mensaje = "❌ Rol no encontrado.";
+            eliminacionExitosa = false;
             return;
         }
 
-        if (!response.Error && response.Response != null && response.Response.Data)
+        // 2. Marcar como inactivo
+        var role = getResponse.Response.Data;
+        role.IsActive = false;
+
+
+        // 3. Actualizar el rol
+        var response = await rolesRepository.UpdateAsync(role);
+
+        if (!response.Error && response.HttpResponseMessage.IsSuccessStatusCode)
         {
-            mensaje = $"✅ {response.Response.Messages ?? "Rol eliminado exitosamente."}";
+            mensaje = $"✅ Rol marcado como inactivo exitosamente.";
             eliminacionExitosa = true;
             rolIdModel = new EliminarRolModel();
             await Task.Delay(800);
@@ -78,11 +86,13 @@
         }
         else
         {
-            mensaje = $"❌ Error al eliminar el rol: {response.Response?.Messages ?? "Error desconocido."}";
+            var errorMsg = await response.HttpResponseMessage.Content.ReadAsStringAsync();
+ 
+            mensaje = $"❌ Error al marcar el rol como inactivo";
             eliminacionExitosa = false;
         }
-    }
 
+    }
 
 
     private void Back()

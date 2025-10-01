@@ -17,17 +17,17 @@
             <MudForm @ref="form" Model="@nuevoRol">
                 <!-- Nombre -->
                 <MudTextField @bind-Value="nuevoRol.Name"
-                              Label="Nombre del Rol"
-                              Variant="Variant.Outlined"
-                              Required="true"
-                              RequiredError="El nombre es obligatorio." />
+                Label="Nombre del Rol"
+                Variant="Variant.Outlined"
+                Required="true"
+                RequiredError="El nombre es obligatorio." />
 
                 <!-- Descripción -->
                 <MudTextField @bind-Value="nuevoRol.Description"
-                              Label="Descripción"
-                              Variant="Variant.Outlined"
-                              Required="true"
-                              RequiredError="La descripción es obligatoria." />
+                Label="Descripción"
+                Variant="Variant.Outlined"
+                Required="true"
+                RequiredError="La descripción es obligatoria." />
 
                 <!-- Estado -->
                 <!-- Estado -->
@@ -42,8 +42,8 @@
 
 
                     <MudButton Variant="Variant.Outlined"
-                               Color="Color.Dark"
-                               OnClick="Cancelar">
+                    Color="Color.Dark"
+                    OnClick="Cancelar">
                         Cancelar
                     </MudButton>
                 </div>
@@ -59,7 +59,7 @@
 
 @code {
     private MudForm? form;
-    private RoleDto nuevoRol = new(); 
+    private RoleDto nuevoRol = new() { IsActive = true}; 
     private bool isLoading = false;
     private string? mensaje;
 
@@ -79,9 +79,6 @@
     }
 
 
-
-
-
     private async Task CrearRol()
     {
         await form!.Validate();
@@ -94,6 +91,8 @@
 
         isLoading = true;
         mensaje = null;
+
+        Console.WriteLine($"IsActive antes de guardar: {nuevoRol.IsActive}");
 
         var response = await rolesRepository.AddAsync(nuevoRol);
 
