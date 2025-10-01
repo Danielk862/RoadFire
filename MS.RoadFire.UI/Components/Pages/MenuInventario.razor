@@ -3,12 +3,47 @@
 <PageTitle>Inventario</PageTitle>
 
 <div class="home-background">
-    <MudContainer Class="pa-10 text-white text-center">
-        <MudText Typo="Typo.h3" GutterBottom="true">Bienvenido</MudText>
-        <MudText Typo="Typo.body1" Class="mb-8">UI Para gestion de Inventario de Road Fire.</MudText>
-    </MudContainer>
+    <div class="inventario-container">
+
+        <!-- Botón Volver -->
+        <div class="top-bar">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="volver-btn" OnClick="Back">
+                &lt; Volver
+            </MudButton>
+        </div>
+
+        <!-- Botones principales -->
+        <div class="inventario-menu">
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="inventario-btn">
+                ENTRADA MERCANCIA
+            </MudButton>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="inventario-btn">
+                SALIDA MERCANCIA
+            </MudButton>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="inventario-btn">
+                TRASLADO ENTRE ALMACENES
+            </MudButton>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="inventario-btn" OnClick="GoCatalog">
+                CATALOGO
+            </MudButton>
+        </div>
+    </div>
 </div>
 
+@inject NavigationManager Navigation
 @code {
 
+
+    private void Back()
+    {
+        Navigation.NavigateTo("/MenuAdmin");
+    }
+
+	private void GoCatalog()
+	{
+		Navigation.NavigateTo("/Catalog");
+	}
 }

@@ -1,0 +1,91 @@
+﻿@page "/Catalog"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+@inject CategoriesRepository categoriesRepository
+
+
+<div class="home-background">
+    <div class="roles-wrapper">
+        <div class="top-bar">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="volver-btn" OnClick="Back">
+                &lt; Volver
+            </MudButton>
+
+            <MudText Typo="Typo.h4" Class="titulo">📦 CATALOGO DE CATEGORÍAS</MudText>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Success" Class="nuevo-btn" OnClick="Create">
+                ➕ Nueva Categoría
+            </MudButton>
+
+            <MudButton Variant="Variant.Outlined" Color="Color.Info" Size="Size.Small" OnClick="Edit">
+                ✏️ Editar
+            </MudButton>
+
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small" OnClick="Delete">
+                🗑️ Eliminar
+            </MudButton>
+        </div>
+
+        <MudTable Items="@categorias" Hover="true" Dense="true" Bordered="true" Striped="true" Class="tabla-categorias">
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>Nombre</MudTh>
+                <MudTh>Descripción</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="ID">@context.Id</MudTd>
+                <MudTd DataLabel="Nombre">@context.Name</MudTd>
+                <MudTd DataLabel="Descripción">@context.Description</MudTd>
+                <MudTd DataLabel="Estado">@(context.IsActive ? "Activo" : "Inactivo")</MudTd>
+               
+
+            </RowTemplate>
+        </MudTable>
+    </div>
+</div>
+
+@code {
+    private List<CategoryDto> categorias = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarCategorias();
+    }
+
+    private async Task CargarCategorias()
+    {
+        var response = await categoriesRepository.GetAllAsync();
+        if (response.Response?.Data != null)
+        {
+            categorias = response.Response.Data;
+        }
+        else
+        {
+            Snackbar.Add("Error al cargar las categorías", Severity.Error);
+        }
+    }
+
+    private void Back()
+    {
+        NavManager.NavigateTo("/MenuInventario");
+    }
+
+    private void Create()
+    {
+    }
+
+    private void Edit()
+    {
+      
+    }
+
+    private void  Delete()
+    {
+       
+    }
+}
