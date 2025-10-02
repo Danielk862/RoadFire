@@ -17,5 +17,7 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         [Required]
         [StringLength(100, MinimumLength = 1)]
         public string Description { get; set; } = string.Empty;
+
+        public bool IsActive { get; set; }
     }
 }

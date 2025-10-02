@@ -15,9 +15,11 @@ namespace MS.RoadFire.DataAccess.Context
         public async Task SeedAsync()
         {
             await _dataContext.Database.EnsureCreatedAsync();
-            await CheckEmployeesAsync();
             await CheckRolesAsync();
+            await CheckEmployeesAsync();
             await CheckUsersAsync();
+            await CheckCategoriesAsync();
+            await CheckProductsAsync();
         }
 
         private async Task CheckRolesAsync()
@@ -27,12 +29,26 @@ namespace MS.RoadFire.DataAccess.Context
                 _dataContext.Roles.Add(new Role
                 {
                     Name = "Administrador",
-                    Description = "Rol encargado de administrar el sistema"
+                    Description = "Rol encargado de administrar el sistema",
+                    IsActive = true
                 });
                 _dataContext.Roles.Add(new Role
                 {
                     Name = "Ventas",
-                    Description = "Rol encargado de las ventas"
+                    Description = "Rol encargado de las ventas",
+                    IsActive = true
+                });
+                _dataContext.Roles.Add(new Role
+                {
+                    Name = "Compras",
+                    Description = "Rol encargado de las compras",
+                    IsActive = true
+                });
+                _dataContext.Roles.Add(new Role
+                {
+                    Name = "Inventario",
+                    Description = "Rol encargado del inventario",
+                    IsActive = true
                 });
             }
             await _dataContext.SaveChangesAsync();
@@ -96,14 +112,80 @@ namespace MS.RoadFire.DataAccess.Context
                 _dataContext.Users.Add(new User
                 {
                     CreatedAt = DateTime.Now,
-                    EmployeeId = salesRole.Id,
+                    EmployeeId = employee2.Id,
                     Password = "123456",
-                    RoleId = employee2.Id,
+                    RoleId = salesRole.Id,
                     State = true,
                     Username = "calvarez"
                 });
             }
             await _dataContext.SaveChangesAsync();
+        }
+
+        private async Task CheckCategoriesAsync()
+        {
+            if (!await _dataContext.Categories.AnyAsync(c => c.Name == "Aceites"))
+            {
+                _dataContext.Categories.Add(new Category
+                {
+                    Name = "Aceites",
+                    Description = "Toda la linea de aceites",
+                    IsActive = true
+                });
+            }
+
+            if (!await _dataContext.Categories.AnyAsync(c => c.Name == "Cadenas"))
+            {
+                _dataContext.Categories.Add(new Category
+                {
+                    Name = "Cadenas",
+                    Description = "Cadenas para todo tipo de motocicleta",
+                    IsActive = true
+                });
+            }
+
+            await _dataContext.SaveChangesAsync();
+        }
+
+        private async Task CheckProductsAsync()
+        {
+            // Verificar si existen productos antes de agregarlos
+            if (!await _dataContext.Products.AnyAsync())
+            {
+                var oil = await _dataContext.Categories.FirstOrDefaultAsync(c => c.Name == "Aceites");
+                var chain = await _dataContext.Categories.FirstOrDefaultAsync(c => c.Name == "Cadenas");
+
+                if (oil == null || chain == null)
+                {
+                    throw new Exception("❌ Categorías 'Aceites' o 'Cadenas' no encontradas. Ejecuta CheckCategoriesAsync primero.");
+                }
+
+                // Agregar producto Aceite
+                if (!await _dataContext.Products.AnyAsync(p => p.Sku == "ACL125"))
+                {
+                    _dataContext.Products.Add(new Product
+                    {
+                        Sku = "ACL125",
+                        Description = "Aceite Mobile 3500",
+                        Price = 32000,
+                        CategoryId = oil.Id
+                    });
+                }
+
+                // Agregar producto Cadena
+                if (!await _dataContext.Products.AnyAsync(p => p.Sku == "CD2020"))
+                {
+                    _dataContext.Products.Add(new Product
+                    {
+                        Sku = "CD2020",
+                        Description = "Cadena pulsar 180",
+                        Price = 120000,
+                        CategoryId = chain.Id
+                    });
+                }
+
+                await _dataContext.SaveChangesAsync();
+            }
         }
     }
 }

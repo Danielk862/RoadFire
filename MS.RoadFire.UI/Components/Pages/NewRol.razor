@@ -1,0 +1,118 @@
+﻿@page "/NewRol"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject NavigationManager Navigation
+@inject RolesRepository rolesRepository
+@inject IDialogService DialogService
+
+
+<div class="home-background">
+    <div class="nuevo-rol-container">
+        <MudPaper Class="rol-form" Elevation="6">
+
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">
+                ➕ Crear Nuevo Rol
+            </MudText>
+
+            <MudForm @ref="form" Model="@nuevoRol">
+                <!-- Nombre -->
+                <MudTextField @bind-Value="nuevoRol.Name"
+                              Label="Nombre del Rol"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El nombre es obligatorio." />
+
+                <!-- Descripción -->
+                <MudTextField @bind-Value="nuevoRol.Description"
+                              Label="Descripción"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="La descripción es obligatoria." />
+
+                <!-- Estado -->
+                <!-- Estado -->
+                <MudCheckBox T="bool" @bind-Checked="nuevoRol.IsActive" Label="Activo" Class="mt-3" />
+
+
+                <!-- Botones -->
+                <div class="form-buttons mt-4">
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="ConfirmarCreacionAsync">
+                        Crear Rol
+                    </MudButton>
+
+
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Dark"
+                               OnClick="Cancelar">
+                        Cancelar
+                    </MudButton>
+                </div>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private MudForm? form;
+    private RoleDto nuevoRol = new(); 
+    private bool isLoading = false;
+    private string? mensaje;
+
+    private async Task ConfirmarCreacionAsync()
+    {
+        bool? confirmacion = await DialogService.ShowMessageBox(
+            "Confirmación",
+            "¿Estás seguro de crear este rol?",
+            yesText: "Aceptar",
+            cancelText: "Cancelar"
+        );
+
+        if (confirmacion == true)
+        {
+            await CrearRol();
+        }
+    }
+
+
+
+
+
+    private async Task CrearRol()
+    {
+        await form!.Validate();
+
+        if (!form.IsValid)
+        {
+            mensaje = "Por favor, complete todos los campos obligatorios.";
+            return;
+        }
+
+        isLoading = true;
+        mensaje = null;
+
+        var response = await rolesRepository.AddAsync(nuevoRol);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            mensaje = "✅ Rol creado exitosamente.";
+            await Task.Delay(1500); 
+            Navigation.NavigateTo("/GestionRoles"); // vuelve al listado
+        }
+        else
+        {
+            mensaje = response.Response?.Messages ?? "❌ Error al crear el rol.";
+        }
+
+        isLoading = false;
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/GestionRoles");
+    }
+}
