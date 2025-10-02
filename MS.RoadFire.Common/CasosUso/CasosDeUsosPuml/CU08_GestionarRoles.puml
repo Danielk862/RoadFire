@@ -1,0 +1,30 @@
+@startuml CU08_GestionRoles_Simple
+title: Gestión de roles
+
+|Usuario|
+start
+
+fork
+    :Crear o actualizar rol;
+fork again
+    :Asignar o editar permisos;
+end fork
+
+:Validar nombre único y permisos;
+
+if () then (Sí)
+    :Guardar rol;
+else (No)
+    :Mostrar errores;
+endif
+
+:Seleccionar rol para eliminar;
+
+:Solicitar confirmación;
+:Reasignar usuarios si aplica;
+:Eliminar rol;
+
+:Listar roles y ver detalles;
+
+stop
+@enduml

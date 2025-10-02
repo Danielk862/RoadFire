@@ -1,0 +1,26 @@
+@startuml CU06_GestionCategorias_Simple
+title: Gestión de categorías
+
+|Usuario|
+start
+
+fork
+  :Crear o editar;
+fork again
+  :Asignar o retirar productos;
+end fork
+
+:Guardar cambios;
+
+if () then (Sí)
+  :Visualizar lista actualizada;
+else (No)
+  :Mostrar mensaje "Nombre ya existe";
+endif
+
+if () then (Sí)
+  :Solicitar reasignación o confirmación;
+endif
+
+stop
+@enduml

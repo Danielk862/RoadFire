@@ -1,0 +1,31 @@
+@startuml CU09_ImportacionMasiva_Simple
+title: Importación masiva de productos
+
+|Usuario|
+start
+
+:Descargar plantilla (opcional);
+
+:Seleccionar archivo CSV;
+
+fork
+    :Validar formato del archivo;
+fork again
+    :Validar datos;
+end fork
+
+if () then (Sí)
+    :Previsualizar;
+
+    :Confirmar importación;
+
+    :Insertar/actualizar;
+
+    :Mostrar resumen;
+else (No)
+    :Rechazar archivo;
+    :Detallar causas;
+endif
+
+stop
+@enduml

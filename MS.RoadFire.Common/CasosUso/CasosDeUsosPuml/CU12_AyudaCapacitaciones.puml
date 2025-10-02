@@ -1,0 +1,23 @@
+@startuml CU12_AyudaCapacitacion_Simple
+title: Módulo de Ayuda y Capacitación
+
+|Usuario|
+start
+
+:Abrir módulo de Ayuda o Capacitación;
+
+fork
+    :Navegar temas o usar búsqueda;
+fork again
+    :Acceder a tutoriales o guías;
+end fork
+
+:Marcar como completado (opcional);
+:Descargar manuales (opcional);
+:Sugerir materiales relacionados;
+
+|Administrador|
+:Crear, editar y publicar contenido;
+
+stop
+@enduml

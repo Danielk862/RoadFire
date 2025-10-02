@@ -1,0 +1,34 @@
+@startuml CU07_GestionUsuarios_Simple
+title: Gestión de usuarios
+
+|Administrador|
+start
+
+fork
+  :Crear o editar usuario;
+fork again
+  :Asignar roles y estado;
+end fork
+
+:Validar duplicidad y roles;
+
+if () then (Sí)
+  :Guardar cambios;
+
+else (No)
+  :Mostrar errores;
+endif
+
+:Seleccionar usuario para eliminar o desactivar;
+
+if () then (Sí)
+  :Confirmar impacto;
+  :Eliminar usuario;
+else (No)
+  :Desactivar usuario;
+endif
+
+:Listar usuarios con filtros y exportación;
+
+stop
+@enduml

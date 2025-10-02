@@ -1,0 +1,32 @@
+@startuml CU01_VisualizarInventario_ForkJoin
+title: Visualizar Inventario
+
+|Usuario|
+start
+
+:Abrir vista de Inventario;
+
+if () then (Sí)
+    fork
+        :Mostrar listado de productos;
+    fork again
+        :Actualizar stock en tiempo real;    
+    end fork
+
+else (No)
+    :Denegar acceso;
+    :Registrar intento fallido;
+endif
+
+:Cerrar vista de Inventario;
+
+note right
+  Reglas de negocio:
+  - Inventario debe mostrarse paginado (50 filas/página).
+  - Orden inicial ascendente por nombre de producto.
+  - Productos inactivos diferenciados y no sugeridos para venta.
+  - Búsqueda insensible a mayúsculas, tildes y espacios.
+end note
+
+stop
+@enduml

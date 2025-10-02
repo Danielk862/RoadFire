@@ -4,8 +4,13 @@ start
 :Abrir módulo Notificaciones;
 :Seleccionar evento;
 :Definir límites/reglas;
-:Elegir canal y destinatarios;
-:Redactar plantilla;
+
+fork
+    :Elegir destinatarios;
+fork again
+    :Redactar plantilla;
+end fork
+
 :Guardar reglas;
 
 :Notificaciones configuradas;
