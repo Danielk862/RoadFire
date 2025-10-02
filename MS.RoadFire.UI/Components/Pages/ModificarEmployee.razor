@@ -1,0 +1,169 @@
+﻿@page "/ModificarEmployee/{id:int}"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.UI.Repositories
+@inject EmployeesRepository EmployeeRepository
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+
+<div class="home-background">
+    <div class="nuevo-employee-container">
+        <MudPaper Class="employee-form" Elevation="6">
+
+            <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4">
+                ✏️ Modificar Empleado
+            </MudText>
+
+            <MudForm @ref="form" Model="@empleado">
+
+                <MudTextField @bind-Value="empleado.FirtsName"
+                              Label="Primer Nombre"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El primer nombre es obligatorio." />
+
+                <MudTextField @bind-Value="empleado.SecondName"
+                              Label="Segundo Nombre"
+                              Variant="Variant.Outlined" />
+
+                <MudTextField @bind-Value="empleado.Surname"
+                              Label="Primer Apellido"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El primer apellido es obligatorio." />
+
+                <MudTextField @bind-Value="empleado.SecondSurname"
+                              Label="Segundo Apellido"
+                              Variant="Variant.Outlined" />
+
+                <MudDatePicker Date="empleado.BornDate"
+                               DateChanged="value => empleado.BornDate = value ?? DateTime.Now"
+                               Label="Fecha de Nacimiento"
+                               Variant="Variant.Outlined"
+                               Required="true"
+                               RequiredError="La fecha de nacimiento es obligatoria." />
+
+                <MudTextField @bind-Value="empleado.Address"
+                              Label="Dirección"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="La dirección es obligatoria." />
+
+                <MudTextField @bind-Value="empleado.Email"
+                              Label="Correo Electrónico"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El correo es obligatorio." />
+
+                <MudTextField @bind-Value="empleado.Mobile"
+                              Label="Teléfono Móvil"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              RequiredError="El teléfono es obligatorio." />
+
+                <MudTextField @bind-Value="empleado.Phone"
+                              Label="Teléfono Fijo"
+                              Variant="Variant.Outlined" />
+
+                <MudCheckBox T="bool" @bind-Checked="empleado.IsActive" Label="Activo" Class="mt-3" />
+
+                <div class="form-buttons mt-4">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ConfirmarEdicionAsync">
+                        Guardar Cambios
+                    </MudButton>
+
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Dark"
+                               OnClick="Cancelar">
+                        Cancelar
+                    </MudButton>
+                </div>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <MudText Typo="Typo.body2" Color="Color.Info" Class="mt-3">@mensaje</MudText>
+            }
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+    private List<EmployeeDto> employees = new();
+    private EmployeeDto? _seleccionado;
+    private MudForm? form;
+    private EmployeeDto empleado = new();
+    private bool isLoading = false;
+    private string? mensaje;
+
+    private void Back()
+    {
+        Navigation.NavigateTo("/GestionEmpleados");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEmployeesAsync();
+    }
+
+    private async Task CargarEmployeesAsync()
+    {
+        var response = await EmployeeRepository.GetAllAsync();
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            employees = response.Response.Data;
+        }
+        else
+        {
+            employees = new List<EmployeeDto>();
+        }
+    }
+
+
+    private async Task ConfirmarEdicionAsync()
+    {
+        await form!.Validate();
+        if (!form.IsValid)
+        {
+            mensaje = "Por favor, complete todos los campos obligatorios.";
+            return;
+        }
+
+        bool? confirmacion = await DialogService.ShowMessageBox(
+            "Confirmación",
+            "¿Desea guardar los cambios del empleado?",
+            yesText: "Aceptar",
+            cancelText: "Cancelar"
+        );
+
+        if (confirmacion == true)
+        {
+            await EditarEmpleado();
+        }
+    }
+
+    private async Task EditarEmpleado()
+    {
+        isLoading = true;
+        var response = await EmployeeRepository.UpdateAsync(empleado);
+
+        if (!response.Error && response.Response?.Data != null)
+        {
+            mensaje = "✅ Cambios guardados exitosamente.";
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/GestionEmpleados");
+        }
+        else
+        {
+            mensaje = response.Response?.Messages ?? "❌ Error al editar el empleado.";
+        }
+
+        isLoading = false;
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/GestionEmpleados");
+    }
+}
