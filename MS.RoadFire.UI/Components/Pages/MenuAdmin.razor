@@ -28,7 +28,7 @@
 
         <div class="user-card">
             <div class="user-info">
-                <h3>@(usuarioActual?.Username ?? "Usuario desconocido")</h3>
+                <h3>@(user ?? "Usuario desconocido")</h3>
 
                 <p>@fechaActual</p>
 
@@ -46,12 +46,15 @@
 
 
 @code {
-    private UserDto? usuarioActual;
+    private string? user;
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await localStorage.GetAsync<UserDto>("usuarioActual");
-        usuarioActual = result.Success ? result.Value : null;
+        var result = await localStorage.GetAsync<string>("user");
+        if (result.Success)
+        {
+            user = result.Value!;
+        }
     }
 
     private void Logout()

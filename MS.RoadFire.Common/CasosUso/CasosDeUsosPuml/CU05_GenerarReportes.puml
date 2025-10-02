@@ -1,0 +1,23 @@
+@startuml CU05_GenerarReporte_Simple
+title: Generar reporte
+
+|Usuario|
+start
+
+:Seleccionar tipo de reporte;
+
+:Definir filtros de consulta;
+
+fork
+    :Validar rango de fechas;
+fork again
+    :Buscar datos según filtros;
+end fork
+
+:Mostrar vista previa;
+:Exportar reporte;
+:Mostrar mensaje "Sin resultados";
+:Solicitar corrección de fechas;
+
+stop
+@enduml

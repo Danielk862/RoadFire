@@ -1,0 +1,40 @@
+@startuml CU03_RegistrarSalidaProductos_Simple
+title: Registrar salida de productos
+
+|Operario de bodega|
+start
+
+:Seleccionar producto;
+
+:Ingresar datos de salida;
+
+fork
+  :Validar formato de campos;
+fork again
+  :Verificar stock suficiente;
+end fork
+
+if () then (Sí)
+  :Confirmar registro;
+
+  fork
+    :Descontar stock;
+  fork again
+    :Registrar movimiento en historial;
+  end fork
+
+  :Mostrar confirmación;
+else (No)
+  :Mostrar errores;
+endif
+
+note right
+  Reglas de negocio:
+  - Cantidad > 0.
+  - No permitir stock negativo salvo autorización.
+  - Fecha de salida no posterior al día actual salvo autorización.
+  - Soporte multi-bodega cuando aplique.
+end note
+
+stop
+@enduml

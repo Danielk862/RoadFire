@@ -1,0 +1,34 @@
+@startuml CU02_RegistrarEntradaProductos_Fork
+title: Registrar entrada de productos
+
+|Operario de bodega|
+start
+
+:Seleccionar "Nueva entrada";
+
+:Ingresar datos de entrada;
+
+fork
+  :Validar campos obligatorios;
+fork again
+  :Verificar producto activo;
+fork again
+  :Comprobar documento duplicado;
+end fork
+
+if () then (Sí)
+  :Confirmar registro;
+
+  fork
+    :Incrementar stock;
+  fork again
+    :Registrar movimiento en historial;
+  end fork
+
+  :Mostrar confirmación;
+else (No)
+  :Mostrar errores;
+endif
+
+stop
+@enduml

@@ -1,0 +1,31 @@
+@startuml CU04_ConfigurarStockMinMax_Simple
+title: Configurar stock mínimo y máximo
+
+|Usuario|
+start
+
+:Seleccionar producto;
+
+:Ingresar valores;
+
+fork
+  :Validar que mínimo ≥ 0;
+fork again
+  :Validar que máximo ≥ mínimo;
+end fork
+
+if () then (Sí)
+  :Guardar cambios;
+
+  fork
+    :Recalcular estado del producto;
+  fork again
+    :Actualizar sugerencias de compra;
+  end fork
+
+else (No)
+  :Resaltar errores;
+endif
+
+stop
+@enduml

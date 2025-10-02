@@ -1,0 +1,25 @@
+@startuml CU11_ProyeccionAgotamiento_Simple
+title: Proyección de agotamiento
+
+|Usuario|
+start
+
+:Definir período de proyección;
+
+:Consultar predicción por producto;
+
+fork
+  :Aplicar filtros;
+fork again
+  :Validar disponibilidad;
+end fork
+
+if () then (Sí)
+    :Visualizar análisis detallado;
+    :Exportar resultado o generar solicitud (opcional);  
+else (No)
+  :Permitir reintento;
+endif
+
+stop
+@enduml
