@@ -5,6 +5,7 @@
 @inject UsuariosRepository usuariosRepository
 @inject RolesRepository rolesRepository
 @inject IDialogService DialogService
+@inject EmployeesRepository employeesRepository
 
 <div class="home-background">
     <div class="nuevo-rol-container">
@@ -20,10 +21,19 @@
                     Label="Nueva contraseña (opcional)"
                     Variant="Variant.Outlined"
                     InputType="InputType.Password" />
-                <MudNumericField T="int" @bind-Value="model.EmployeeId" 
-                    Label="ID Empleado" 
-                    Variant="Variant.Outlined" 
-                    Required="true" />
+
+                <MudSelect T="int" @bind-Value="model.EmployeeId"
+                           Label="Empleado" Variant="Variant.Outlined"
+                           Required="true">
+                    @foreach (var e in empleados.Where(x => x.IsActive))
+                    {
+                        <MudSelectItem Value="@e.Id">
+                            @($"{e.FirtsName} {e.SecondName} {e.Surname} {e.SecondSurname}".Replace("  ", " ").Trim())
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+
+
                 <MudSelect @bind-Value="model.RoleId" 
                     Label="Rol" Variant="Variant.Outlined" 
                     Required="true">
@@ -57,24 +67,28 @@
     private MudForm? form;
     private UserDto model = new();
     private List<RoleDto> roles = new();
+	private List<EmployeeDto> empleados = new();
     private string? mensaje;
     private bool isLoading;
-    private string newPassword = "";   // solo para edición local
+    private string newPassword = "";  
     private bool loaded;
 
     protected override async Task OnInitializedAsync()
     {
-        // cargar roles
         var rr = await rolesRepository.GetAllAsync();
         roles = (!rr.Error && rr.Response?.Data != null) ? rr.Response.Data : new();
 
-        // cargar usuario
+        var respEmps = await employeesRepository.GetAllAsync();
+        empleados = (!respEmps.Error && respEmps.Response?.Data != null)
+            ? respEmps.Response.Data
+            : new();
+
         var ur = await usuariosRepository.GetByIdAsync(id);
         if (!ur.Error && ur.Response?.Data != null)
         {            
             model = ur.Response.Data;
             loaded = true;
-            StateHasChanged();
+            StateHasChanged();  
         }
         else
         {
@@ -94,13 +108,13 @@
         if (!string.IsNullOrWhiteSpace(newPassword))
         {
             model.Password = newPassword;
-            // opcional: limpiar para no dejarla en memoria
-            newPassword = "";     }
-
+        }
 
         var resp = await usuariosRepository.UpdateAsync(model);
         if (!resp.Error && resp.Response?.Data != null)
         {
+            newPassword = string.Empty;
+            model.Password = null!;
             mensaje = "✅ Usuario actualizado.";
             await Task.Delay(1500);
             Navigation.NavigateTo("/GestionUsuarios");
@@ -117,4 +131,6 @@
     {
         Navigation.NavigateTo("/GestionUsuarios");
     }
+
+
 }

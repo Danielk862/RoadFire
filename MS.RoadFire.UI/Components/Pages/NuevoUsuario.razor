@@ -5,6 +5,8 @@
 @inject UsuariosRepository usuariosRepository
 @inject RolesRepository rolesRepository
 @inject IDialogService DialogService
+@inject EmployeesRepository employeesRepository
+
 
 <div class="home-background">
     <div class="nuevo-rol-container">
@@ -30,15 +32,19 @@
                               Required="true"
                               RequiredError="La contraseña es obligatoria." />
 
-                <!-- EmployeeId -->
-                <MudNumericField T="int" @bind-Value="nuevoUsuario.EmployeeId"
-                                 Label="ID Empleado"
-                                 Variant="Variant.Outlined"
-                                 Required="true"
-                                 RequiredError="El ID de empleado es obligatorio." />
+                <MudSelect T="int" @bind-Value="nuevoUsuario.EmployeeId"
+                           Label="Empleado" 
+                           Variant="Variant.Outlined"
+                           Required="true" 
+                           RequiredError="Seleccione un empleado.">
+                    @foreach (var e in empleados.Where(x => x.IsActive))
+                    {
+                        <MudSelectItem Value="@e.Id">
+                            @($"{e.FirtsName} {e.SecondName} {e.Surname} {e.SecondSurname}".Replace("  ", " ").Trim())
+                        </MudSelectItem>
+                    }
+                </MudSelect>
 
-                <!-- RoleId -->
-                <!-- Lista desplegable con roles-->
                 <MudSelect @bind-Value="nuevoUsuario.RoleId"
                            Label="Rol"
                            Variant="Variant.Outlined"
@@ -78,11 +84,11 @@
 @code {
     private MudForm? form;
     private UserDto nuevoUsuario = new() { State = true };
-    private List<RoleDto> roles = new(); //Para listar roles
+    private List<RoleDto> roles = new(); 
+    private List<EmployeeDto> empleados = new();
     private bool isLoading = false;
     private string? mensaje;
 
-	// Cargar roles al iniciar
     protected override async Task OnInitializedAsync()
     {
         var respRoles = await rolesRepository.GetAllAsync();
@@ -90,6 +96,12 @@
             roles = respRoles.Response.Data;
         else
             roles = new();
+
+        var respEmps = await employeesRepository.GetAllAsync();
+        if (!respEmps.Error && respEmps.Response?.Data != null)
+            empleados = respEmps.Response.Data; 
+        else
+            empleados = new();
     }
 
     private async Task ConfirmarCreacionAsync()
@@ -137,4 +149,5 @@
     {
         Navigation.NavigateTo("/GestionUsuarios");
     }
+
 }

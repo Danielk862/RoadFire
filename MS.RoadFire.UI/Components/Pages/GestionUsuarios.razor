@@ -26,7 +26,8 @@
 
         <!-- 📊 TABLA -->
         <MudTable Items="@usuarios" Dense="true" Hover="true" Bordered="true" Elevation="2"
-            @bind-SelectedItem="_seleccionado">
+            @bind-SelectedItem="_seleccionado"
+            RowClick="@((TableRowClickEventArgs<UserDto> e) => _seleccionado = e.Item)">
             <HeaderContent>
                 <MudTh>ID Usuario</MudTh>
                 <MudTh>Nombre Usuario</MudTh>
@@ -55,37 +56,38 @@
 @code {
 
     private List<UserDto> usuarios = new();
-
-	//Para nombres de roles para evitar múltiples llamadas (Temporal no esta llegando de API/BD)
     private Dictionary<int, string> roleNames = new();
 
-    private string GetRoleName(UserDto u) =>
-        !string.IsNullOrWhiteSpace(u.RoleName)
-            ? u.RoleName
-            : (roleNames.TryGetValue(u.RoleId, out var n) ? n : u.RoleId.ToString());
-
     protected override async Task OnInitializedAsync()
-    {
-        await CargarUsuariosAsync();
-
+    {        
         var rr = await rolesRepository.GetAllAsync();
         roleNames = (!rr.Error && rr.Response?.Data != null)
             ? rr.Response.Data.ToDictionary(r => r.Id, r => r.Name)
             : new();
+
+        await CargarUsuariosAsync();
+    }
+
+    //Para nombres de roles para evitar múltiples llamadas(Temporal no esta llegando de API/BD)
+
+    private string GetRoleName(UserDto u)
+    {
+        if (string.IsNullOrWhiteSpace(u.RoleName) ||
+            u.RoleName.Equals("string", StringComparison.OrdinalIgnoreCase))
+            return roleNames.TryGetValue(u.RoleId, out var n) ? n : u.RoleId.ToString();
+
+        return u.RoleName;
     }
 
     private async Task CargarUsuariosAsync()
     {
-		var response = await usuariosRepository.GetAllAsync();
+        var r = await usuariosRepository.GetAllAsync();
 
-        if (!response.Error && response.Response?.Data != null)
-        {
-            usuarios = response.Response.Data;
-        }
-        else
-        {
-            usuarios = new List<UserDto>(); // tabla vacía si no hay datos
-        }
+        usuarios = (!r.Error && r.Response?.Data != null)
+            ? r.Response.Data
+                .OrderByDescending(u => u.State) // Activos primero
+                .ToList()
+            : new List<UserDto>();
     }
 
     // Método para volver al menú anterior
@@ -94,6 +96,7 @@
         Navigation.NavigateTo("/MenuUsuarios");
     }
     // Método para crear un nuevo usuario
+
     private void NewUser()
     {
         Navigation.NavigateTo("/NuevoUsuario");
