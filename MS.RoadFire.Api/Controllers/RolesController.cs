@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 
 namespace MS.RoadFire.Api.Controllers
@@ -10,17 +11,22 @@ namespace MS.RoadFire.Api.Controllers
     public class RolesController : Controller
     {
         #region Internals
+
         private readonly IGenericServices<Role, RoleDto> _genericServices;
-        #endregion
+
+        #endregion Internals
 
         #region Constructor
+
         public RolesController(IGenericServices<Role, RoleDto> genericServices)
         {
             _genericServices = genericServices;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
+
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -28,7 +34,7 @@ namespace MS.RoadFire.Api.Controllers
             return StatusCode((int)result.Code, result);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
             var result = await _genericServices.GetAsync(id);
@@ -45,16 +51,31 @@ namespace MS.RoadFire.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(RoleDto model)
         {
+            Console.WriteLine($"📨 UpdateAsync recibido: Id={model.Id}, Nombre={model.Name}, IsActive={model.IsActive}");
             var result = await _genericServices.UpdateAsync(model);
             return StatusCode((int)result.Code, result);
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var result = await _genericServices.DeleteAsync(id);
             return StatusCode((int)result.Code, result);
         }
-        #endregion
+
+        [HttpGet("paginated")]
+        public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        {
+            var result = await _genericServices.GetPaginationAsync(pagination);
+            return StatusCode((int)result.Code, result);
+        }
+
+        [HttpGet("totalRecords")]
+        public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
+        {
+            var result = await _genericServices.GetTotalRecordsAsync(pagination);
+            return StatusCode((int)result.Code, result);
+        }
+        #endregion Methods
     }
 }

@@ -1,0 +1,11 @@
+﻿@if (Category is null) 
+{ 
+    <Loading /> 
+} 
+else 
+{ 
+    <MudDialog> 
+        <DialogContent> <CategoryForm Category="Category" OnValidSubmit="EditAsync" ReturnAction="Return" IsEdit="true" /> 
+        </DialogContent> 
+    </MudDialog> 
+}

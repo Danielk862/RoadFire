@@ -1,0 +1,66 @@
+﻿@page "/MenuRolVentas"
+@using MS.RoadFire.Business.Models
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+<div class="home-background">
+    <div class="admin-container">
+
+        <!-- Botones principales -->
+        <div class="menu-buttons">
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="menu-btn" OnClick="@(() => Navigation.NavigateTo("/Compras"))">
+                COMPRAS
+            </MudButton>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="menu-btn" OnClick="@(() => Navigation.NavigateTo("/Ventas"))">
+                VENTAS
+            </MudButton>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Warning" Class="menu-btn" OnClick="@(() => Navigation.NavigateTo("/Inventarios"))">
+                INVENTARIOS
+            </MudButton>
+        </div>
+
+        <!-- Tarjeta del usuario -->
+        <MudPaper Class="user-card" Elevation="10">
+            <div class="user-info">
+                <div>
+                    <h3>@(user ?? "Usuario desconocido")</h3>
+
+                    <p>@fechaActual</p>
+                </div>
+
+                <MudAvatar Class="user-avatar" Size="Size.Large" Img="imagenes/usuario.png" />
+            </div>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="logout-btn" OnClick="CerrarSesion">
+                CERRAR SESION
+            </MudButton>
+        </MudPaper>
+    </div>
+</div>
+
+
+@inject NavigationManager Navigation
+@inject ProtectedLocalStorage localStorage
+
+@code {
+    private void CerrarSesion()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private string? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await localStorage.GetAsync<string>("user");
+        if (result.Success)
+        {
+            user = result.Value!;
+        }
+    }
+
+
+
+    private string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+}

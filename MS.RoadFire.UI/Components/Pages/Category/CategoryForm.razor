@@ -1,0 +1,8 @@
+﻿<EditForm Model="@Category" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator /> 
+    <MudTextField Label="Nombre" @bind-Value="@Category!.Name" For="@(() => Category!.Name)" Disabled="IsEdit" Required="true" Class="mb-4" />
+    <MudTextField Label="Decripción" @bind-Value="@Category.Description" For="@(() => Category.Description)" Required="true" Class="mb-4" />
+    <MudCheckBox T="bool" @bind-Value="Category.IsActive" Label="Activo" Class="mb-4" />
+    <MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="ReturnAction"> <MudHidden xs="true"> Cancelar </MudHidden> </MudButton>
+    <MudButton Variant="Variant.Outlined" Color="Color.Success" ButtonType="ButtonType.Submit"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
+</EditForm>

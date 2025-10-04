@@ -1,4 +1,4 @@
-﻿@page "/GestionRoles"
+﻿@* @page "/GestionRoles"
 @using MS.RoadFire.Business.Models
 @using MS.RoadFire.Common.Helpers
 @using MS.RoadFire.UI.Repositories
@@ -84,7 +84,8 @@
     // Método para eliminar un rol 
     private void DeleteRole()
     {
-        Console.WriteLine("Eliminar rol clicado");
+		Navigation.NavigateTo("/DeleteRole");
 
     }
 }
+ *@

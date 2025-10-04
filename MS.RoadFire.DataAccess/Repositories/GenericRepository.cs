@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MS.RoadFire.Common.External;
+using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.DataAccess.Context;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
 using System.Linq.Expressions;
@@ -68,7 +70,7 @@ namespace MS.RoadFire.DataAccess.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            return false; 
+            return false;
         }
 
         public async Task<T> Get(Expression<Func<T, bool>> expression)
@@ -80,6 +82,21 @@ namespace MS.RoadFire.DataAccess.Repositories
         public async Task<List<T>> GetAll(Expression<Func<T, bool>> expression)
         {
             return await _entity.AsNoTracking().Where(expression).ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            var queryable = _entity.AsQueryable();
+
+            return await queryable.Paginate(paginationDTO).ToListAsync();
+        }
+
+        public async Task<int> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            var queryable = _entity.AsQueryable();
+            double count = await queryable.CountAsync();
+            return (int)count;
+
         }
         #endregion
     }

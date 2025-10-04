@@ -97,6 +97,15 @@ namespace MS.RoadFire.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Por favor espere....
+        /// </summary>
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El registro no pudo ser eliminado. Por favor, inténtelo nuevamente..
         /// </summary>
         public static string NotDeleteData {

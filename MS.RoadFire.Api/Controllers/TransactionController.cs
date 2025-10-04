@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MS.RoadFire.Application.Contracts.Interfaces;
-using MS.RoadFire.Application.Services;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 
 namespace MS.RoadFire.Api.Controllers
@@ -12,12 +12,14 @@ namespace MS.RoadFire.Api.Controllers
     {
         #region Internals
         private readonly ITransactionServices _transactionServices;
+        private readonly IGenericServices<Transaction, TransactionDto> _genericServices;
         #endregion
 
         #region Constructor
-        public TransactionController(ITransactionServices transactionServices)
+        public TransactionController(ITransactionServices transactionServices, IGenericServices<Transaction, TransactionDto> genericServices)
         {
             _transactionServices = transactionServices;
+            _genericServices = genericServices;
         }
         #endregion
 
@@ -29,7 +31,7 @@ namespace MS.RoadFire.Api.Controllers
             return StatusCode((int)result.Code, result);
         }
 
-        [HttpGet("transactionId")]
+        [HttpGet("{transactionId}")]
         public async Task<IActionResult> GetAsync(int transactionId)
         {
             var result = await _transactionServices.GetAsync(transactionId);
@@ -40,6 +42,20 @@ namespace MS.RoadFire.Api.Controllers
         public async Task<IActionResult> AddAsync(TransactionDto model)
         {
             var result = await _transactionServices.AddAsync(model);
+            return StatusCode((int)result.Code, result);
+        }
+
+        [HttpGet("paginated")]
+        public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        {
+            var result = await _genericServices.GetPaginationAsync(pagination);
+            return StatusCode((int)result.Code, result);
+        }
+
+        [HttpGet("totalRecords")]
+        public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
+        {
+            var result = await _genericServices.GetTotalRecordsAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
         #endregion

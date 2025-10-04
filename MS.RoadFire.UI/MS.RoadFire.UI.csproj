@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="8.*" />
+    <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
 

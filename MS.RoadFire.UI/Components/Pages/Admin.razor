@@ -1,4 +1,4 @@
-﻿@page "/MenuAdmin"
+﻿@page "/Admin"
 @using MS.RoadFire.Business.Models
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
@@ -14,11 +14,14 @@
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
 
             <!-- por ahora programar estos con el back -->
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAInventarios">
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToInventories">
                 INVENTARIOS
             </MudButton>
 
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">CLIENTE</MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCategory">
+                CATEGORIAS
+            </MudButton>
 
             <!--por ahora programar estos con el back-->
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAUsuarios">
@@ -36,6 +39,7 @@
                     CERRAR SESIÓN
                 </MudButton>
             </div>
+
             <img src="/Imagenes/user.png" class="user-img" />
         </div>
     </div>
@@ -67,9 +71,14 @@
         Navigation.NavigateTo("/MenuUsuarios");
     }
 
-    private void IrAInventarios()
+    private void GoToInventories()
     {
         Navigation.NavigateTo("/MenuInventario");
+    }
+
+    private void GoToCategory()
+    {
+        Navigation.NavigateTo("../categories");
     }
 
     private string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");

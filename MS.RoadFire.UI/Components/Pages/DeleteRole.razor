@@ -1,0 +1,114 @@
+﻿@* @page "/DeleteRole"
+@using MS.RoadFire.Business.Models
+@using MS.RoadFire.Common.Helpers
+@using MS.RoadFire.UI.Repositories
+@using System.Net;
+
+<div class="home-background">
+    <MudPaper Class="roles-wrapper" Elevation="12">
+
+        <!-- Botón volver -->
+        <div class="top-bar">
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="volver-btn" OnClick="Back">
+                &lt; Volver
+            </MudButton>
+        </div>
+
+        <!-- Título -->
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="titulo">Eliminar rol</MudText>
+
+        <!-- Formulario -->
+        <EditForm Model="@rolIdModel" OnValidSubmit="EliminarRolAsync">
+            <MudTextField @bind-Value="rolIdModel.Id"
+                          Label="Código Rol"
+                          Variant="Variant.Outlined"
+                          Class="input-field"
+                          Required="true"
+                          Immediate="true" />
+
+            <div class="btn-container">
+                <MudButton Variant="Variant.Filled" Color="Color.Success" Class="btn-eliminar" ButtonType="ButtonType.Submit">
+                    Eliminar
+                </MudButton>
+
+                <MudButton Variant="Variant.Outlined" Color="Color.Default" Class="btn-cancelar" OnClick="Cancelar">
+                    Cancelar
+                </MudButton>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <MudAlert Severity="@(eliminacionExitosa ? Severity.Success : Severity.Error)" Class="mensaje-alerta">
+                @mensaje
+            </MudAlert>
+        }
+    </MudPaper>
+</div>
+
+@inject RolesRepository rolesRepository
+@inject NavigationManager Navigation
+
+@code {
+    private EliminarRolModel rolIdModel = new();
+    private string? mensaje;
+    private bool eliminacionExitosa = false;
+
+    private async Task EliminarRolAsync()
+    {
+        // 1. Obtener el rol actual
+
+        Console.WriteLine($"ID recibido en EliminarRolAsync: {rolIdModel.Id}");
+
+        var getResponse = await rolesRepository.GetByIdAsync(rolIdModel.Id);
+        if (getResponse.Error || getResponse.Response?.Data == null)
+        {
+            mensaje = "❌ Rol no encontrado.";
+            eliminacionExitosa = false;
+            return;
+        }
+
+        // 2. Marcar como inactivo
+        var role = getResponse.Response.Data;
+        role.IsActive = false;
+
+
+        // 3. Actualizar el rol
+        var response = await rolesRepository.UpdateAsync(role);
+
+        if (!response.Error && response.HttpResponseMessage.IsSuccessStatusCode)
+        {
+            mensaje = $"✅ Rol marcado como inactivo exitosamente.";
+            eliminacionExitosa = true;
+            rolIdModel = new EliminarRolModel();
+            await Task.Delay(800);
+            Navigation.NavigateTo("/GestionRoles", forceLoad: true);
+        }
+        else
+        {
+            var errorMsg = await response.HttpResponseMessage.Content.ReadAsStringAsync();
+ 
+            mensaje = $"❌ Error al marcar el rol como inactivo";
+            eliminacionExitosa = false;
+        }
+
+    }
+
+
+    private void Back()
+    {
+        Navigation.NavigateTo("/GestionRoles");
+    }
+
+    private void Cancelar()
+    {
+        rolIdModel = new EliminarRolModel();
+        mensaje = null;
+    }
+
+    public class EliminarRolModel
+    {
+        public int Id { get; set; }
+    }
+}
+ *@

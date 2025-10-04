@@ -1,4 +1,4 @@
-﻿using MS.RoadFire.Common.Helpers;
+﻿using MS.RoadFire.Common.External;
 using System.Linq.Expressions;
 
 namespace MS.RoadFire.DataAccess.Contracts.Interfaces
@@ -12,5 +12,7 @@ namespace MS.RoadFire.DataAccess.Contracts.Interfaces
         Task<T> AddAsync(T model);
         Task<T> UpdateAsync(T model);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<T>> GetPaginationAsync(PaginationDTO paginationDTO);
+        Task<int> GetTotalRecordsAsync(PaginationDTO paginationDTO);
     }
 }
