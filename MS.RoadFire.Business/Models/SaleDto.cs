@@ -2,8 +2,9 @@
 
 namespace MS.RoadFire.Business.Models
 {
-    public class TransactionDto
+    internal class SaleDto
     {
+        [Key]
         public int Id { get; set; }
 
         /// <summary>
@@ -22,12 +23,11 @@ namespace MS.RoadFire.Business.Models
         /// <summary>
         /// Tipo de movimiento<br/>
         /// Solo se puede enviar
-        ///   - Salida
-        ///   - Entrada
+        ///   - Venta
         /// </summary>
         /// <example>Salida</example>
         [Required]
-        [RegularExpression("^(Salida|Entrada)$", ErrorMessage = "El campo Type solo permite Salida, Entrada")]
+        [RegularExpression("^(Venta)$", ErrorMessage = "El campo Type solo permite venta")]
         public string Type { get; set; } = string.Empty;
 
         /// <summary>
@@ -37,15 +37,18 @@ namespace MS.RoadFire.Business.Models
         [Required]
         public int UserId { get; set; }
 
+        [Required]
+        public int CustomerId { get; set; }
+
         /// <summary>
         /// Lista de detalle de los productos.
         /// </summary>
         /// <example></example>
-        public List<TransactionDetailDto> TransactionDetailDtos { get; set; } = new List<TransactionDetailDto>();
+        public List<SaleDetailsDto> SaleDetailsDtos { get; set; } = new List<SaleDetailsDto>();
 
-        public TransactionDto()
+        public SaleDto()
         {
-            TransactionDetailDtos = new List<TransactionDetailDto>();
+            SaleDetailsDtos = new List<SaleDetailsDto>();
         }
     }
 }

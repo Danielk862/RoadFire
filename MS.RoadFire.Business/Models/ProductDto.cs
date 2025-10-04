@@ -39,5 +39,10 @@
         /// </summary>
         /// <example>True</example>
         public bool IsActive { get; set; }
+
+        public DateTime RegistrationDate { get; set; }
+
+        public DateTime? UpdateDate { get; set; }
     }
+}
 }

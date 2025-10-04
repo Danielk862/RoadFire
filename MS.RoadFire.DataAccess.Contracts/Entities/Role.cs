@@ -19,5 +19,9 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         public string Description { get; set; } = string.Empty;
 
         public bool IsActive { get; set; }
+
+        public DateTime RegistrationDate { get; set; }
+
+        public DateTime? UpdateDate { get; set; }
     }
 }

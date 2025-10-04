@@ -3,11 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MS.RoadFire.DataAccess.Contracts.Entities
 {
-    [Table("Stock")]
-    public class Stock
+    [Table("SaleDetails")]
+    public class SaleDetails
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
+        public int SaleId { get; set; }
 
         [Required]
         public int ProductId { get; set; }
@@ -16,13 +19,12 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         public int Quantity { get; set; }
 
         [Required]
-        public decimal ValueUnit { get; set; }
+        public decimal UnitValue { get; set; }
+
+        [ForeignKey("SaleId")]
+        public virtual Sale? Sale { get; set; }
 
         [ForeignKey("ProductId")]
         public virtual Product? Product { get; set; }
-
-        public DateTime RegistrationDate { get; set; }
-
-        public DateTime? UpdateDate { get; set; }
     }
 }
