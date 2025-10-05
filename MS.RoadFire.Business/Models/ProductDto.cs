@@ -33,7 +33,10 @@
         /// </summary>
         /// <example></example>
         public string CategoryName { get; set; } = string.Empty;
-        
+
+        public int SupplierId { get; set; }
+        public string SupplierName { get; set; } = string.Empty;
+
         /// <summary>
         /// Estado
         /// </summary>

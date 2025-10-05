@@ -24,10 +24,14 @@ namespace MS.RoadFire.CrossCutting.LocRegister
         {
             services.AddTransient(typeof(IGenericServices<,>), typeof(GenericServices<,>));
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IProductServices, ProductServices>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<ISaleService, SaleService>();
             services.AddScoped<ISecurityServices, SecurityServices>();
             services.AddScoped<IStockServices, StockServices>();
+            services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<ITransactionServices, TransactionServices>();
             services.AddScoped<IUserServices, UserServices>();
         }

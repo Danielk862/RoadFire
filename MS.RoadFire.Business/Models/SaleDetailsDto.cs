@@ -21,7 +21,7 @@ namespace MS.RoadFire.Business.Models
         /// Descripción del producto
         /// </summary>
         /// <example>Aceite mobile</example>
-        public int ProductDescription { get; set; }
+        public string ProductDescription { get; set; } = string.Empty;
 
         /// <summary>
         /// Cantidad del producto

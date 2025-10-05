@@ -15,11 +15,21 @@ namespace MS.RoadFire.DataAccess.Context
         public async Task SeedAsync()
         {
             await _dataContext.Database.EnsureCreatedAsync();
-            await CheckRolesAsync();
-            await CheckEmployeesAsync();
-            await CheckUsersAsync();
-            await CheckCategoriesAsync();
-            await CheckProductsAsync();
+            await CheckFullAsync();
+            //await CheckRolesAsync();
+            //await CheckEmployeesAsync();
+            //await CheckUsersAsync();
+            //await CheckCategoriesAsync();
+            //await CheckProductsAsync();
+        }
+
+        private async Task CheckFullAsync()
+        {
+            if (!_dataContext.Employees.Any())
+            {
+                var insertData = File.ReadAllText("..\\MS.RoadFire.DataAccess\\Scripts\\InitialData.sql");
+                await _dataContext.Database.ExecuteSqlRawAsync(insertData);
+            }
         }
 
         private async Task CheckRolesAsync()

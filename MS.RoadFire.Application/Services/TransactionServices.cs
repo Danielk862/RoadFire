@@ -15,24 +15,23 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<Transaction> _genericRepository;
         private readonly IGenericRepository<TransactionDetail> _genericTransactionDetailRepository;
         private readonly IGenericRepository<Product> _genericProductRepository;
-        private readonly IGenericRepository<User> _userrepository;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IStockServices _stockServices;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public TransactionServices(IGenericRepository<Transaction> genericRepository, IGenericRepository<User> userrepository,
+        public TransactionServices(IGenericRepository<Transaction> genericRepository, IGenericRepository<User> userRepository,
             IGenericRepository<TransactionDetail> genericTransactionDetailRepository, IGenericRepository<Product> genericProductRepository,
             IStockServices stockServices, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericTransactionDetailRepository = genericTransactionDetailRepository;
             _genericProductRepository = genericProductRepository;
-            _userrepository = userrepository;
+            _userRepository = userRepository;
             _stockServices = stockServices;
             _mapper = mapper;
         }
-
         #endregion
 
         #region Methods
@@ -44,7 +43,7 @@ namespace MS.RoadFire.Application.Services
             {
                 TransactionDto result = new TransactionDto();
                 List<TransactionDetailDto> transactionDetailDtos = new List<TransactionDetailDto>();
-                var isExist = await _userrepository.GetAsync(transactionDto.UserId);
+                var isExist = await _userRepository.GetAsync(transactionDto.UserId);
 
                 if (isExist == null)
                 {

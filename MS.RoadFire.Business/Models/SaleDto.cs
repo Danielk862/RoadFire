@@ -2,7 +2,7 @@
 
 namespace MS.RoadFire.Business.Models
 {
-    internal class SaleDto
+    public class SaleDto
     {
         [Key]
         public int Id { get; set; }

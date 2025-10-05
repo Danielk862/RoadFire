@@ -19,14 +19,12 @@ namespace MS.RoadFire.Business.Models
         [StringLength(50, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 1)]
         public string FirstName { get; set; } = string.Empty;
 
-        [StringLength(50, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 0)]
         public string SecondName { get; set; } = string.Empty;
 
         [Required(ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.Required))]
         [StringLength(50, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 1)]
         public string Surname { get; set; } = string.Empty;
 
-        [StringLength(50, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 0)]
         public string SecondSurname { get; set; } = string.Empty;
 
         [Required(ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.Required))]
