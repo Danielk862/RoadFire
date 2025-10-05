@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MS.RoadFire.Common.Resource;
+using System.ComponentModel.DataAnnotations;
 
 namespace MS.RoadFire.Business.Models
 {
@@ -12,6 +13,7 @@ namespace MS.RoadFire.Business.Models
         /// <example>Aceites</example>
         [Required]
         [StringLength(50, MinimumLength = 1)]
+        [Display(ResourceType = typeof(MessagesResource), Name = nameof(MessagesResource.Name))]
         public string Name { get; set; } = string.Empty;
 
         /// <summary>

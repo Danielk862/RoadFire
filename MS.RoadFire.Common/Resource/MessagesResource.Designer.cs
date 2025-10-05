@@ -70,6 +70,15 @@ namespace MS.RoadFire.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Persona contacto.
+        /// </summary>
+        public static string ContactPerson {
+            get {
+                return ResourceManager.GetString("ContactPerson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Por favor, ingresa un correo electrónico válido..
         /// </summary>
         public static string EmailInvalid {
@@ -102,6 +111,15 @@ namespace MS.RoadFire.Common.Resource {
         public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
         

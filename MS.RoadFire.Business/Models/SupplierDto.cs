@@ -27,6 +27,7 @@ namespace MS.RoadFire.Business.Models
         [StringLength(15, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 1)]
         public string Nit { get; set; } = string.Empty;
 
+        [Display(ResourceType = typeof(MessagesResource), Name = nameof(MessagesResource.ContactPerson))]
         [Required(ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.Required))]
         [StringLength(120, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 1)]
         public string ContactPerson { get; set; } = string.Empty;

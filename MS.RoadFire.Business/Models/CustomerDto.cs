@@ -41,5 +41,9 @@ namespace MS.RoadFire.Business.Models
 
         public bool IsActive { get; set; }
 
+        public DateTime RegistrationDate { get; set; }
+
+        public DateTime? UpdateDate { get; set; }
+
     }
 }

@@ -153,4 +153,10 @@
   <data name="Phone" xml:space="preserve">
     <value>Telefono</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Persona contacto</value>
+  </data>
 </root>
