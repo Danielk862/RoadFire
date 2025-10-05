@@ -473,9 +473,10 @@ namespace MS.RoadFire.DataAccess.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<int>("Nit")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
+                    b.Property<string>("Nit")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Phone")
                         .IsRequired()

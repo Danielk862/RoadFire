@@ -1,0 +1,12 @@
+﻿<EditForm Model="@Supplier" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudTextField Label="Nombre" @bind-Value="@Supplier!.Name" For="@(() => Supplier!.Name)" Disabled="IsEdit" Required="true" Class="mb-4" />
+    <MudTextField Label="Dirección" @bind-Value="@Supplier!.Address" For="@(() => Supplier!.Address)" Required="true" Class="mb-4" />
+    <MudTextField Label="Telefono" @bind-Value="@Supplier!.Phone" For="@(() => Supplier!.Phone)" Required="true" Pattern="^\d{10}$" HelperText="Ingrese solo números (10 dígitos)" Class="mb-4" />
+    <MudTextField Label="Nit" @bind-Value="@Supplier!.Nit" For="@(() => Supplier!.Nit)" Required="true" Pattern="^\d{7,15}$" HelperText="Ingrese solo números (7 a 15 dígitos)" Class="mb-4" />
+    <MudTextField Label="Persona contacto" @bind-Value="@Supplier!.ContactPerson" For="@(() => Supplier!.ContactPerson)" Required="true" Class="mb-4" />
+    <MudTextField Label="WebSite" @bind-Value="@Supplier!.Website" For="@(() => Supplier!.Website)" Required="true" Class="mb-4" />
+    <MudTextField Label="Decripción" @bind-Value="@Supplier.Description" For="@(() => Supplier.Description)" Required="true" Class="mb-4" />
+    <MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="ReturnAction"> <MudHidden xs="true"> Cancelar </MudHidden> </MudButton>
+    <MudButton Variant="Variant.Outlined" Color="Color.Success" ButtonType="ButtonType.Submit"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
+</EditForm>

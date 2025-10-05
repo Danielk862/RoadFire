@@ -115,6 +115,15 @@ namespace MS.RoadFire.Common.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Telefono.
+        /// </summary>
+        public static string Phone {
+            get {
+                return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El campo {0} es requerido..
         /// </summary>
         public static string Required {

@@ -54,8 +54,8 @@ VALUES
 INSERT INTO [dbo].[Suppliers] 
 (Name, Address, Phone, Nit, ContactPerson, Website, Description, RegistrationDate)
 VALUES
-('MotoParts S.A.S.', 'Zona Industrial #23-11', '6015552001', 900123456, 'Andrés López', 'www.motoparts.com', 'Proveedor de repuestos y aceites', GETDATE()),
-('SpeedPro Ltda.', 'Av 68 #45-67', '6015552002', 901654321, 'Paola Hernández', 'www.speedpro.com', 'Proveedor de llantas y frenos', GETDATE());
+('MotoParts S.A.S.', 'Zona Industrial #23-11', '6015552001', '900123456', 'Andrés López', 'www.motoparts.com', 'Proveedor de repuestos y aceites', GETDATE()),
+('SpeedPro Ltda.', 'Av 68 #45-67', '6015552002', '901654321', 'Paola Hernández', 'www.speedpro.com', 'Proveedor de llantas y frenos', GETDATE());
 
 
 -------------------------------

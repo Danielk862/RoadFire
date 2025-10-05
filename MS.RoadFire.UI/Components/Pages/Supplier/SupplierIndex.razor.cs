@@ -6,16 +6,16 @@ using MS.RoadFire.UI.Repositories;
 using MudBlazor;
 using System.Net;
 
-namespace MS.RoadFire.UI.Components.Pages.Category
+namespace MS.RoadFire.UI.Components.Pages.Supplier
 {
-    public partial class CategoriesIndex
+    public partial class SupplierIndex
     {
-        private List<CategoryDto>? Categories { get; set; }
-        private MudTable<CategoryDto> table = new();
+        private List<SupplierDto>? Suppliers { get; set; }
+        private MudTable<SupplierDto> table = new();
         private readonly int[] pageSizeOptions = { 10, 20, 50, int.MaxValue };
         private int totalRecords = 0;
         private bool loading;
-        private const string baseUrl = "api/Category";
+        private const string baseUrl = "api/Supplier";
         private string infoFormat = "Registro {first_item} de {last_item} Total {all_items}";
 
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -52,7 +52,7 @@ namespace MS.RoadFire.UI.Components.Pages.Category
             loading = false;
         }
 
-        private async Task<TableData<CategoryDto>> LoadListAsync(TableState state, CancellationToken cancellationToken)
+        private async Task<TableData<SupplierDto>> LoadListAsync(TableState state, CancellationToken cancellationToken)
         {
             int page = state.Page + 1;
             int pageSize = state.PageSize;
@@ -63,20 +63,20 @@ namespace MS.RoadFire.UI.Components.Pages.Category
                 url += $"&filter={Filter}";
             }
 
-            var responseHttp = await Repository.GetAsync<ResponseDto<List<CategoryDto>>>(url);
+            var responseHttp = await Repository.GetAsync<ResponseDto<List<SupplierDto>>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 Snackbar.Add(message!, Severity.Error);
-                return new TableData<CategoryDto> { Items = [], TotalItems = 0 };
+                return new TableData<SupplierDto> { Items = [], TotalItems = 0 };
             }
 
             if (responseHttp.Response == null)
             {
-                return new TableData<CategoryDto> { Items = [], TotalItems = 0 };
+                return new TableData<SupplierDto> { Items = [], TotalItems = 0 };
             }
 
-            return new TableData<CategoryDto>
+            return new TableData<SupplierDto>
             {
                 Items = responseHttp.Response.Data,
                 TotalItems = totalRecords,
@@ -106,11 +106,11 @@ namespace MS.RoadFire.UI.Components.Pages.Category
                 {
                     { "Id", id }
                 };
-                dialog = await DialogService.ShowAsync<CategoriesEdit>("Editar", parameters, options);
+                dialog = await DialogService.ShowAsync<SupplierEdit>("Editar", parameters, options);
             }
             else
             {
-                dialog = await DialogService.ShowAsync<CategoriesCreate>("Nuevo", options);
+                dialog = await DialogService.ShowAsync<SupplierCreate>("Nuevo", options);
             }
 
             var result = await dialog.Result;
@@ -122,11 +122,11 @@ namespace MS.RoadFire.UI.Components.Pages.Category
             }
         }
 
-        private async Task DeleteAsync(CategoryDto category)
+        private async Task DeleteAsync(SupplierDto supplier)
         {
             var parameters = new DialogParameters
                 {
-                    { "Message", $"Estas seguro de borrar la categoría: {category.Name}"}
+                    { "Message", $"Estas seguro de borrar la categoría: {supplier.Name}"}
                 };
 
             var options = new DialogOptions
@@ -144,13 +144,13 @@ namespace MS.RoadFire.UI.Components.Pages.Category
                 return;
             }
 
-            var responseHttp = await Repository.DeleteAsync<ResponseDto<bool>>($"{baseUrl}/Delete/{category.Id}");
+            var responseHttp = await Repository.DeleteAsync<ResponseDto<bool>>($"{baseUrl}/Delete/{supplier.Id}");
 
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("/categories");
+                    NavigationManager.NavigateTo("/suppliers");
                 }
                 else
                 {

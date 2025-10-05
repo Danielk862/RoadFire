@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS.RoadFire.DataAccess.Migrations
 {
     [DbContext(typeof(DbRoadFireContext))]
-    [Migration("20251005160851_InitialDB")]
+    [Migration("20251005184215_InitialDB")]
     partial class InitialDB
     {
         /// <inheritdoc />
@@ -476,9 +476,10 @@ namespace MS.RoadFire.DataAccess.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.Property<int>("Nit")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
+                    b.Property<string>("Nit")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Phone")
                         .IsRequired()

@@ -1,0 +1,11 @@
+﻿@if (Supplier is null) 
+{ 
+    <Loading /> 
+} 
+else 
+{ 
+    <MudDialog> 
+        <DialogContent> <SupplierForm Supplier="Supplier" OnValidSubmit="EditAsync" ReturnAction="Return" IsEdit="true" /> 
+        </DialogContent> 
+    </MudDialog> 
+}

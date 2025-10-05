@@ -102,7 +102,7 @@ namespace MS.RoadFire.DataAccess.Migrations
                     Name = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Nit = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    Nit = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     ContactPerson = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
                     Website = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),

@@ -23,8 +23,8 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         public string Phone { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(100, MinimumLength = 1)]
-        public int Nit { get; set; }
+        [StringLength(15, MinimumLength = 1)]
+        public string Nit { get; set; } = string.Empty;
 
         [Required]
         [StringLength(120, MinimumLength = 1)]
