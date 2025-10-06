@@ -1,0 +1,32 @@
+﻿<EditForm Model="@CurrentRole" OnValidSubmit="() => OnValidSubmit.InvokeAsync()">
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="Nombre del Rol"
+                  @bind-Value="CurrentRole.Name"
+                  For="@(() => CurrentRole.Name)"
+                  Required="true"
+                  Class="mb-4" />
+
+    <MudTextField Label="Descripción"
+                  @bind-Value="CurrentRole.Description"
+                  For="@(() => CurrentRole.Description)"
+                  Required="true"
+                  Class="mb-4" />
+
+    <MudCheckBox T="bool"
+                 @bind-Value="CurrentRole.IsActive"
+                 Label="Activo"
+                 Class="mb-4" />
+
+    <MudButton Variant="Variant.Outlined"
+               Color="Color.Info"
+               OnClick="() => ReturnAction.InvokeAsync()">
+        Cancelar
+    </MudButton>
+
+    <MudButton Variant="Variant.Outlined"
+               Color="Color.Success"
+               ButtonType="ButtonType.Submit">
+        Guardar
+    </MudButton>
+</EditForm>

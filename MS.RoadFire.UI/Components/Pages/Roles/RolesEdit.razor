@@ -1,0 +1,20 @@
+﻿@page "/roles/edit/{Id:int}"
+
+@if (CurrentRole is null)
+{
+    <Loading />
+}
+else
+{
+    <MudDialog>
+        <DialogContent>
+            <RoleForm CurrentRole="CurrentRole"
+                      OnValidSubmit="EditAsync"
+                      ReturnAction="Return"
+                      IsEdit="true" />
+        </DialogContent>
+    </MudDialog>
+}
+
+
+
