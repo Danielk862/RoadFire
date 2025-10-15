@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Helpers;
@@ -39,6 +40,7 @@ namespace MS.RoadFire.Application.Services
                 var request = _mapper.Map<User>(model);
                 request.CreatedAt = DateTime.Now;
                 request.UpdatedAt = DateTime.Now;
+                request.Password = CryptoManager.EncryptAES(model.Password);
                 var validEmployee = await _employeeServices.GetAsync(model.EmployeeId);
                 var validRol = await _genericServices.GetAsync(model.RoleId);
 
@@ -59,6 +61,8 @@ namespace MS.RoadFire.Application.Services
                 if (!validEmployee.Data.IsActive)
                     request.State = false;
 
+                request.Employee = null;
+                request.Role = null;
                 var result = await _genericRepository.AddAsync(request);
                 var register = _mapper.Map<UserDto>(result);
                 register.RoleName = validRol.Data.Name;
@@ -144,7 +148,7 @@ namespace MS.RoadFire.Application.Services
                 var user = await _genericRepository.GetAsync(model.Id);
                 user.CreatedAt = user.CreatedAt;
                 user.UpdatedAt = DateTime.Now;
-                user.Password = model.Password;
+                user.Password = CryptoManager.EncryptAES(model.Password);
 
                 if (!validEmployee.Data!.IsActive && validEmployee.Data != null)
                     user.State = false;

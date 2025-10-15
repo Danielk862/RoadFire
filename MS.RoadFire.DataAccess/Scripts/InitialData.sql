@@ -30,10 +30,10 @@ VALUES
 INSERT INTO [dbo].[Users] 
 (Username, Password, CreatedAt, State, EmployeeId, RoleId)
 VALUES
-('admin', 'admin123', GETDATE(), 1, 1, 1),
-('vendedor1', 'ventas123', GETDATE(), 1, 2, 2),
-('compras1', 'compras123', GETDATE(), 1, 3, 3),
-('inventario1', 'inv123', GETDATE(), 1, 4, 4);
+('admin', 'OMI+CYfFOJNN3SMA963Tew==', GETDATE(), 1, 1, 1),
+('vendedor1', 'OMI+CYfFOJNN3SMA963Tew==', GETDATE(), 1, 2, 2),
+('compras1', 'OMI+CYfFOJNN3SMA963Tew==', GETDATE(), 1, 3, 3),
+('inventario1', 'OMI+CYfFOJNN3SMA963Tew==', GETDATE(), 1, 4, 4);
 
 
 -------------------------------

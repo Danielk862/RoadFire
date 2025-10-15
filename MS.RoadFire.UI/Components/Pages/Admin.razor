@@ -27,7 +27,7 @@
             </MudButton>
 
             <!--por ahora programar estos con el back-->
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAUsuarios">
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToUsers">
                 USUARIOS
             </MudButton>
         </div>
@@ -36,7 +36,7 @@
             <div class="user-info">
                 <h3>@(user ?? "Usuario desconocido")</h3>
 
-                <p>@fechaActual</p>
+                <p>@currentDate</p>
 
                 <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="logout-btn" OnClick="Logout">
                     CERRAR SESIÓN
@@ -69,16 +69,6 @@
         Navigation.NavigateTo("/");
     }
 
-    private void IrAUsuarios()
-    {
-        Navigation.NavigateTo("/MenuUsuarios");
-    }
-
-    private void GoToInventories()
-    {
-        Navigation.NavigateTo("/MenuInventario");
-    }
-
     private void GoToCategory()
     {
         Navigation.NavigateTo("../categories");
@@ -89,6 +79,16 @@
         Navigation.NavigateTo("../suppliers");
     }
 
-    private string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+    private void GoToInventories()
+    {
+        Navigation.NavigateTo("../suppliers");
+    }
+
+    private void GoToUsers()
+    {
+        Navigation.NavigateTo("../suppliers");
+    }
+
+    private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");
 
 }

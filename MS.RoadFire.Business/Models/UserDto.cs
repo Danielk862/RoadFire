@@ -48,6 +48,10 @@ namespace MS.RoadFire.Business.Models
         /// <example>1</example>
         public int RoleId { get; set; }
 
+        /// <summary>
+        /// Descripción rol
+        /// </summary>
+        /// <example>Administrador</example>
         public string RoleName { get; set; } = string.Empty;
     }
 }

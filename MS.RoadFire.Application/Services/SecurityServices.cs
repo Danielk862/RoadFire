@@ -36,7 +36,7 @@ namespace MS.RoadFire.Application.Services
 
             try
             {
-                var login = await _genericUser.Get(x => x.Username == username && x.Password == password && x.State);
+                var login = await _genericUser.Get(x => x.Username == username && x.Password == CryptoManager.EncryptAES(password) && x.State);
 
                 if (login == null)
                 {

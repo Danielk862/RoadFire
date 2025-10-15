@@ -15,7 +15,7 @@ namespace MS.RoadFire.DataAccess.Contracts.Entities
         public string Username { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(25, MinimumLength = 1)]
+        [StringLength(120, MinimumLength = 1)]
         public string Password { get; set; } = string.Empty;
 
         [Required]
