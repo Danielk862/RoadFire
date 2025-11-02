@@ -29,6 +29,7 @@ namespace MS.RoadFire.UI.Components.Pages
             if (!response.Error && response.Response!.Data != null && response.Response.Code.ToString() == "200")
             {
                 var user = response.Response.Data;
+                await localStorage!.SetAsync("rol", user.RoleName);
 
                 if (user != null && user.RoleName.Equals("Administrador"))
                 {

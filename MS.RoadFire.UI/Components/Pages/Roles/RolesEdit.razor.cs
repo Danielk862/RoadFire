@@ -31,7 +31,7 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     Snackbar.Add("El rol no fue encontrado.", Severity.Warning);
-                    NavigationManager.NavigateTo("/GestionRoles");
+                    NavigationManager.NavigateTo("/gestionRoles");
                 }
                 else
                 {

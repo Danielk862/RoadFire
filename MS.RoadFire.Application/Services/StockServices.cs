@@ -2,6 +2,7 @@
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.Constants;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
@@ -14,14 +15,16 @@ namespace MS.RoadFire.Application.Services
         #region Internals
         private readonly IGenericRepository<Stock> _genericRepository;
         private readonly IGenericRepository<Product> _productgeneric;
+        private readonly IStockRepository _stockRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public StockServices(IGenericRepository<Stock> genericRepository, IGenericRepository<Product> productgeneric, IMapper mapper)
+        public StockServices(IGenericRepository<Stock> genericRepository, IGenericRepository<Product> productgeneric, IStockRepository stockRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _productgeneric = productgeneric;
+            _stockRepository = stockRepository;
             _mapper = mapper;
         }
         #endregion
@@ -122,6 +125,47 @@ namespace MS.RoadFire.Application.Services
                         response.Data = _mapper.Map<StockDto>(update);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<ResponseDto<List<StockDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<StockDto>> response = new ResponseDto<List<StockDto>>();
+
+            try
+            {
+                var request = await _stockRepository.GetPaginationAsync(paginationDTO);
+                var listStock = _mapper.Map<List<StockDto>>(request);
+
+                foreach (var item in listStock)
+                {
+                    item.Total = item.Quantity * item.ValueUnit;
+                }
+                response.Data = listStock;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _stockRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
             }
             catch (Exception ex)
             {

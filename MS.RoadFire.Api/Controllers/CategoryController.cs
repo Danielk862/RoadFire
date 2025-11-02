@@ -12,12 +12,14 @@ namespace MS.RoadFire.Api.Controllers
     {
         #region Internals
         private readonly IGenericServices<Category, CategoryDto> _genericServices;
+        private readonly ICategoryService _categoryService;
         #endregion
 
         #region Constructor
-        public CategoryController(IGenericServices<Category, CategoryDto> genericServices)
+        public CategoryController(IGenericServices<Category, CategoryDto> genericServices, ICategoryService categoryService)
         {
             _genericServices = genericServices;
+            _categoryService = categoryService;
         }
         #endregion
 
@@ -60,14 +62,14 @@ namespace MS.RoadFire.Api.Controllers
         [HttpGet("paginated")]
         public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetPaginationAsync(pagination);
+            var result = await _categoryService.GetPaginationAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpGet("totalRecords")]
         public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetTotalRecordsAsync(pagination);
+            var result = await _categoryService.GetTotalRecordsAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
         #endregion

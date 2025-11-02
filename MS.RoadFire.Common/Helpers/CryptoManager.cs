@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace MS.RoadFire.Common.Helpers

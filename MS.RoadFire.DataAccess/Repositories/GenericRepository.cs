@@ -23,32 +23,32 @@ namespace MS.RoadFire.DataAccess.Repositories
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _entity.AsNoTracking().ToListAsync();
         }
 
-        public async Task<T> GetAsync(int id)
+        public virtual async Task<T> GetAsync(int id)
         {
             var data = await _entity.FindAsync(id);
             return data!;
         }
 
-        public async Task<T> AddAsync(T model)
+        public virtual async Task<T> AddAsync(T model)
         {
             _context.Add(model);
             await _context.SaveChangesAsync();
             return model;
         }
 
-        public async Task<T> UpdateAsync(T model)
+        public virtual async Task<T> UpdateAsync(T model)
         {
             _context.Update(model);
             await _context.SaveChangesAsync();
             return model;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public virtual async Task<bool> DeleteAsync(int id)
         {
             var data = await _entity.FindAsync(id);
 
@@ -73,25 +73,25 @@ namespace MS.RoadFire.DataAccess.Repositories
             return false;
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> expression)
+        public virtual async Task<T> Get(Expression<Func<T, bool>> expression)
         {
             var result = await _entity.AsNoTracking().Where(expression).FirstOrDefaultAsync();
             return result!;
         }
 
-        public async Task<List<T>> GetAll(Expression<Func<T, bool>> expression)
+        public virtual async Task<List<T>> GetAll(Expression<Func<T, bool>> expression)
         {
             return await _entity.AsNoTracking().Where(expression).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetPaginationAsync(PaginationDTO paginationDTO)
+        public virtual async Task<IEnumerable<T>> GetPaginationAsync(PaginationDTO paginationDTO)
         {
             var queryable = _entity.AsQueryable();
 
             return await queryable.Paginate(paginationDTO).ToListAsync();
         }
 
-        public async Task<int> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        public virtual async Task<int> GetTotalRecordsAsync(PaginationDTO paginationDTO)
         {
             var queryable = _entity.AsQueryable();
             double count = await queryable.CountAsync();

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
@@ -15,15 +16,17 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<Product> _genericRepository;
         private readonly IMapper _mapper; 
         private readonly IGenericRepository<Category> _categoryRepository;
+        private readonly IProductRepository _productRepository;
         #endregion
 
         #region Constructor
         public ProductServices(IGenericRepository<Product> genericRepository, IMapper mapper,
-            IGenericRepository<Category> categoryRepository)
+            IGenericRepository<Category> categoryRepository, IProductRepository productRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _productRepository = productRepository;
         }
         #endregion
 
@@ -180,6 +183,41 @@ namespace MS.RoadFire.Application.Services
                 return (false, "El Sku no se puede modificar");
             else
                 return (true, string.Empty);
+        }
+
+        public async Task<ResponseDto<List<ProductDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<ProductDto>> response = new ResponseDto<List<ProductDto>>();
+
+            try
+            {
+                var request = await _productRepository.GetPaginationAsync(paginationDTO);
+                response.Data = _mapper.Map<List<ProductDto>>(request);
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _productRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
         }
         #endregion
     }

@@ -25,7 +25,7 @@ namespace MS.RoadFire.Application.Services
         #endregion
 
         #region Methods
-        public async Task<ResponseDto<TDto>> AddAsync(TDto model)
+        public virtual async Task<ResponseDto<TDto>> AddAsync(TDto model)
         {
             ResponseDto<TDto> response = new ResponseDto<TDto>();
 
@@ -45,7 +45,7 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<bool>> DeleteAsync(int id)
+        public virtual async Task<ResponseDto<bool>> DeleteAsync(int id)
         {
             ResponseDto<bool> response = new ResponseDto<bool>();
 
@@ -69,7 +69,7 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<List<TDto>>> GetAllAsync()
+        public virtual async Task<ResponseDto<List<TDto>>> GetAllAsync()
         {
             ResponseDto<List<TDto>> response = new ResponseDto<List<TDto>>();
 
@@ -86,7 +86,7 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<TDto>> GetAsync(int id)
+        public virtual async Task<ResponseDto<TDto>> GetAsync(int id)
         {
             ResponseDto<TDto> response = new ResponseDto<TDto>();
 
@@ -105,7 +105,7 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<List<TEntity>>> GetPaginationAsync(PaginationDTO paginationDTO) 
+        public virtual async Task<ResponseDto<List<TEntity>>> GetPaginationAsync(PaginationDTO paginationDTO) 
         {
             ResponseDto<List<TEntity>> response = new ResponseDto<List<TEntity>>();
 
@@ -120,9 +120,9 @@ namespace MS.RoadFire.Application.Services
                 response.Messages = ex.Message;
             }
             return response;
-        } 
+        }
 
-        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        public virtual async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
         {
             ResponseDto<int> response = new ResponseDto<int>();
 
@@ -139,7 +139,7 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<TDto>> UpdateAsync(TDto model)
+        public virtual async Task<ResponseDto<TDto>> UpdateAsync(TDto model)
         {
             ResponseDto<TDto> response = new ResponseDto<TDto>();
 

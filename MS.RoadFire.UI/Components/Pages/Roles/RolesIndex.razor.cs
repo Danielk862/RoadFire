@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.UI.Components.Shared;
 using MS.RoadFire.UI.Models;
@@ -22,6 +23,7 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
         [Inject] private IDialogService DialogService { get; set; } = null!;
         [Inject] private ISnackbar Snackbar { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private ProtectedLocalStorage localStorage { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
 
@@ -145,7 +147,7 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     Snackbar.Add("El rol no fue encontrado o ya fue eliminado.", Severity.Warning);
-                    NavigationManager.NavigateTo("/GestionRoles", forceLoad: true);
+                    NavigationManager.NavigateTo("/gestionRoles", forceLoad: true);
                 }
                 else
                 {
@@ -158,6 +160,17 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
             Snackbar.Add("Rol eliminado correctamente ✅", Severity.Success);
             await LoadTotalRecordsAsync();
             await table.ReloadServerData();
+        }
+
+        private async void ReturnAction()
+        {
+            var result = await localStorage.GetAsync<string>("rol");
+
+            if (result.Value!.Equals("Administrador"))
+            {
+                NavigationManager.NavigateTo($"/Admin");
+            }
+
         }
     }
 }

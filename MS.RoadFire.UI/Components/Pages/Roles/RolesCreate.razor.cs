@@ -31,7 +31,7 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
 
         private void Return()
         {
-            NavigationManager.NavigateTo("/GestionRoles");
+            NavigationManager.NavigateTo("/gestionRoles");
         }
     }
 }

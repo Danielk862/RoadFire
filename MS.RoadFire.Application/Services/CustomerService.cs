@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
@@ -13,13 +14,15 @@ namespace MS.RoadFire.Application.Services
     {
         #region Internals
         private readonly IGenericRepository<Customer> _genericRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public CustomerService(IGenericRepository<Customer> genericRepository, IMapper mapper)
+        public CustomerService(IGenericRepository<Customer> genericRepository, ICustomerRepository customerRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
         }
         #endregion
@@ -167,6 +170,41 @@ namespace MS.RoadFire.Application.Services
                 return (false, "El segundo apellido debe ser máximo de 50 caracteres");
             else
                 return (true, string.Empty);
+        }
+
+        public async Task<ResponseDto<List<CustomerDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<CustomerDto>> response = new ResponseDto<List<CustomerDto>>();
+
+            try
+            {
+                var request = await _customerRepository.GetPaginationAsync(paginationDTO);
+                response.Data = _mapper.Map<List<CustomerDto>>(request);
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _customerRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
         }
         #endregion
     }

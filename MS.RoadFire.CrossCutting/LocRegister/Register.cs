@@ -24,10 +24,12 @@ namespace MS.RoadFire.CrossCutting.LocRegister
         {
             services.AddTransient(typeof(IGenericServices<,>), typeof(GenericServices<,>));
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IProductServices, ProductServices>();
             services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISaleService, SaleService>();
             services.AddScoped<ISecurityServices, SecurityServices>();
             services.AddScoped<IStockServices, StockServices>();
@@ -39,6 +41,14 @@ namespace MS.RoadFire.CrossCutting.LocRegister
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IUserRerpository, UserRerpository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
         }
 
         private static void AddJsonDefaultSettings()

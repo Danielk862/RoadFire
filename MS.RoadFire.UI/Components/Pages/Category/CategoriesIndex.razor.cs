@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.UI.Components.Shared;
 using MS.RoadFire.UI.Models;
@@ -22,6 +23,7 @@ namespace MS.RoadFire.UI.Components.Pages.Category
         [Inject] private IDialogService DialogService { get; set; } = null!;
         [Inject] private ISnackbar Snackbar { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private ProtectedLocalStorage localStorage { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
 
@@ -163,6 +165,17 @@ namespace MS.RoadFire.UI.Components.Pages.Category
             await LoadTotalRecordsAsync();
             await table.ReloadServerData();
             Snackbar.Add("Registro eliminado", Severity.Success);
+        }
+
+        private async void ReturnAction()
+        {
+            var result = await localStorage.GetAsync<string>("rol");
+
+            if (result.Value!.Equals("Administrador"))
+            {
+                NavigationManager.NavigateTo($"/Admin");
+            }
+
         }
     }
 }

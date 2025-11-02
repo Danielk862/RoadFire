@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
@@ -16,16 +16,18 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<User> _genericRepository;
         private readonly IEmployeeServices _employeeServices;
         private readonly IGenericServices<Role, RoleDto> _genericServices;
+        private readonly IUserRerpository _userRerpository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public UserServices(IGenericRepository<User> genericRepository, IEmployeeServices employeeServices, IGenericServices<Role, RoleDto> genericServices,
-            IMapper mapper)
+            IUserRerpository userRerpository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _employeeServices = employeeServices;
             _genericServices = genericServices;
+            _userRerpository = userRerpository;
             _mapper = mapper;
         }
         #endregion
@@ -189,6 +191,41 @@ namespace MS.RoadFire.Application.Services
             //    return (false, "El rol no se puede modificar");
             else
                 return (true, string.Empty);
+        }
+
+        public async Task<ResponseDto<List<UserDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<UserDto>> response = new ResponseDto<List<UserDto>>();
+
+            try
+            {
+                var request = await _userRerpository.GetPaginationAsync(paginationDTO);
+                response.Data = _mapper.Map<List<UserDto>>(request);
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _userRerpository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
         }
         #endregion
     }

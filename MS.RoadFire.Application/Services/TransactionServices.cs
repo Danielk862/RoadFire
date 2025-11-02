@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
@@ -17,19 +18,21 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<Product> _genericProductRepository;
         private readonly IGenericRepository<User> _userRepository;
         private readonly IStockServices _stockServices;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public TransactionServices(IGenericRepository<Transaction> genericRepository, IGenericRepository<User> userRepository,
             IGenericRepository<TransactionDetail> genericTransactionDetailRepository, IGenericRepository<Product> genericProductRepository,
-            IStockServices stockServices, IMapper mapper)
+            IStockServices stockServices, ITransactionRepository transactionRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericTransactionDetailRepository = genericTransactionDetailRepository;
             _genericProductRepository = genericProductRepository;
             _userRepository = userRepository;
             _stockServices = stockServices;
+            _transactionRepository = transactionRepository;
             _mapper = mapper;
         }
         #endregion
@@ -171,6 +174,41 @@ namespace MS.RoadFire.Application.Services
                 response.Messages = ex.Message;
             }
 
+            return response;
+        }
+
+        public async Task<ResponseDto<List<TransactionDetailDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<TransactionDetailDto>> response = new ResponseDto<List<TransactionDetailDto>>();
+
+            try
+            {
+                var request = await _transactionRepository.GetPaginationAsync(paginationDTO);
+                response.Data = _mapper.Map<List<TransactionDetailDto>>(request);
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _transactionRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
             return response;
         }
         #endregion

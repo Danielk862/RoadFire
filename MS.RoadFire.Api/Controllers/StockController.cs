@@ -41,14 +41,14 @@ namespace MS.RoadFire.Api.Controllers
         [HttpGet("paginated")]
         public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetPaginationAsync(pagination);
+            var result = await _stockServices.GetPaginationAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpGet("totalRecords")]
         public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetTotalRecordsAsync(pagination);
+            var result = await _stockServices.GetTotalRecordsAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
         #endregion

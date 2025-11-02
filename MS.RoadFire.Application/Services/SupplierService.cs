@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
+using System.Diagnostics.Metrics;
 using System.Net;
 
 namespace MS.RoadFire.Application.Services
@@ -13,13 +15,15 @@ namespace MS.RoadFire.Application.Services
     {
         #region Internals
         private readonly IGenericRepository<Supplier> _genericRepository;
+        private readonly ISupplierRepository _supplierRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
-        public SupplierService(IGenericRepository<Supplier> genericRepository, IMapper mapper)
+        public SupplierService(IGenericRepository<Supplier> genericRepository, ISupplierRepository supplierRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
+            _supplierRepository = supplierRepository;
             _mapper = mapper;
         }
         #endregion
@@ -121,6 +125,41 @@ namespace MS.RoadFire.Application.Services
                 response.Messages = ex.Message;
             }
 
+            return response;
+        }
+
+        public async Task<ResponseDto<List<SupplierDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<SupplierDto>> response = new ResponseDto<List<SupplierDto>>();
+
+            try
+            {
+                var request = await _supplierRepository.GetPaginationAsync(paginationDTO);
+                response.Data = _mapper.Map<List<SupplierDto>>(request); 
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+            
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _supplierRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
             return response;
         }
         #endregion

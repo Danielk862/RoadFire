@@ -1,4 +1,5 @@
 ﻿using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 
 namespace MS.RoadFire.Application.Contracts.Interfaces
@@ -10,5 +11,7 @@ namespace MS.RoadFire.Application.Contracts.Interfaces
         Task<ResponseDto<ProductDto>> AddAsync(ProductDto model);
         Task<ResponseDto<ProductDto>> UpdateAsync(ProductDto model);
         Task<ResponseDto<bool>> DeleteAsync(int id);
+        Task<ResponseDto<List<ProductDto>>> GetPaginationAsync(PaginationDTO paginationDTO);
+        Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO);
     }
 }
