@@ -1,0 +1,89 @@
+﻿@page "/GestionUsuarios"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@Users"
+              @ref="table"
+              ServerData="LoadListAsync"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+
+        <ToolBarContent>
+            <div class="d-flex justify-content-between">              
+
+                <MudText Typo="Typo.h6" Class="me-4 title-table">Usuarios</MudText>
+
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Dark"
+                           StartIcon="@Icons.Material.Filled.ArrowBack"
+                           OnClick="@GoBack">
+                    Volver
+                </MudButton>
+
+                <MudButton Variant="Variant.Outlined"
+                           EndIcon="@Icons.Material.Filled.Add"
+                           Color="Color.Info"
+                           OnClick="@(() => ShowModalAsync())">
+                    Nuevo
+                </MudButton>
+            </div>
+
+            <MudSpacer />
+            <FilterComponent ApplyFilter="SetFilterValue" />
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh Style="width:220px">Usuario</MudTh>
+            <MudTh Style="width:260px">Empleado</MudTh>
+            <MudTh Style="width:220px">Rol</MudTh>
+            <MudTh Style="width:130px">Estado</MudTh>
+            <MudTh Style="width:220px">Acciones</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd>@context.Username</MudTd>
+            <MudTd>@context.EmployeeName</MudTd>
+            <MudTd>@context.RoleName</MudTd>
+            <MudTd>
+                <MudIcon Icon="@(context.State? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                         Color="@(context.State ? Color.Success : Color.Error)"
+                         Style="vertical-align: middle;" />
+            </MudTd>
+            <MudTd>
+                <MudTooltip Text="Editar">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Warning"
+                               OnClick="@(() => ShowModalAsync(context.Id, true))">
+                        <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                    </MudButton>
+                </MudTooltip>
+                <MudTooltip Text="Borrar">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Error"
+                               OnClick="@(() => DeleteAsync(@context))">
+                        <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                    </MudButton>
+                </MudTooltip>
+            </MudTd>
+        </RowTemplate>
+
+        <NoRecordsContent>
+            <MudText Style="color:#000000 !important;">No hay usuarios registrados</MudText>
+        </NoRecordsContent>
+
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Número de registros"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todo"
+                           InfoFormat="@infoFormat"
+                           Class="custome-page" />
+        </PagerContent>
+    </MudTable>
+}

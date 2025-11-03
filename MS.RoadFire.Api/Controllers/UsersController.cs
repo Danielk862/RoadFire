@@ -11,19 +11,22 @@ namespace MS.RoadFire.Api.Controllers
     public class UsersController : Controller
     {
         #region Internals
+
         private readonly IUserServices _userServices;
-        private readonly IGenericServices<User, UserDto> _genericServices;
-        #endregion
+
+        #endregion Internals
 
         #region Constructor
-        public UsersController(IUserServices userServices, IGenericServices<User, UserDto> genericServices)
+
+        public UsersController(IUserServices userServices)
         {
             _userServices = userServices;
-            _genericServices = genericServices;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
+
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -62,16 +65,17 @@ namespace MS.RoadFire.Api.Controllers
         [HttpGet("paginated")]
         public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetPaginationAsync(pagination);
+            var result = await _userServices.GetPaginationAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpGet("totalRecords")]
         public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetTotalRecordsAsync(pagination);
+            var result = await _userServices.GetTotalRecordsAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
-        #endregion
+
+        #endregion Methods
     }
 }

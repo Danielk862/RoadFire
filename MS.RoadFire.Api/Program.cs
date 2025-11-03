@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MS.RoadFire.CrossCutting.LocRegister;
 using MS.RoadFire.DataAccess.Context;
+using MS.RoadFire.DataAccess.Contracts.Interfaces;
+using MS.RoadFire.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.Services.AddRegister();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddSwaggerGen(c =>
 {
     var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");

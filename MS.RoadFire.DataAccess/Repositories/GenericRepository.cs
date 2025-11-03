@@ -10,19 +10,24 @@ namespace MS.RoadFire.DataAccess.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         #region Internals
+
         private readonly DbRoadFireContext _context;
         private readonly DbSet<T> _entity;
-        #endregion
+
+        #endregion Internals
 
         #region Constructor
+
         public GenericRepository(DbRoadFireContext context)
         {
             _context = context;
             _entity = context.Set<T>();
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _entity.AsNoTracking().ToListAsync();
@@ -96,8 +101,8 @@ namespace MS.RoadFire.DataAccess.Repositories
             var queryable = _entity.AsQueryable();
             double count = await queryable.CountAsync();
             return (int)count;
-
         }
-        #endregion
+
+        #endregion Methods
     }
 }
