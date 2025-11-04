@@ -1,0 +1,109 @@
+﻿@page "/employees"
+
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@Employees"
+              @ref="table"
+              ServerData="LoadListAsync"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true">
+
+        <!-- 🔹 Barra superior -->
+        <ToolBarContent>
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <MudText Typo="Typo.h6" Class="me-4">Gestión de Empleados</MudText>
+
+                <div class="d-flex align-items-center gap-2">
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Info"
+                               EndIcon="@Icons.Material.Filled.Add"
+                               OnClick="@(() => ShowModalAsync())">
+                        Nuevo
+                    </MudButton>
+
+                    <FilterComponent ApplyFilter="SetFilterValue" />
+                </div>
+            </div>
+        </ToolBarContent>
+
+        <!-- 🔹 Encabezado -->
+        <HeaderContent>
+            <MudTh style="width: 60px;">ID</MudTh>
+            <MudTh>Primer nombre</MudTh>
+            <MudTh>Segundo nombre</MudTh>
+            <MudTh>Primer apellido</MudTh>
+            <MudTh>Segundo apellido</MudTh>
+            <MudTh>Fecha nacimiento</MudTh>
+            <MudTh>Dirección</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Celular</MudTh>
+            <MudTh>Correo</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh>Registro</MudTh>
+            <MudTh>Actualización</MudTh>
+            <MudTh style="width: 180px;">Acciones</MudTh>
+        </HeaderContent>
+
+        <!-- 🔹 Filas -->
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>@context.FirtsName</MudTd>
+            <MudTd>@context.SecondName</MudTd>
+            <MudTd>@context.Surname</MudTd>
+            <MudTd>@context.SecondSurname</MudTd>
+            <MudTd>@context.BornDate?.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.Address</MudTd>
+            <MudTd>@context.Phone</MudTd>
+            <MudTd>@context.Mobile</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>
+                <MudIcon Icon="@(context.IsActive ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                         Color="@(context.IsActive ? Color.Success : Color.Error)" />
+            </MudTd>
+            <MudTd>@(context.RegistrationDate?.ToString("dd/MM/yyyy hh:mm tt") ?? "-")</MudTd>
+            <MudTd>@(context.UpdateDate?.ToString("dd/MM/yyyy hh:mm tt") ?? "-")</MudTd>
+
+            <MudTd>
+                <div class="d-flex gap-2">
+                    <MudTooltip Text="Editar">
+                        <MudButton Variant="Variant.Filled" Color="Color.Warning"
+                                   OnClick="@(() => ShowModalAsync(context.Id, true))">
+                            <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                        </MudButton>
+                    </MudTooltip>
+
+                    <MudTooltip Text="Eliminar">
+                        <MudButton Variant="Variant.Filled" Color="Color.Error"
+                                   OnClick="@(() => DeleteAsync(context))">
+                            <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                        </MudButton>
+                    </MudTooltip>
+                </div>
+            </MudTd>
+        </RowTemplate>
+
+        <!-- 🔹 Sin registros -->
+        <NoRecordsContent>
+            <MudText>No hay empleados registrados.</MudText>
+        </NoRecordsContent>
+
+        <!-- 🔹 Paginador -->
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Registros por página"
+                           PageSizeOptions="pageSizeOptions"
+                           AllItemsText="Todo"
+                           InfoFormat="@infoFormat" />
+        </PagerContent>
+    </MudTable>
+}
+
+
+

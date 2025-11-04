@@ -30,6 +30,9 @@
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@IrAUsuarios">
                 USUARIOS
             </MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToEmployees">
+                EMPLEADOS
+            </MudButton>
         </div>
 
         <div class="user-card">
@@ -88,6 +91,13 @@
     {
         Navigation.NavigateTo("../suppliers");
     }
+
+
+    private void GoToEmployees()
+    {
+        Navigation.NavigateTo("../employees");
+    }
+
 
     private string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
 

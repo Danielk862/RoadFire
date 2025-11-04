@@ -1,0 +1,19 @@
+﻿@page "/employees/edit/{Id:int}"
+
+@if (CurrentEmployee is null)
+{
+    <Loading />
+}
+else
+{
+	<MudDialog>
+		<DialogContent>
+			<EmployeesForm CurrentEmployee="CurrentEmployee"
+						   OnValidSubmit="EditAsync"
+						   ReturnAction="Return"
+						   IsEdit="true" />
+		</DialogContent>
+	</MudDialog>
+}
+
+

@@ -39,7 +39,7 @@ namespace MS.RoadFire.Business.Models
         /// Fecha de nacimiento
         /// </summary>
         /// <example>1986-02-26</example>
-        public DateTime BornDate { get; set; }
+        public DateTime? BornDate { get; set; }
 
         /// <summary>
         /// Dirección residencia
@@ -71,6 +71,16 @@ namespace MS.RoadFire.Business.Models
         /// Estado
         /// </summary>
         /// <example>True</example>
-        public bool IsActive {  get; set; }
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Fecha de registro
+        /// </summary>
+        public DateTime? RegistrationDate { get; set; }   // ✅ Agregado
+
+        /// <summary>
+        /// Última actualización
+        /// </summary>
+        public DateTime? UpdateDate { get; set; }         // ✅ Agregado
     }
 }
