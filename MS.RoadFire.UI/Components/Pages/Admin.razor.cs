@@ -39,6 +39,11 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../stocks");
         }
 
+        private void GoToSales()
+        {
+            NavigatorManager.NavigateTo("../sales");
+        }
+
         private void GoToUsers()
         {
             NavigatorManager.NavigateTo("../suppliers");

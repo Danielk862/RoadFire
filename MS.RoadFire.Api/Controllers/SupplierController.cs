@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MS.RoadFire.Application.Contracts.Interfaces;
+using MS.RoadFire.Application.Services;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.External;
 using MS.RoadFire.DataAccess.Contracts.Entities;
@@ -28,6 +29,14 @@ namespace MS.RoadFire.Api.Controllers
         public async Task<IActionResult> GetAllAsync()
         {
             var result = await _supplierService.GetAllAsync();
+            return StatusCode((int)result.Code, result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetComboAsync()
+        {
+            var result = await _supplierService.GetAllAsync();
+            result.Data = result.Data!.OrderBy(x => x.Name).ToList();
             return StatusCode((int)result.Code, result);
         }
 

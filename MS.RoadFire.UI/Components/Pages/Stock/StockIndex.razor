@@ -1,5 +1,7 @@
 ﻿@page "/stocks"
 
+@using System.Globalization
+
 @if (loading)
 {
     <Loading />
@@ -33,8 +35,8 @@ else
             <MudTd>@context.ProductId</MudTd>
             <MudTd>@context.ProductDescription</MudTd>
             <MudTd>@context.Quantity</MudTd>
-            <MudTd>@context.ValueUnit</MudTd>
-            <MudTd>@context.Total</MudTd>
+            <MudTd>@context.ValueUnit.ToString("C0", CultureInfo.CurrentCulture)</MudTd>
+            <MudTd>@context.Total.ToString("C0", CultureInfo.CurrentCulture)</MudTd>
         </RowTemplate>
         <NoRecordsContent>
             <MudText Style="color=#000000 !important;">"No hay registros"</MudText>

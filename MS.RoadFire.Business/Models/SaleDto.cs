@@ -27,7 +27,7 @@ namespace MS.RoadFire.Business.Models
         /// </summary>
         /// <example>Salida</example>
         [Required]
-        [RegularExpression("^(Venta)$", ErrorMessage = "El campo Type solo permite venta")]
+        [RegularExpression("^(Venta)$", ErrorMessage = "El campo tipo solo permite venta")]
         public string Type { get; set; } = string.Empty;
 
         /// <summary>

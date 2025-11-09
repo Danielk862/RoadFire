@@ -31,6 +31,14 @@ namespace MS.RoadFire.Api.Controllers
             return StatusCode((int)result.Code, result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetComboAsync()
+        {
+            var result = await _productServices.GetAllAsync();
+            result.Data = result.Data!.OrderBy(x => x.Description).ToList();
+            return StatusCode((int)result.Code, result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
