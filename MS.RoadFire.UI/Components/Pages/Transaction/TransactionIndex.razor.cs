@@ -5,24 +5,24 @@ using MS.RoadFire.UI.Models;
 using MS.RoadFire.UI.Repositories;
 using MudBlazor;
 
-namespace MS.RoadFire.UI.Components.Pages.Sales
+namespace MS.RoadFire.UI.Components.Pages.Transaction
 {
-    public partial class SalesIndex
+    public partial class TransactionIndex
     {
-        private SaleDto sale = new SaleDto();
+        private TransactionDto transaction = new TransactionDto();
 
         private List<ProductDto> Products = new List<ProductDto>();
         private ProductDto? SelectProduct;
 
-        private List<CustomerDto> Customers = new List<CustomerDto>();
-        private CustomerDto? SelectCustomer;
+        private List<string> listTypes = new List<string>();
+        private string? selectType;
 
         private int quantity = 0;
         private bool CanAddProduct => SelectProduct is not null && quantity > 0;
         private decimal TotalAmount = 0;
 
         private bool loading;
-        private const string baseUrl = "api/Sale/";
+        private const string baseUrl = "api/Transaction/";
 
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private IDialogService DialogService { get; set; } = null!;
@@ -32,43 +32,26 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
 
         protected override async Task OnInitializedAsync()
         {
-            sale.Date = DateTime.Now;
-
-            sale = new SaleDto
-            {
-                Type = "Venta"
-            };
-
+            transaction.Date = DateTime.Now;
             await LoadProducts();
-            await LoadCustomer();
+            await LoadTypes();
         }
 
-        private async Task LoadCustomer()
+        private async Task LoadTypes()
         {
-            loading = true;
-            var url = $"api/Customer/GetCombo";
-
-            var responseHttp = await Repository.GetAsync<ResponseDto<List<CustomerDto>>>(url);
-
-            if (responseHttp.Error)
-            {
-                var message = await responseHttp.GetErrorMessageAsync();
-                Snackbar.Add(message!, Severity.Error);
-                return;
-            }
-
-            Customers = responseHttp.Response!.Data!;
-            loading = false;
+            await Task.CompletedTask;
+            listTypes = new List<string> { "Entrada", "Salida" };
         }
 
-        private Task<IEnumerable<CustomerDto>> SearchCustomerAsync(string value, CancellationToken token)
+        private Task<IEnumerable<string>> SearchTypes(string value, CancellationToken token)
         {
+            IEnumerable<string> result;
+
             if (string.IsNullOrWhiteSpace(value))
-                return Task.FromResult(Customers.AsEnumerable());
-
-            var result = Customers
-                .Where(p => p.FirstName.Contains(value, StringComparison.OrdinalIgnoreCase) || p.Surname.Contains(value, StringComparison.OrdinalIgnoreCase))
-                .AsEnumerable();
+                result = listTypes;
+            else
+                result = listTypes.Where(x =>
+                    x.Contains(value, StringComparison.OrdinalIgnoreCase));
 
             return Task.FromResult(result);
         }
@@ -108,7 +91,7 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
             loading = true;
             if (SelectProduct is null) return;
 
-            var existing = sale.SaleDetailsDtos.FirstOrDefault(p => p.ProductId == SelectProduct.Id);
+            var existing = transaction.TransactionDetailDtos.FirstOrDefault(p => p.ProductId == SelectProduct.Id);
             if (existing != null)
             {
                 existing.Quantity += quantity;
@@ -116,7 +99,7 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
             }
             else
             {
-                sale.SaleDetailsDtos.Add(new SaleDetailsDto
+                transaction.TransactionDetailDtos.Add(new TransactionDetailDto
                 {
                     ProductId = SelectProduct.Id,
                     ProductDescription = SelectProduct.Description,
@@ -129,33 +112,32 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
 
             SelectProduct = null;
             quantity = 0;
-            TotalAmount = sale.SaleDetailsDtos.Sum(x => x.Total);
+            TotalAmount = transaction.TransactionDetailDtos.Sum(x => x.Total);
             loading = false;
         }
 
-        private void RemoveProduct(SaleDetailsDto item)
+        private void RemoveProduct(TransactionDetailDto item)
         {
-            sale.SaleDetailsDtos.Remove(item);
-            TotalAmount = sale.SaleDetailsDtos.Sum(x => x.Total);
+            transaction.TransactionDetailDtos.Remove(item);
+            TotalAmount = transaction.TransactionDetailDtos.Sum(x => x.Total);
         }
 
-        private async Task SaveSale()
+        private async Task SaveTransaction()
         {
             var user = await localStorage.GetAsync<int>("idUser");
-            var customer = SelectCustomer;
-            var sales = sale;
-            sale.Date = DateTime.Now;
-            sale.UserId = user.Value;
-            sale.CustomerId = customer!.Id;
+            var transa = transaction;
+            transa.Type = selectType!;
+            transaction.Date = DateTime.Now;
+            transaction.UserId = user.Value;
 
-            if (!await ValidData(sale))
+            if (!await ValidData(transa))
             {
                 var message = "Todos los datos deben ser completados";
                 Snackbar.Add(message!, Severity.Info);
                 return;
             }
 
-            var responseHttp = await Repository.PostAsync($"{baseUrl}Add", sale);
+            var responseHttp = await Repository.PostAsync($"{baseUrl}Add", transaction);
 
             if (responseHttp.Error)
             {
@@ -165,24 +147,24 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
             }
 
             loading = true;
-            Snackbar.Add("Venta realizada con éxito", Severity.Success);
+            Snackbar.Add("Movimiento realizado con éxito", Severity.Success);
             await Task.Delay(2000);
             Return();
             loading = false;
         }
 
-        private async Task<bool> ValidData(SaleDto sale)
+        private async Task<bool> ValidData(TransactionDto transaction)
         {
             await Task.CompletedTask;
-            if (sale.CustomerId.Equals(0) || sale.UserId.Equals(0)) return false;
-            if (string.IsNullOrEmpty(sale.Description) || string.IsNullOrEmpty(sale.Type)) return false;
-            if (sale.SaleDetailsDtos.Count() == 0) return false;
+            if (transaction.UserId.Equals(0)) return false;
+            if (string.IsNullOrEmpty(transaction.Description) || string.IsNullOrEmpty(transaction.Type)) return false;
+            if (transaction.TransactionDetailDtos.Count() == 0) return false;
             return true;
         }
 
         private void Return()
         {
-            NavigationManager.NavigateTo("/sales", forceLoad: true);
+            NavigationManager.NavigateTo("/transaction", forceLoad: true);
         }
 
         private async Task ReturnAction()

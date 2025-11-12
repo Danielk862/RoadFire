@@ -24,9 +24,9 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("/");
         }
 
-        private void GoToCategory()
+        private void GoToTransaction()
         {
-            NavigatorManager.NavigateTo("../categories");
+            NavigatorManager.NavigateTo("../transaction");
         }
 
         private void GoToSupplier()
@@ -34,9 +34,9 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../suppliers");
         }
 
-        private void GoToInventories()
+        private void GoToPurchase()
         {
-            NavigatorManager.NavigateTo("../stocks");
+            NavigatorManager.NavigateTo("../purchase");
         }
 
         private void GoToSales()
@@ -44,9 +44,14 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../sales");
         }
 
-        private void GoToUsers()
+        private void GoToInventories()
         {
-            NavigatorManager.NavigateTo("../suppliers");
+            NavigatorManager.NavigateTo("../stocks");
+        }
+
+        private void GoToCategory()
+        {
+            NavigatorManager.NavigateTo("../categories");
         }
 
         private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");

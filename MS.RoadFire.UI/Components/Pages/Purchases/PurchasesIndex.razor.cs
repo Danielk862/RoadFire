@@ -61,7 +61,7 @@ namespace MS.RoadFire.UI.Components.Pages.Purchases
             loading = false;
         }
 
-        private Task<IEnumerable<SupplierDto>> SearchCustomerAsync(string value, CancellationToken token)
+        private Task<IEnumerable<SupplierDto>> SearchSupplierAsync(string value, CancellationToken token)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return Task.FromResult(Supplier.AsEnumerable());
@@ -105,6 +105,7 @@ namespace MS.RoadFire.UI.Components.Pages.Purchases
 
         private void AddProduct()
         {
+            loading = true;
             if (SelectProduct is null) return;
 
             var existing = purchase.PurchaseDetailsDtos.FirstOrDefault(p => p.ProductId == SelectProduct.Id);
@@ -129,6 +130,7 @@ namespace MS.RoadFire.UI.Components.Pages.Purchases
             SelectProduct = null;
             quantity = 0;
             TotalAmount = purchase.PurchaseDetailsDtos.Sum(x => x.Total);
+            loading = false;
         }
 
         private void RemoveProduct(PurchaseDetailsDto item)
@@ -137,7 +139,7 @@ namespace MS.RoadFire.UI.Components.Pages.Purchases
             TotalAmount = purchase.PurchaseDetailsDtos.Sum(x => x.Total);
         }
 
-        private async Task SaveSale()
+        private async Task SavePurchase()
         {
             var user = await localStorage.GetAsync<int>("idUser");
             var supplier = SelectSupplier;
@@ -180,7 +182,23 @@ namespace MS.RoadFire.UI.Components.Pages.Purchases
 
         private void Return()
         {
-            NavigationManager.NavigateTo("/sales", forceLoad: true);
+            NavigationManager.NavigateTo("/purchase", forceLoad: true);
+        }
+
+        private async Task ReturnAction()
+        {
+            var rol = await localStorage.GetAsync<string>("rol");
+
+            string path = rol.Value switch
+            {
+                "Administrador" => "/Admin",
+                "Ventas" => "/Ventas",
+                "Compras" => "/Compras",
+                "Inventario" => "/Inventario",
+                _ => "/Home"
+            };
+
+            NavigationManager.NavigateTo(path);
         }
     }
 }

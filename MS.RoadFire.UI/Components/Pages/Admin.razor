@@ -5,14 +5,21 @@
 <div class="home-background">
     <div class="admin-container">
         <div class="menu-grid">
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INGRESO Y SALIDA</MudButton>
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">COMPRAS</MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToTransaction">
+                INGRESO Y SALIDA
+            </MudButton>
 
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSupplier">
                 PROVEEDOR
             </MudButton>
 
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSales">VENTAS</MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToPurchase">
+                COMPRAS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSales">
+                VENTAS
+            </MudButton>
 
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
 
@@ -24,11 +31,6 @@
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">CLIENTE</MudButton>
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCategory">
                 CATEGORIAS
-            </MudButton>
-
-            <!--por ahora programar estos con el back-->
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToUsers">
-                USUARIOS
             </MudButton>
         </div>
 

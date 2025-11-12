@@ -167,15 +167,20 @@ namespace MS.RoadFire.UI.Components.Pages.Category
             Snackbar.Add("Registro eliminado", Severity.Success);
         }
 
-        private async void ReturnAction()
+        private async Task ReturnAction()
         {
-            var result = await localStorage.GetAsync<string>("rol");
+            var rol = await localStorage.GetAsync<string>("rol");
 
-            if (result.Value!.Equals("Administrador"))
+            string path = rol.Value switch
             {
-                NavigationManager.NavigateTo($"/Admin");
-            }
+                "Administrador" => "/Admin",
+                "Ventas" => "/Ventas",
+                "Compras" => "/Compras",
+                "Inventario" => "/Inventario",
+                _ => "/Home"
+            };
 
+            NavigationManager.NavigateTo(path);
         }
     }
 }

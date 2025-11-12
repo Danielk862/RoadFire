@@ -1,4 +1,4 @@
-﻿@page "/sales"
+﻿@page "/transaction"
 
 @using MS.RoadFire.Business.Models
 @using System.Globalization
@@ -13,39 +13,33 @@
             color: black !important;
         }
     </style>
-    <MudText Typo="Typo.h5" GutterBottom="true">Registrar Venta</MudText>
+    <MudText Typo="Typo.h5" GutterBottom="true">Salida y/o Entrada Productos</MudText>
 
-    <EditForm Model="@sale">
+    <EditForm Model="@transaction">
         <DataAnnotationsValidator />
-            
+
         <MudGrid>
             <MudItem xs="12" sm="6">
                 <MudTextField Label="Fecha" Value="@DateTime.Today.ToString("dd/MM/yyyy")" ReadOnly="true" />
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudTextField Label="Descripción" @bind-Value="sale.Description" Required />
+                <MudTextField Label="Descripción" @bind-Value="transaction.Description" Required />
             </MudItem>
 
-            <MudItem xs="12" sm="6">
-                <MudSelect T="string" @bind-Value="sale.Type" ReadOnly="true">
-                    <MudSelectItem Value="sale.Type">Venta</MudSelectItem>
-                </MudSelect>
-            </MudItem>
-
-            <MudItem xs="12" sm="6">
-                <MudAutocomplete T="CustomerDto"
-                                 Label="Cliente"
+            <MudItem xs="12" sm="5">
+                <MudAutocomplete T="string"
+                                 Label="Tipo de movimiento"
                                  Dense="true"
                                  Clearable="true"
                                  Required="true"
-                                 @bind-Value="SelectCustomer"
-                                 ToStringFunc="@(p => p is null ? string.Empty : $"{p.FirstName} {p.Surname}")"
-                                 SearchFunc="SearchCustomerAsync"
-                                 ResetValueOnEmptyText="true" 
+                                 @bind-Value="selectType"
+                                 SearchFunc="@SearchTypes"
+                                 ToStringFunc="@(p => p ?? string.Empty)"
+                                 ResetValueOnEmptyText="true"
                                  Style="background-color: transparent; color: black;" />
             </MudItem>
-        </MudGrid> 
+        </MudGrid>
 
         <MudDivider Class="my-4" />
         <MudGrid>
@@ -67,7 +61,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="4" Class="d-flex align-center">
-                <MudButton Variant="Variant.Filled"  Color="Color.Info" Disabled="@(!CanAddProduct)" OnClick="AddProduct">
+                <MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="@(!CanAddProduct)" OnClick="AddProduct">
                     <MudIcon Icon="@Icons.Material.Filled.Add" /> Agregar
                 </MudButton>
             </MudItem>
@@ -76,9 +70,9 @@
         <MudSpacer />
         <MudText Typo="Typo.h4" Align="Align.Center" Class="my-4" Style="font-weight: bold;">Lista de productos</MudText>
 
-        @if (sale.SaleDetailsDtos.Count > 0)
+        @if (transaction.TransactionDetailDtos.Count > 0)
         {
-            <MudTable Items="@sale.SaleDetailsDtos" Dense="true" Hover="true" Class="mt-3">
+            <MudTable Items="@transaction.TransactionDetailDtos" Dense="true" Hover="true" Class="mt-3">
                 <HeaderContent>
                     <MudTh>Producto</MudTh>
                     <MudTh>Cantidad</MudTh>
@@ -108,9 +102,10 @@
 
         <MudButton Variant="Variant.Filled" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">Regresar</MudButton>
 
-        <MudButton Variant="Variant.Filled" Color="Color.Success" Type="Submit" OnClick="@(() => SaveSale())">
+        <MudButton Variant="Variant.Filled" Color="Color.Success" Type="Submit" OnClick="@(() => SaveTransaction())">
             <MudIcon Icon="@Icons.Material.Filled.Save" /> Guardar Venta
         </MudButton>
 
     </EditForm>
 </MudPaper>
+
