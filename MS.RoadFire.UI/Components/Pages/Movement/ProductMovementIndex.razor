@@ -18,6 +18,11 @@ else
             .mud-typography {
                 color: black !important;
             }
+
+            .table-black-pager .mud-table-pagination,
+            .table-black-pager .mud-table-pagination * {
+                color: black !important;
+            }
         </style>
         <MudItem xs="12" sm="5">
             <MudAutocomplete T="ProductDto"
@@ -61,7 +66,8 @@ else
               Hover="true"
               Striped="true"
               FixedHeader="true"
-              FixedFooter="true">
+              FixedFooter="true"
+              Class="table-black-pager">
         <ToolBarContent>
         </ToolBarContent>
         <HeaderContent>
@@ -83,5 +89,12 @@ else
         <NoRecordsContent>
             <MudText>No hay registros</MudText>
         </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Filas por página"
+                           AllItemsText="Todos"
+                           OfText="de"
+                           InfoFormat="Mostrando {first_item}-{last_item} de {all_items}"
+                           ItemsPerPageOptions="new int[] { 5, 10, 20, 50 }" />
+        </PagerContent>
     </MudTable>
 }
