@@ -7,6 +7,6 @@
     <MudTextField Label="Persona contacto" @bind-Value="@Supplier!.ContactPerson" For="@(() => Supplier!.ContactPerson)" Required="true" Class="mb-4" />
     <MudTextField Label="WebSite" @bind-Value="@Supplier!.Website" For="@(() => Supplier!.Website)" Required="true" Class="mb-4" />
     <MudTextField Label="Decripción" @bind-Value="@Supplier.Description" For="@(() => Supplier.Description)" Required="true" Class="mb-4" />
-    <MudButton Variant="Variant.Outlined" Color="Color.Info" OnClick="ReturnAction"> <MudHidden xs="true"> Cancelar </MudHidden> </MudButton>
-    <MudButton Variant="Variant.Outlined" Color="Color.Success" ButtonType="ButtonType.Submit"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Cancelar </MudHidden> </MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Success" ButtonType="ButtonType.Submit" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
 </EditForm>

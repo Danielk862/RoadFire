@@ -79,6 +79,7 @@ namespace MS.RoadFire.UI.Components.Pages.Users
                 Snackbar.Add(messageError!, Severity.Error);
                 return;
             }
+
             Return();
             Snackbar.Add("Usuario actualizado correctamente", Severity.Success);
         }

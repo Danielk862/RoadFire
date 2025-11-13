@@ -7,16 +7,16 @@ using MS.RoadFire.UI.Repositories;
 using MudBlazor;
 using System.Net;
 
-namespace MS.RoadFire.UI.Components.Pages.Roles
+namespace MS.RoadFire.UI.Components.Pages.Products
 {
-    public partial class RolesIndex
+    public partial class ProductsIndex
     {
-        private List<RoleDto>? Roles { get; set; }
-        private MudTable<RoleDto> table = new();
+        private List<ProductDto>? Products { get; set; }
+        private MudTable<ProductDto> table = new();
         private readonly int[] pageSizeOptions = { 10, 20, 50, int.MaxValue };
         private int totalRecords = 0;
         private bool loading;
-        private const string baseUrl = "api/Roles";
+        private const string baseUrl = "api/Product";
         private string infoFormat = "Registro {first_item} de {last_item} Total {all_items}";
 
         [Inject] private IRepository Repository { get; set; } = null!;
@@ -54,7 +54,7 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
             loading = false;
         }
 
-        private async Task<TableData<RoleDto>> LoadListAsync(TableState state, CancellationToken cancellationToken)
+        private async Task<TableData<ProductDto>> LoadListAsync(TableState state, CancellationToken cancellationToken)
         {
             int page = state.Page + 1;
             int pageSize = state.PageSize;
@@ -65,15 +65,15 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
                 url += $"&filter={Filter}";
             }
 
-            var responseHttp = await Repository.GetAsync<ResponseDto<List<RoleDto>>>(url);
+            var responseHttp = await Repository.GetAsync<ResponseDto<List<ProductDto>>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 Snackbar.Add(message!, Severity.Error);
-                return new TableData<RoleDto> { Items = [], TotalItems = 0 };
+                return new TableData<ProductDto> { Items = [], TotalItems = 0 };
             }
 
-            return new TableData<RoleDto>
+            return new TableData<ProductDto>
             {
                 Items = responseHttp.Response!.Data,
                 TotalItems = totalRecords,
@@ -103,11 +103,11 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
                 {
                     { "Id", id }
                 };
-                dialog = await DialogService.ShowAsync<RolesEdit>("Editar Rol", parameters, options);
+                dialog = await DialogService.ShowAsync<ProductsEdit>("Editar Producto", parameters, options);
             }
             else
             {
-                dialog = await DialogService.ShowAsync<RolesCreate>("Nuevo Rol", options);
+                dialog = await DialogService.ShowAsync<ProductsCreate>("Nuevo Producto", options);
             }
 
             var result = await dialog.Result;
@@ -119,11 +119,11 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
             }
         }
 
-        private async Task DeleteAsync(RoleDto role)
+        private async Task DeleteAsync(ProductDto product)
         {
             var parameters = new DialogParameters
             {
-                { "Message", $"¿Estás seguro de eliminar el rol: {role.Name}?" }
+                { "Message", $"¿Estás seguro de eliminar el producto: {product.Description}?" }
             };
 
             var options = new DialogOptions
@@ -139,14 +139,14 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
             if (result == null || result.Canceled)
                 return;
 
-            var responseHttp = await Repository.DeleteAsync<ResponseDto<bool>>($"{baseUrl}/Delete/{role.Id}");
+            var responseHttp = await Repository.DeleteAsync<ResponseDto<bool>>($"{baseUrl}/Delete/{product.Id}");
 
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    Snackbar.Add("El rol no fue encontrado o ya fue eliminado.", Severity.Warning);
-                    NavigationManager.NavigateTo("/gestionRoles", forceLoad: true);
+                    Snackbar.Add("El producto no fue encontrado o ya fue eliminado.", Severity.Warning);
+                    NavigationManager.NavigateTo("/products", forceLoad: true);
                 }
                 else
                 {
@@ -156,7 +156,7 @@ namespace MS.RoadFire.UI.Components.Pages.Roles
                 return;
             }
 
-            Snackbar.Add("Rol eliminado correctamente", Severity.Success);
+            Snackbar.Add("Producto eliminado correctamente", Severity.Success);
             await LoadTotalRecordsAsync();
             await table.ReloadServerData();
         }

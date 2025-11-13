@@ -72,7 +72,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="4" Class="d-flex align-center">
-                <MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="@(!CanAddProduct)" OnClick="AddProduct">
+                <MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="@(!CanAddProduct)" OnClick="AddProduct" Style="min-width: 120px; height: 45px;">
                     <MudIcon Icon="@Icons.Material.Filled.Add" /> Agregar
                 </MudButton>
             </MudItem>
@@ -111,9 +111,9 @@
 
         <MudDivider Class="my-4" />
 
-        <MudButton Variant="Variant.Filled" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction">Regresar</MudButton>
+        <MudButton Variant="Variant.Filled" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;">Regresar</MudButton>
 
-        <MudButton Variant="Variant.Filled" Color="Color.Success" Type="Submit" OnClick="@(() => SavePurchase())">
+        <MudButton Variant="Variant.Filled" Color="Color.Success" Type="Submit" OnClick="@(() => SavePurchase())" Style="min-width: 120px; height: 45px;">
             <MudIcon Icon="@Icons.Material.Filled.Save" /> Guardar Venta
         </MudButton>
 

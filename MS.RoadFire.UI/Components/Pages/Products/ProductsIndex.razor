@@ -1,4 +1,6 @@
-﻿@page "/gestionRoles"
+﻿@page "/products"
+
+@using System.Globalization
 
 @if (loading)
 {
@@ -6,7 +8,7 @@
 }
 else
 {
-    <MudTable Items="@Roles"
+    <MudTable Items="@Products"
               @ref="table"
               ServerData="LoadListAsync"
               Dense="true"
@@ -16,9 +18,9 @@ else
               FixedFooter="true">
         <ToolBarContent>
             <div class="d-flex justify-content-between">
-                <MudText Typo="Typo.h6" Class="me-4 title-table">Roles</MudText>
-                <MudButton Variant="Variant.Outlined" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;">Atrás</MudButton>
-                <MudButton Variant="Variant.Outlined"
+                <MudText Typo="Typo.h6" Class="me-4 title-table">Productos</MudText>
+                <MudButton Variant="Variant.Filled" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Tertiary" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;">Atrás</MudButton>
+                <MudButton Variant="Variant.Filled"
                            EndIcon="@Icons.Material.Filled.Add"
                            Color="Color.Info"
                            OnClick="@(() => ShowModalAsync())"
@@ -31,22 +33,26 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh Style="width:250px">Nombre</MudTh>
+            <MudTh Style="width:250px">Sku</MudTh>
             <MudTh Style="width:250px">Descripción</MudTh>
-            <MudTh Style="width:150px">Estado</MudTh>
-            <MudTh Style="width:200px">Fecha Registro</MudTh>
+            <MudTh Style="width:150px">Precio</MudTh>
+            <MudTh Style="width:200px">Categoría</MudTh>
+            <MudTh Style="width:200px">Proveedor</MudTh>
+            <MudTh Style="width:200px">Estado</MudTh>
             <MudTh Style="width:270px">Acciones</MudTh>
         </HeaderContent>
 
         <RowTemplate>
-            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.Sku</MudTd>
             <MudTd>@context.Description</MudTd>
+            <MudTd>@context.Price.ToString("C0", CultureInfo.CurrentCulture)</MudTd>
+            <MudTd>@context.CategoryName</MudTd>
+            <MudTd>@context.SupplierName</MudTd>
             <MudTd>
-                <MudIcon Icon="@(context.IsActive ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                <MudIcon Icon="@(context.IsActive? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
                          Color="@(context.IsActive ? Color.Success : Color.Error)"
                          Style="vertical-align: middle;" />
             </MudTd>
-            <MudTd>@context.RegistrationDate.ToShortDateString()</MudTd>
             <MudTd>
                 <MudTooltip Text="Editar">
                     <MudButton Variant="Variant.Filled"
@@ -55,7 +61,13 @@ else
                         <MudIcon Icon="@Icons.Material.Filled.Edit" />
                     </MudButton>
                 </MudTooltip>
-                @* Eliminar lo agregaremos luego *@
+                <MudTooltip Text="Borrar">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Error"
+                               OnClick="@(() => DeleteAsync(@context))">
+                        <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                    </MudButton>
+                </MudTooltip>
             </MudTd>
         </RowTemplate>
 

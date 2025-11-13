@@ -23,7 +23,8 @@ namespace MS.RoadFire.UI.Components.Pages.Category
                 return; 
             }
 
-            Return(); Snackbar.Add("Registro creado", Severity.Success);
+            Return(); 
+            Snackbar.Add("Registro creado", Severity.Success);
         }
 
         private void Return()

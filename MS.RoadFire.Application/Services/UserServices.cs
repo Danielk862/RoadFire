@@ -127,6 +127,7 @@ namespace MS.RoadFire.Application.Services
             try
             {
                 var user = await _genericRepository.GetAsync(id);
+                user.Password = CryptoManager.DecryptAES(user.Password);
 
                 if (user != null)
                     response.Data = _mapper.Map<UserDto>(user);
@@ -151,6 +152,8 @@ namespace MS.RoadFire.Application.Services
                 user.CreatedAt = user.CreatedAt;
                 user.UpdatedAt = DateTime.Now;
                 user.Password = CryptoManager.EncryptAES(model.Password);
+                user.RoleId = model.RoleId;
+                user.State = model.State;
 
                 if (!validEmployee.Data!.IsActive && validEmployee.Data != null)
                     user.State = false;

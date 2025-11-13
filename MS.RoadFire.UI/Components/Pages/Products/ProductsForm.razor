@@ -1,0 +1,40 @@
+﻿<EditForm Model="@Product" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudTextField Label="Sku" @bind-Value="@Product.Sku" For="@(() => Product!.Sku)" Disabled="IsEdit" Required="true" Class="mb-4" />
+    <MudTextField Label="Decripción" @bind-Value="@Product.Description" For="@(() => Product.Description)" Required="true" Class="mb-4" />
+    <MudTextField Label="Precio" @bind-Value="@Product.Price" For="@(() => Product.Price)" Required="true" Class="mb-4" />
+
+    <MudSelect T="int"
+               Label="Categorías"
+               @bind-Value="Product.CategoryId"
+               For="@(() => Product.CategoryId)"
+               Required="true"
+               Class="mb-4">
+
+        <MudSelectItem T="int" Value="0" Disabled="true">Seleccione una categoría</MudSelectItem>
+        @foreach (var cat in Categories)
+        {
+            <MudSelectItem T="int" Value="@cat.Id">@cat.Name</MudSelectItem>
+        }
+
+    </MudSelect>
+
+
+    <MudSelect T="int"
+               Label="Proveedores"
+               @bind-Value="Product.SupplierId"
+               For="@(() => Product.SupplierId)"
+               Required="true"
+               Class="mb-4">
+        <MudSelectItem T="int" Value="0" Disabled="true">Seleccione un proveedor</MudSelectItem>
+        @foreach (var sup in Suppliers)
+        {
+            <MudSelectItem T="int" Value="@sup.Id">@sup.Name</MudSelectItem>
+        }
+
+    </MudSelect>
+
+    <MudCheckBox T="bool" @bind-Value="Product.IsActive" Label="Activo" Class="mb-4" />
+    <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Cancelar </MudHidden> </MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Success" ButtonType="ButtonType.Submit" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
+</EditForm>

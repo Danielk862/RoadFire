@@ -1,0 +1,63 @@
+﻿<EditForm Model="@CurrentEmployee" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="Primer Nombre"
+                @bind-Value="CurrentEmployee.FirtsName"
+                For="@(() => CurrentEmployee.FirtsName)"
+                Required="true"
+                Class="mb-4" />
+
+    <MudTextField Label="Segundo nombre"
+                  @bind-Value="CurrentEmployee.SecondName"
+                  For="@(() => CurrentEmployee.SecondName)"             
+                  Class="mb-4" />
+
+    <MudTextField Label="Primer apellido"
+                  @bind-Value="CurrentEmployee.Surname"
+                  For="@(() => CurrentEmployee.Surname)"
+                  Required="true"
+                  Class="mb-4" />
+
+    <MudTextField Label="Segundo apellido"
+                  @bind-Value="CurrentEmployee.SecondSurname"
+                  For="@(() => CurrentEmployee.SecondSurname)"               
+                  Class="mb-4" />
+
+    <MudDatePicker T="DateTime"
+                   @bind-Date="CurrentEmployee.BornDate"
+                   Label="Fecha de nacimiento"
+                   DateFormat="dd/MM/yyyy"
+                   Class="mb-4" />
+
+    <MudTextField Label="Dirección"
+                  @bind-Value="CurrentEmployee.Address"
+                  For="@(() => CurrentEmployee.Address)"
+                  Required="true" />
+
+    <MudTextField Label="Teléfono"
+                  @bind-Value="CurrentEmployee.Phone"
+                  For="@(() => CurrentEmployee.Phone)" />
+
+    <MudTextField Label="Celular"
+                  @bind-Value="CurrentEmployee.Mobile"
+                  For="@(() => CurrentEmployee.Mobile)" />
+
+    <MudTextField Label="Correo electrónico"
+                  @bind-Value="CurrentEmployee.Email"
+                  For="@(() => CurrentEmployee.Email)" />
+
+    <MudCheckBox T="bool"
+                 @bind-Value="CurrentEmployee.IsActive"
+                 Label="Activo"
+                 Class="mb-4" />
+
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Info"
+               OnClick="ReturnAction"
+               Style="min-width: 120px; height: 45px;">
+        Cancelar
+    </MudButton>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Success" ButtonType="ButtonType.Submit" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
+</EditForm>
+

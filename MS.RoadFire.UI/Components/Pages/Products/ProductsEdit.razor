@@ -1,6 +1,6 @@
-﻿@page "/usuarios/edit/{Id:int}"
+﻿@page "/products/edit/{Id:int}"
 
-@if (UserToEdit is null)
+@if (Product is null)
 {
     <Loading />
 }
@@ -8,9 +8,9 @@ else
 {
     <MudDialog>
         <DialogContent>
-            <UserForm CurrentUser="UserToEdit"
-                      Employees="Employees"
-                      Roles="Roles"
+            <ProductsForm Product="Product"
+                      Categories="Categories"
+                      Suppliers="Suppliers"
                       IsEdit="true"
                       OnValidSubmit="EditAsync"
                       ReturnAction="Return" />

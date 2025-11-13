@@ -1,0 +1,100 @@
+﻿@page "/employees"
+
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <MudTable Items="@Employees"
+              @ref="table"
+              ServerData="LoadListAsync"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              FixedHeader="true"
+              FixedFooter="true"> 
+        <ToolBarContent>
+            <div class="d-flex justify-content-between">
+                <MudText Typo="Typo.h6" Class="me-4 title-table">Empleados</MudText>
+                <MudButton Variant="Variant.Filled" 
+                    Class="mr-4" 
+                    StartIcon="@Icons.Material.Filled.ArrowBack" 
+                    Color="Color.Info" 
+                    OnClick="ReturnAction" 
+                    Style="min-width: 120px; height: 45px;">
+                    Atrás
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                    EndIcon="@Icons.Material.Filled.Add"
+                    Color="Color.Success" OnClick="@(() => ShowModalAsync())"
+                    Style="min-width: 120px; height: 45px;">
+                    Nuevo
+                </MudButton>
+            </div>
+            <MudSpacer />
+            @* <FilterComponent ApplyFilter="SetFilterValue" /> *@
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh style="width: 60px;">ID</MudTh>
+            <MudTh>Primer nombre</MudTh>
+            <MudTh>Segundo nombre</MudTh>
+            <MudTh>Primer apellido</MudTh>
+            <MudTh>Segundo apellido</MudTh>
+            <MudTh>Fecha nacimiento</MudTh>
+            <MudTh>Dirección</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Celular</MudTh>
+            <MudTh>Correo</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh style="width: 180px;">Acciones</MudTh>
+        </HeaderContent>
+
+        <!-- 🔹 Filas -->
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>@context.FirtsName</MudTd>
+            <MudTd>@context.SecondName</MudTd>
+            <MudTd>@context.Surname</MudTd>
+            <MudTd>@context.SecondSurname</MudTd>
+            <MudTd>@context.BornDate?.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.Address</MudTd>
+            <MudTd>@context.Phone</MudTd>
+            <MudTd>@context.Mobile</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>
+                <MudIcon Icon="@(context.IsActive ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                         Color="@(context.IsActive ? Color.Success : Color.Error)" />
+            </MudTd>
+
+            <MudTd>
+                <div class="d-flex gap-2">
+                    <MudTooltip Text="Editar">
+                        <MudButton Variant="Variant.Filled" Color="Color.Warning"
+                                   OnClick="@(() => ShowModalAsync(context.Id, true))">
+                            <MudIcon Icon="@Icons.Material.Filled.Edit" />
+                        </MudButton>
+                    </MudTooltip>
+
+                    <MudTooltip Text="Eliminar">
+                        <MudButton Variant="Variant.Filled" Color="Color.Error"
+                                   OnClick="@(() => DeleteAsync(context))">
+                            <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                        </MudButton>
+                    </MudTooltip>
+                </div>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText Style="color=#000000 !important;">No hay empleados registrados.</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="Número de registros"
+                PageSizeOptions="pageSizeOptions"
+                AllItemsText="Todo"
+                InfoFormat="@infoFormat"
+                Class="custome-page" />
+        </PagerContent>
+    </MudTable>
+}

@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Components;
 using MS.RoadFire.Business.Models;
-using MS.RoadFire.Common.Helpers;
+using MS.RoadFire.UI.Models;
 using MS.RoadFire.UI.Repositories;
 using MudBlazor;
 using System.Net;
 
-namespace MS.RoadFire.UI.Components.Pages.Category
+namespace MS.RoadFire.UI.Components.Pages.Products
 {
-    public partial class CategoriesEdit
+    public partial class ProductsEdit
     {
-        private CategoryDto? Category;
+        private ProductDto? Product;
+        private List<CategoryDto> Categories = new();
+        private List<SupplierDto> Suppliers = new();
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ISnackbar Snackbar { get; set; } = null!;
@@ -17,13 +19,14 @@ namespace MS.RoadFire.UI.Components.Pages.Category
 
         protected override async Task OnInitializedAsync()
         {
-            var responseHttp = await Repository.GetAsync<ResponseDto<CategoryDto>>($"api/Category/Get/{Id}");
+            await LoadLookupsAsync();
+            var responseHttp = await Repository.GetAsync<ResponseDto<ProductDto>>($"api/Product/Get/{Id}");
 
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("categories");
+                    NavigationManager.NavigateTo("products");
                 }
                 else
                 {
@@ -33,13 +36,24 @@ namespace MS.RoadFire.UI.Components.Pages.Category
             }
             else
             {
-                Category = responseHttp.Response!.Data;
+                Product = responseHttp.Response!.Data;
             }
+        }
+
+        private async Task LoadLookupsAsync()
+        {
+            var categories = await Repository.GetAsync<ResponseDto<List<CategoryDto>>>("api/Category/GetAll");
+            if (!categories.Error && categories.Response?.Data is not null)
+                Categories = categories.Response.Data;
+
+            var suppliers = await Repository.GetAsync<ResponseDto<List<SupplierDto>>>("api/Supplier/GetAll");
+            if (!suppliers.Error && suppliers.Response?.Data is not null)
+                Suppliers = suppliers.Response.Data;
         }
 
         private async Task EditAsync()
         {
-            var responseHttp = await Repository.PutAsync("api/Category/Update", Category);
+            var responseHttp = await Repository.PutAsync("api/Product/Update", Product);
 
             if (responseHttp.Error) 
             { 
@@ -52,9 +66,9 @@ namespace MS.RoadFire.UI.Components.Pages.Category
             Snackbar.Add("Registro actualizado.", Severity.Success);
         }
 
-        private void Return() 
+        private void Return()
         {
-            NavigationManager.NavigateTo("categories"); 
+            NavigationManager.NavigateTo("products", forceLoad: true);
         }
     }
 }

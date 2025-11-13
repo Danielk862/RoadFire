@@ -39,7 +39,7 @@ namespace MS.RoadFire.Business.Models
         /// Fecha de nacimiento
         /// </summary>
         /// <example>1986-02-26</example>
-        public DateTime BornDate { get; set; }
+        public DateTime? BornDate { get; set; }
 
         /// <summary>
         /// Dirección residencia

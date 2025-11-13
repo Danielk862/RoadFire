@@ -43,14 +43,16 @@ else
                 <MudButton Variant="Variant.Filled"
                            Color="Color.Success"
                            StartIcon="@Icons.Material.Filled.Search"
-                           OnClick="LoadProductMovements">
+                           OnClick="LoadProductMovements"
+                           Style="min-width: 120px; height: 45px;">
                     Buscar
                 </MudButton>
 
                 <MudButton Variant="Variant.Filled"
                            StartIcon="@Icons.Material.Filled.ArrowBack"
                            Color="Color.Info"
-                           OnClick="ReturnAction">
+                           OnClick="ReturnAction"
+                           Style="min-width: 120px; height: 45px;">
                     Regresar
                 </MudButton>
             </div>
@@ -90,7 +92,7 @@ else
             <MudText>No hay registros</MudText>
         </NoRecordsContent>
         <PagerContent>
-            <MudTablePager RowsPerPageString="Filas por página"
+            <MudTablePager RowsPerPageString="Número de registros"
                            AllItemsText="Todos"
                            OfText="de"
                            InfoFormat="Mostrando {first_item}-{last_item} de {all_items}"

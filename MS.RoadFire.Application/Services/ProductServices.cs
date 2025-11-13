@@ -16,16 +16,19 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<Product> _genericRepository;
         private readonly IMapper _mapper; 
         private readonly IGenericRepository<Category> _categoryRepository;
+        private readonly IGenericRepository<Supplier> _supplierRepository;
         private readonly IProductRepository _productRepository;
         #endregion
 
         #region Constructor
         public ProductServices(IGenericRepository<Product> genericRepository, IMapper mapper,
-            IGenericRepository<Category> categoryRepository, IProductRepository productRepository)
+            IGenericRepository<Category> categoryRepository, IGenericRepository<Supplier> supplierRepository, 
+            IProductRepository productRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _supplierRepository = supplierRepository;
             _productRepository = productRepository;
         }
         #endregion
@@ -38,6 +41,7 @@ namespace MS.RoadFire.Application.Services
             try
             {
                 var request = _mapper.Map<Product>(model);
+                request.RegistrationDate = DateTime.Now;
                 var validCategory = await _categoryRepository.GetAsync(model.CategoryId);
 
                 if (validCategory == null)
@@ -123,7 +127,9 @@ namespace MS.RoadFire.Application.Services
                 {
                     var data = _mapper.Map<ProductDto>(product);
                     var category = await _categoryRepository.GetAsync(data.CategoryId);
+                    var supplier = await _supplierRepository.GetAsync(data.SupplierId);
                     data.CategoryName = category.Name;
+                    data.SupplierName = supplier.Name;
                     response.Data = data;
                 }
             }
@@ -147,6 +153,7 @@ namespace MS.RoadFire.Application.Services
                 product.Price = model.Price;
                 product.CategoryId = model.CategoryId;
                 product.IsActive = model.IsActive;
+                product.UpdateDate = DateTime.Now;
 
                 var validate = await ValidData(product, model);
 
@@ -192,7 +199,17 @@ namespace MS.RoadFire.Application.Services
             try
             {
                 var request = await _productRepository.GetPaginationAsync(paginationDTO);
-                response.Data = _mapper.Map<List<ProductDto>>(request);
+                var result = _mapper.Map<List<ProductDto>>(request);
+
+                foreach (var item in result)
+                {
+                    var category = await _categoryRepository.GetAsync(item.CategoryId);
+                    var supplier = await _supplierRepository.GetAsync(item.SupplierId);
+                    item.CategoryName = category.Description;
+                    item.SupplierName = supplier.Description;
+                }
+
+                response.Data = result;
             }
             catch (Exception ex)
             {

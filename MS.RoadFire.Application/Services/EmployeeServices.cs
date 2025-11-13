@@ -39,6 +39,7 @@ namespace MS.RoadFire.Application.Services
                 if (valid.Item1 && email.Item1)
                 {
                     var request = _mapper.Map<Employee>(model);
+                    request.RegistrationDate = DateTime.Now;
                     var result = await _genericRepository.AddAsync(request);
                     response.Data = _mapper.Map<EmployeeDto>(result);
                 }
@@ -134,6 +135,7 @@ namespace MS.RoadFire.Application.Services
                 if (valid.Item1 && email.Item1)
                 {
                     var request = _mapper.Map<Employee>(model);
+                    request.UpdateDate = DateTime.Now;
                     var result = await _genericRepository.UpdateAsync(request);
 
                     if (!request.IsActive)

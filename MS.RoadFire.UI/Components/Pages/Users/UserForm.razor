@@ -1,5 +1,5 @@
 ﻿@using MS.RoadFire.Business.Models
-<EditForm Model="@CurrentUser" OnValidSubmit="() => OnValidSubmit.InvokeAsync()">
+<EditForm Model="@CurrentUser" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
     <MudTextField Label="Usuario"
@@ -41,7 +41,7 @@
                                                       is EmployeeDto empSelect ? $"{empSelect.FirtsName} {empSelect.Surname}" : "")"
                   Disabled="true"
                   Class="mb-4" />
-        }
+    }
 
     <MudSelect T="int"
                Label="Rol"
@@ -62,15 +62,17 @@
                  Label="Activo"
                  Class="mb-4" />
 
-    <MudButton Variant="Variant.Outlined"
+    <MudButton Variant="Variant.Filled"
                Color="Color.Info"
-               OnClick="() => ReturnAction.InvokeAsync()">
-        Cancelar
+               OnClick="ReturnAction"
+               Style="min-width: 120px; height: 45px;">
+        <MudHidden xs="true"> Cancelar </MudHidden>
     </MudButton>
 
-    <MudButton Variant="Variant.Outlined"
+    <MudButton Variant="Variant.Filled"
                Color="Color.Success"
-               ButtonType="ButtonType.Submit">
-        Guardar
+               ButtonType="ButtonType.Submit"
+               Style="min-width: 120px; height: 45px;">
+        <MudHidden xs="true"> Guardar </MudHidden>
     </MudButton>
 </EditForm>
