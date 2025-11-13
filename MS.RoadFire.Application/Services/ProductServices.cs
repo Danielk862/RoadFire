@@ -54,6 +54,8 @@ namespace MS.RoadFire.Application.Services
                 if (!validCategory.IsActive)
                     request.IsActive = false;
 
+                request.Category = null;
+                request.Supplier = null;
                 var result = await _genericRepository.AddAsync(request);
                 var register = _mapper.Map<ProductDto>(result);
                 register.CategoryName = validCategory.Name;
@@ -154,6 +156,7 @@ namespace MS.RoadFire.Application.Services
                 product.CategoryId = model.CategoryId;
                 product.IsActive = model.IsActive;
                 product.UpdateDate = DateTime.Now;
+                product.SupplierId = model.SupplierId;
 
                 var validate = await ValidData(product, model);
 
@@ -205,11 +208,11 @@ namespace MS.RoadFire.Application.Services
                 {
                     var category = await _categoryRepository.GetAsync(item.CategoryId);
                     var supplier = await _supplierRepository.GetAsync(item.SupplierId);
-                    item.CategoryName = category.Description;
-                    item.SupplierName = supplier.Description;
+                    item.CategoryName = category.Name;
+                    item.SupplierName = supplier.Name;
                 }
 
-                response.Data = result;
+                response.Data = result.OrderBy(x => x.Description).ToList();
             }
             catch (Exception ex)
             {

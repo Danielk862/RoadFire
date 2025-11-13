@@ -74,7 +74,7 @@ namespace MS.RoadFire.UI.Components.Pages.Users
                 return;
             }
 
-            var nuevoUsuario = new UserDto
+            var request = new UserDto
             {
                 Username = NewUser.Username,
                 Password = NewUser.Password,
@@ -83,13 +83,12 @@ namespace MS.RoadFire.UI.Components.Pages.Users
                 State = NewUser.State
             };
 
-            var responseHttp = await Repository.PostAsync("api/Users/Add", nuevoUsuario);
+            var responseHttp = await Repository.PostAsync("api/Users/Add", request);
 
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 Snackbar.Add(message ?? "No se pudo crear el usuario.", Severity.Error);
-                Console.WriteLine($"Mensaje backend: {message}");
                 return;
             }
             Return();

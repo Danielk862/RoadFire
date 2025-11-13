@@ -1,6 +1,6 @@
 ﻿<EditForm Model="@Product" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <MudTextField Label="Sku" @bind-Value="@Product.Sku" For="@(() => Product!.Sku)" Disabled="IsEdit" Required="true" Class="mb-4" />
+    <MudTextField Label="Sku" @bind-Value="@Product.Sku" For="@(() => Product   .Sku)" Disabled="IsEdit" Required="true" Class="mb-4" />
     <MudTextField Label="Decripción" @bind-Value="@Product.Description" For="@(() => Product.Description)" Required="true" Class="mb-4" />
     <MudTextField Label="Precio" @bind-Value="@Product.Price" For="@(() => Product.Price)" Required="true" Class="mb-4" />
 

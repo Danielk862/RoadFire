@@ -146,7 +146,7 @@ namespace MS.RoadFire.UI.Components.Pages.Products
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     Snackbar.Add("El producto no fue encontrado o ya fue eliminado.", Severity.Warning);
-                    NavigationManager.NavigateTo("/products", forceLoad: true);
+                    NavigationManager.NavigateTo("/productsIndex", forceLoad: true);
                 }
                 else
                 {

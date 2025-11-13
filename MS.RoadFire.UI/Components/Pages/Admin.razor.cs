@@ -70,7 +70,7 @@ namespace MS.RoadFire.UI.Components.Pages
 
         private void GoToUProducts()
         {
-            NavigatorManager.NavigateTo("../products");
+            NavigatorManager.NavigateTo("../productsIndex");
         }
 
         private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");

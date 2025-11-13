@@ -26,7 +26,7 @@ namespace MS.RoadFire.UI.Components.Pages.Products
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    NavigationManager.NavigateTo("products");
+                    NavigationManager.NavigateTo("productsIndex");
                 }
                 else
                 {
@@ -68,7 +68,7 @@ namespace MS.RoadFire.UI.Components.Pages.Products
 
         private void Return()
         {
-            NavigationManager.NavigateTo("products", forceLoad: true);
+            NavigationManager.NavigateTo("productsIndex", forceLoad: true);
         }
     }
 }

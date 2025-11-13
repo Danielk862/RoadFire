@@ -52,7 +52,7 @@ namespace MS.RoadFire.UI.Components.Pages.Products
         {
             if (string.IsNullOrWhiteSpace(Product.Description))
             {
-                Snackbar.Add("Ingrese el usuario.", Severity.Warning);
+                Snackbar.Add("Ingrese la descripción.", Severity.Warning);
                 return;
             }
 
@@ -74,7 +74,8 @@ namespace MS.RoadFire.UI.Components.Pages.Products
                 Description = Product.Description,
                 CategoryId = Product.CategoryId,
                 SupplierId = Product.SupplierId,
-                IsActive = Product.IsActive
+                IsActive = Product.IsActive,
+                Price = Product.Price,
             };
 
             var responseHttp = await Repository.PostAsync("api/Product/Add", request);
@@ -85,13 +86,14 @@ namespace MS.RoadFire.UI.Components.Pages.Products
                 Snackbar.Add(message ?? "No se pudo crear el producto.", Severity.Error);
                 return;
             }
+
             Return();
             Snackbar.Add("Producto creado correctamente", Severity.Success);
         }
 
         private void Return()
         {
-            NavigationManager.NavigateTo("/products");
+            NavigationManager.NavigateTo("productsIndex", forceLoad: true);
         }
     }
 }
