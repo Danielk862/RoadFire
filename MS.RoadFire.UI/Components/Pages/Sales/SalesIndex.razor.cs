@@ -141,34 +141,43 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
 
         private async Task SaveSale()
         {
-            var user = await localStorage.GetAsync<int>("idUser");
-            var customer = SelectCustomer;
-            var sales = sale;
-            sale.Date = DateTime.Now;
-            sale.UserId = user.Value;
-            sale.CustomerId = customer!.Id;
-
-            if (!await ValidData(sale))
-            {
-                var message = "Todos los datos deben ser completados";
-                Snackbar.Add(message!, Severity.Info);
-                return;
-            }
-
-            var responseHttp = await Repository.PostAsync($"{baseUrl}Add", sale);
-
-            if (responseHttp.Error)
-            {
-                var message = await responseHttp.GetErrorMessageAsync();
-                Snackbar.Add(message!, Severity.Error);
-                return;
-            }
-
             loading = true;
-            Snackbar.Add("Venta realizada con éxito", Severity.Success);
-            await Task.Delay(2000);
-            Return();
-            loading = false;
+            StateHasChanged();
+
+            try
+            {
+                var user = await localStorage.GetAsync<int>("idUser");
+                var customer = SelectCustomer;
+                var sales = sale;
+                sale.Date = DateTime.Now;
+                sale.UserId = user.Value;
+                sale.CustomerId = customer!.Id;
+
+                if (!await ValidData(sale))
+                {
+                    var message = "Todos los datos deben ser completados";
+                    Snackbar.Add(message!, Severity.Info);
+                    return;
+                }
+
+                var responseHttp = await Repository.PostAsync($"{baseUrl}Add", sale);
+
+                if (responseHttp.Error)
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    Snackbar.Add(message!, Severity.Error);
+                    return;
+                }
+
+                Snackbar.Add("Venta realizada con éxito", Severity.Success);
+                await Task.Delay(2000);
+                Return();
+            }
+            finally 
+            {
+                loading = false;
+                StateHasChanged();
+            }
         }
 
         private async Task<bool> ValidData(SaleDto sale)

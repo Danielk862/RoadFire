@@ -1,0 +1,19 @@
+﻿@page "/usuarios/edit/{Id:int}"
+
+@if (UserToEdit is null)
+{
+    <Loading />
+}
+else
+{
+    <MudDialog>
+        <DialogContent>
+            <UserForm CurrentUser="UserToEdit"
+                      Employees="Employees"
+                      Roles="Roles"
+                      IsEdit="true"
+                      OnValidSubmit="EditAsync"
+                      ReturnAction="Return" />
+        </DialogContent>
+    </MudDialog>
+}

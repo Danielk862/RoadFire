@@ -124,33 +124,42 @@ namespace MS.RoadFire.UI.Components.Pages.Transaction
 
         private async Task SaveTransaction()
         {
-            var user = await localStorage.GetAsync<int>("idUser");
-            var transa = transaction;
-            transa.Type = selectType!;
-            transaction.Date = DateTime.Now;
-            transaction.UserId = user.Value;
-
-            if (!await ValidData(transa))
-            {
-                var message = "Todos los datos deben ser completados";
-                Snackbar.Add(message!, Severity.Info);
-                return;
-            }
-
-            var responseHttp = await Repository.PostAsync($"{baseUrl}Add", transaction);
-
-            if (responseHttp.Error)
-            {
-                var message = await responseHttp.GetErrorMessageAsync();
-                Snackbar.Add(message!, Severity.Error);
-                return;
-            }
-
             loading = true;
-            Snackbar.Add("Movimiento realizado con éxito", Severity.Success);
-            await Task.Delay(2000);
-            Return();
-            loading = false;
+            StateHasChanged();
+
+            try
+            {
+                var user = await localStorage.GetAsync<int>("idUser");
+                var transa = transaction;
+                transa.Type = selectType!;
+                transaction.Date = DateTime.Now;
+                transaction.UserId = user.Value;
+
+                if (!await ValidData(transa))
+                {
+                    var message = "Todos los datos deben ser completados";
+                    Snackbar.Add(message!, Severity.Info);
+                    return;
+                }
+
+                var responseHttp = await Repository.PostAsync($"{baseUrl}Add", transaction);
+
+                if (responseHttp.Error)
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    Snackbar.Add(message!, Severity.Error);
+                    return;
+                }
+
+                Snackbar.Add("Movimiento realizado con éxito", Severity.Success);
+                await Task.Delay(2000);
+                Return();
+            }
+            finally 
+            {
+                loading = false;
+                StateHasChanged();
+            }
         }
 
         private async Task<bool> ValidData(TransactionDto transaction)

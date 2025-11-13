@@ -141,34 +141,43 @@ namespace MS.RoadFire.UI.Components.Pages.Purchases
 
         private async Task SavePurchase()
         {
-            var user = await localStorage.GetAsync<int>("idUser");
-            var supplier = SelectSupplier;
-            var sales = purchase;
-            purchase.Date = DateTime.Now;
-            purchase.UserId = user.Value;
-            purchase.SupplierId = supplier!.Id;
-
-            if (!await ValidData(purchase))
-            {
-                var message = "Todos los datos deben ser completados";
-                Snackbar.Add(message!, Severity.Info);
-                return;
-            }
-
-            var responseHttp = await Repository.PostAsync($"{baseUrl}Add", purchase);
-
-            if (responseHttp.Error)
-            {
-                var message = await responseHttp.GetErrorMessageAsync();
-                Snackbar.Add(message!, Severity.Error);
-                return;
-            }
-
             loading = true;
-            Snackbar.Add("Compra realizada con éxito", Severity.Success);
-            await Task.Delay(2000);
-            Return();
-            loading = false;
+            StateHasChanged();
+
+            try
+            {
+                var user = await localStorage.GetAsync<int>("idUser");
+                var supplier = SelectSupplier;
+                var sales = purchase;
+                purchase.Date = DateTime.Now;
+                purchase.UserId = user.Value;
+                purchase.SupplierId = supplier!.Id;
+
+                if (!await ValidData(purchase))
+                {
+                    var message = "Todos los datos deben ser completados";
+                    Snackbar.Add(message!, Severity.Info);
+                    return;
+                }
+
+                var responseHttp = await Repository.PostAsync($"{baseUrl}Add", purchase);
+
+                if (responseHttp.Error)
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    Snackbar.Add(message!, Severity.Error);
+                    return;
+                }
+
+                Snackbar.Add("Compra realizada con éxito", Severity.Success);
+                await Task.Delay(2000);
+                Return();
+            }
+            finally
+            {
+                loading = false;
+                StateHasChanged();
+            }
         }
 
         private async Task<bool> ValidData(PurchaseDto purchase)

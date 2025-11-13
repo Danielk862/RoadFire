@@ -84,6 +84,15 @@ namespace MS.RoadFire.DataAccess.Repositories
             return await _entity.AsNoTracking().Where(expression).ToListAsync();
         }
 
+        public virtual async Task<List<T>> GetAllInclude(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _entity.AsNoTracking();
+            foreach (var include in includes)
+                query = query.Include(include);
+
+            return await query.Where(expression).ToListAsync();
+        }
+
         public virtual async Task<IEnumerable<T>> GetPaginationAsync(PaginationDTO paginationDTO)
         {
             var queryable = _entity.AsQueryable();

@@ -36,6 +36,7 @@ namespace MS.RoadFire.CrossCutting.LocRegister
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<ITransactionServices, TransactionServices>();
             services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<IProductMovementService, ProductMovementService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)

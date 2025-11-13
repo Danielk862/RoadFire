@@ -49,9 +49,19 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../stocks");
         }
 
+        private void GoToMovements()
+        {
+            NavigatorManager.NavigateTo("../movements");
+        }
+
         private void GoToCategory()
         {
             NavigatorManager.NavigateTo("../categories");
+        }
+
+        private void GoToUsers()
+        {
+            NavigatorManager.NavigateTo("../GestionUsuarios");
         }
 
         private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");

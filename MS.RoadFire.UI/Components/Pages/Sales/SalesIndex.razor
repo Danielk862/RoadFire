@@ -3,6 +3,11 @@
 @using MS.RoadFire.Business.Models
 @using System.Globalization
 
+<MudOverlay Visible="loading" DarkBackground="true" Class="overlay-center">
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+    <MudText Typo="Typo.h6" Class="mt-4" Color="Color.Primary">Guardando Venta...</MudText>
+</MudOverlay>
+
 <MudPaper Class="pa-4 mx-auto" Style="max-width: 100%; background-color: transparent; box-shadow: none; color: black;">
     <style>
         .mud-input-label,

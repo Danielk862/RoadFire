@@ -1,0 +1,76 @@
+﻿@using MS.RoadFire.Business.Models
+<EditForm Model="@CurrentUser" OnValidSubmit="() => OnValidSubmit.InvokeAsync()">
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="Usuario"
+                  @bind-Value="CurrentUser.Username"
+                  For="@(() => CurrentUser.Username)"
+                  Required="true"
+                  Disabled="@IsEdit"
+                  Class="mb-4" />
+
+    <MudTextField Label="@(IsEdit ? "Contraseña (opcional)" : "Contraseña")"
+                  @bind-Value="CurrentUser.Password"
+                  For="@(() => CurrentUser.Password)"
+                  InputType="InputType.Password"
+                  Required="@(!IsEdit)"
+                  HelperText="@(IsEdit ? "Si no desea cambiarla, deje este campo vacío." : "")"
+                  Class="mb-4" />
+
+    @if (!IsEdit)
+    {
+        <MudSelect T="int"
+                   Label="Empleado"
+                   @bind-Value="CurrentUser.EmployeeId"
+                   For="@(() => CurrentUser.EmployeeId)"
+                   Required="true"
+                   Class="mb-4">
+
+            <MudSelectItem T="int" Value="0" Disabled="true">Seleccione un empleado</MudSelectItem>
+            @foreach (var emp in Employees)
+            {
+                <MudSelectItem T="int" Value="@emp.Id">@emp.FirtsName @emp.Surname</MudSelectItem>
+            }
+
+        </MudSelect>
+    }
+    else
+    {
+        <MudTextField Label="Empleado"
+                      Value="@(Employees?.FirstOrDefault(e => e.Id == CurrentUser.EmployeeId)
+                                                      is EmployeeDto empSelect ? $"{empSelect.FirtsName} {empSelect.Surname}" : "")"
+                  Disabled="true"
+                  Class="mb-4" />
+        }
+
+    <MudSelect T="int"
+               Label="Rol"
+               @bind-Value="CurrentUser.RoleId"
+               For="@(() => CurrentUser.RoleId)"
+               Required="true"
+               Class="mb-4">
+        <MudSelectItem T="int" Value="0" Disabled="true">Seleccione un rol</MudSelectItem>
+        @foreach (var role in Roles)
+        {
+            <MudSelectItem T="int" Value="@role.Id">@role.Name</MudSelectItem>
+        }
+
+    </MudSelect>
+
+    <MudCheckBox T="bool"
+                 @bind-Value="CurrentUser.State"
+                 Label="Activo"
+                 Class="mb-4" />
+
+    <MudButton Variant="Variant.Outlined"
+               Color="Color.Info"
+               OnClick="() => ReturnAction.InvokeAsync()">
+        Cancelar
+    </MudButton>
+
+    <MudButton Variant="Variant.Outlined"
+               Color="Color.Success"
+               ButtonType="ButtonType.Submit">
+        Guardar
+    </MudButton>
+</EditForm>
