@@ -1,0 +1,15 @@
+﻿<EditForm Model="@Customer" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudTextField Label="Tipo de Identificación" @bind-Value="@Customer.TypeIdentification" For="@(() => Customer.TypeIdentification)" Required="true" Class="mb-4" />
+    <MudTextField Label="Identificación" @bind-Value="@Customer.Identification" For="@(() => Customer.Identification)" Required="true" Class="mb-4" />
+    <MudTextField Label="Primer Nombre" @bind-Value="@Customer.FirstName" For="@(() => Customer.FirstName)" Required="true" Class="mb-4" />
+    <MudTextField Label="Segundo Nombre" @bind-Value="@Customer.SecondName" For="@(() => Customer.SecondName)" Required="false" Class="mb-4" />
+    <MudTextField Label="Primer Apellido" @bind-Value="@Customer.Surname" For="@(() => Customer.Surname)" Required="true" Class="mb-4" />
+    <MudTextField Label="Segundo Apellido" @bind-Value="@Customer.SecondSurname" For="@(() => Customer.SecondSurname)" Required="false" Class="mb-4" />
+    <MudTextField Label="Dirección" @bind-Value="@Customer.Address" For="@(() => Customer.Address)" Required="true" Class="mb-4" />
+    <MudTextField Label="Teléfono" @bind-Value="@Customer.Phone" For="@(() => Customer.Phone)" Required="true" Class="mb-4" />
+    <MudTextField Label="Email" @bind-Value="@Customer.Email" For="@(() => Customer.Email)" Required="true" Class="mb-4" />
+    <MudCheckBox T="bool" @bind-Value="Customer.IsActive" Label="Activo" Class="mb-4" />
+    <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Cancelar </MudHidden> </MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Success" ButtonType="ButtonType.Submit" Style="min-width: 120px; height: 45px;"> <MudHidden xs="true"> Guardar </MudHidden> </MudButton>
+</EditForm>

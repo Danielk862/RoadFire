@@ -57,7 +57,9 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
                 return;
             }
 
-            Customers = responseHttp.Response!.Data!;
+            var response = responseHttp.Response!.Data!;
+            var activeCustomer = response.FindAll(x => x.IsActive);
+            Customers = activeCustomer;
             loading = false;
         }
 
@@ -87,7 +89,9 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
                 return;
             }
 
-            Products = responseHttp.Response!.Data!;
+            var response = responseHttp.Response!.Data!;
+            var activeProducts = response.FindAll(x => x.IsActive);
+            Products = activeProducts;
             loading = false;
         }
 

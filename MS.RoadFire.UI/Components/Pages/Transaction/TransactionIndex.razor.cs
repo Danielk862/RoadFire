@@ -70,7 +70,9 @@ namespace MS.RoadFire.UI.Components.Pages.Transaction
                 return;
             }
 
-            Products = responseHttp.Response!.Data!;
+            var response = responseHttp.Response!.Data!;
+            var activeProducts = response.FindAll(x => x.IsActive);
+            Products = activeProducts;
             loading = false;
         }
 

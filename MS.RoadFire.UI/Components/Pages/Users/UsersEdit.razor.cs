@@ -50,12 +50,18 @@ namespace MS.RoadFire.UI.Components.Pages.Users
         private async Task LoadLookupsAsync()
         {
             var empResp = await Repository.GetAsync<ResponseDto<List<EmployeeDto>>>("api/Employees/GetAll");
+
             if (!empResp.Error && empResp.Response?.Data is not null)
                 Employees = empResp.Response.Data;
 
             var roleResp = await Repository.GetAsync<ResponseDto<List<RoleDto>>>("api/Roles/GetAll");
+
             if (!roleResp.Error && roleResp.Response?.Data is not null)
-                Roles = roleResp.Response.Data;
+            {
+                var response = roleResp.Response?.Data;
+                var resultRoles = response!.FindAll(x => x.IsActive);
+                Roles = resultRoles;
+            }
         }
 
         private async Task EditAsync()

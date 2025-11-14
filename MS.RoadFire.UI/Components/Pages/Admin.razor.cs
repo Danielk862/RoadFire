@@ -54,6 +54,11 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../movements");
         }
 
+        private void GoToCustomer()
+        {
+            NavigatorManager.NavigateTo("../customers");
+        }
+
         private void GoToCategory()
         {
             NavigatorManager.NavigateTo("../categories");

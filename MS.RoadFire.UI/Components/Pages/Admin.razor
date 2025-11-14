@@ -23,7 +23,6 @@
 
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
 
-            <!-- por ahora programar estos con el back -->
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToInventories">
                 INVENTARIOS
             </MudButton>
@@ -32,7 +31,10 @@
                 MOVIMIENTOS
             </MudButton>
 
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">CLIENTE</MudButton>
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCustomer">
+                CLIENTE
+            </MudButton>
+
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCategory">
                 CATEGORIAS
             </MudButton>

@@ -24,6 +24,7 @@ namespace MS.RoadFire.UI.Components.Pages.Users
         {
             var empResp = await Repository.GetAsync<ResponseDto<List<EmployeeDto>>>("api/Employees/GetAll");
             var roleResp = await Repository.GetAsync<ResponseDto<List<RoleDto>>>("api/Roles/GetAll");
+            var users = await Repository.GetAsync<ResponseDto<List<UserDto>>>("api/Users/GetAll");
 
             if (empResp.Error)
             {
@@ -31,7 +32,11 @@ namespace MS.RoadFire.UI.Components.Pages.Users
             }
             else
             {
-                Employees = empResp.Response?.Data ?? new();
+                var response = empResp.Response?.Data;
+                var resultEmployees = response!.FindAll(x => x.IsActive);
+                var listEmployees = resultEmployees.Where(a => !users.Response!.Data!.Any(x => x.EmployeeId == a.Id)).ToList();
+                Employees = listEmployees ?? new();
+
                 if (Employees.Count == 0)
                     Snackbar.Add("No hay empleados disponibles para asignar.", Severity.Info);
             }
@@ -42,7 +47,10 @@ namespace MS.RoadFire.UI.Components.Pages.Users
             }
             else
             {
-                Roles = roleResp.Response?.Data ?? new();
+                var response = roleResp.Response?.Data;
+                var resultRoles = response!.FindAll(x => x.IsActive);
+                Roles = resultRoles ?? new();
+
                 if (Roles.Count == 0)
                     Snackbar.Add("No hay roles configurados.", Severity.Info);
             }

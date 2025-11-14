@@ -37,6 +37,7 @@ namespace MS.RoadFire.Business.Models
 
         [Required(ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.Required))]
         [StringLength(120, ErrorMessageResourceType = typeof(MessagesResource), ErrorMessageResourceName = nameof(MessagesResource.StringLength), MinimumLength = 1)]
+        [EmailAddress(ErrorMessage = "Debes ingresar un correo electrónico válido.")]
         public string Email { get; set; } = string.Empty;
 
         public bool IsActive { get; set; }
