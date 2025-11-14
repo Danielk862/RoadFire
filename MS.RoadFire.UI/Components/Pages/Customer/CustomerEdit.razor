@@ -1,3 +1,12 @@
-﻿<h3>CustomerEdit</h3>
-
-
+﻿@if (Customer is null) 
+{ 
+    <Loading /> 
+} 
+else 
+{ 
+    <MudDialog>
+        <DialogContent>
+            <CustomerForm Customer="Customer" OnValidSubmit="EditAsync" ReturnAction="Return" IsEdit="true" />
+        </DialogContent> 
+    </MudDialog> 
+}
