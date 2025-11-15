@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
@@ -16,20 +17,25 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<SaleDetails> _genericSaleDetailsRepository;
         private readonly IGenericRepository<Product> _genericProductRepository;
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<Customer> _customerRepository;
         private readonly IStockServices _stockServices;
+        private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public SaleService(IGenericRepository<Sale> genericRepository, IGenericRepository<User> userRepository,
             IGenericRepository<SaleDetails> genericSaleDetailsRepository, IGenericRepository<Product> genericProductRepository,
-            IStockServices stockServices, IMapper mapper)
+            IStockServices stockServices, ISaleRepository saleRepository,
+            IGenericRepository<Customer> customerRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericSaleDetailsRepository = genericSaleDetailsRepository;
             _genericProductRepository = genericProductRepository;
             _userRepository = userRepository;
             _stockServices = stockServices;
+            _saleRepository = saleRepository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
         }
         #endregion
@@ -171,6 +177,60 @@ namespace MS.RoadFire.Application.Services
                 response.Messages = ex.Message;
             }
 
+            return response;
+        }
+
+        public async Task<ResponseDto<List<SaleDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<SaleDto>> response = new ResponseDto<List<SaleDto>>();
+
+            try
+            {
+                var request = await _saleRepository.GetPaginationAsync(paginationDTO);
+                var result = _mapper.Map<List<SaleDto>>(request);
+
+                foreach (var item in result)
+                {
+                    var detail = await _genericSaleDetailsRepository.GetAll(x => x.SaleId == item.Id);
+                    var saleDetails = _mapper.Map<List<SaleDetailsDto>>(detail);
+                    item.Username = request.Where(x => x.UserId == item.UserId).Select(x => x.User!.Username).FirstOrDefault()!;
+                    var customer = await  _customerRepository.Get(x => x.Id == item.CustomerId);
+                    item.CustomerName = $"{customer.FirstName} {customer.SecondName} {customer.Surname} {customer.SecondSurname}";
+
+                    item.SaleDetailsDtos.AddRange(saleDetails);
+
+                    foreach (var product in item.SaleDetailsDtos)
+                    {
+                        var searchProduct = await _genericProductRepository.GetAsync(product.ProductId);
+                        product.ProductDescription = searchProduct.Description;
+                    }
+                }
+
+                response.Data = result;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _saleRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
             return response;
         }
         #endregion

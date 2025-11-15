@@ -45,8 +45,10 @@ namespace MS.RoadFire.CrossCutting.LocRegister
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<ISaleRepository, SaleRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<IUserRerpository, UserRerpository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();

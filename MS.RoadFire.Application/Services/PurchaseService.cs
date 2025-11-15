@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
+using MS.RoadFire.Common.External;
 using MS.RoadFire.Common.Helpers;
 using MS.RoadFire.Common.Resource;
 using MS.RoadFire.DataAccess.Contracts.Entities;
 using MS.RoadFire.DataAccess.Contracts.Interfaces;
+using System.Collections.Generic;
 using System.Net;
 
 namespace MS.RoadFire.Application.Services
@@ -17,19 +19,21 @@ namespace MS.RoadFire.Application.Services
         private readonly IGenericRepository<Product> _genericProductRepository;
         private readonly IGenericRepository<User> _userRepository;
         private readonly IStockServices _stockServices;
+        private readonly IPurchaseRepository _purchaseRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructor
         public PurchaseService(IGenericRepository<Purchase> genericRepository, IGenericRepository<User> userRepository,
             IGenericRepository<PurchaseDetails> genericPurchaseDetailsRepository, IGenericRepository<Product> genericProductRepository,
-            IStockServices stockServices, IMapper mapper)
+            IStockServices stockServices, IPurchaseRepository purchaseRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _genericPurchaseDetailsRepository = genericPurchaseDetailsRepository;
             _genericProductRepository = genericProductRepository;
             _userRepository = userRepository;
             _stockServices = stockServices;
+            _purchaseRepository = purchaseRepository;
             _mapper = mapper;
         }
         #endregion
@@ -171,6 +175,58 @@ namespace MS.RoadFire.Application.Services
                 response.Messages = ex.Message;
             }
 
+            return response;
+        }
+
+        public async Task<ResponseDto<List<PurchaseDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<List<PurchaseDto>> response = new ResponseDto<List<PurchaseDto>>();
+
+            try
+            {
+                var request = await _purchaseRepository.GetPaginationAsync(paginationDTO);
+                var result = _mapper.Map<List<PurchaseDto>>(request);
+
+                foreach (var item in result)
+                {
+                    var detail = await _genericPurchaseDetailsRepository.GetAll(x => x.PurchaseId == item.Id);
+                    var purchaseDetails = _mapper.Map<List<PurchaseDetailsDto>>(detail);
+                    item.UserName = request.Where(x => x.UserId == item.UserId).Select(x => x.User!.Username).FirstOrDefault()!;
+                    item.SupplierName = request.Where(x => x.SupplierId == item.SupplierId).Select(x => x.Supplier!.Name).FirstOrDefault()!;
+                    item.PurchaseDetailsDtos.AddRange(purchaseDetails);
+
+                    foreach (var product in item.PurchaseDetailsDtos)
+                    {
+                        var searchProduct = await _genericProductRepository.GetAsync(product.ProductId);
+                        product.ProductDescription = searchProduct.Description;
+                    }
+                }
+
+                response.Data = result;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
+            return response;
+        }
+
+
+        public async Task<ResponseDto<int>> GetTotalRecordsAsync(PaginationDTO paginationDTO)
+        {
+            ResponseDto<int> response = new ResponseDto<int>();
+
+            try
+            {
+                var request = await _purchaseRepository.GetTotalRecordsAsync(paginationDTO);
+                response.Data = request;
+            }
+            catch (Exception ex)
+            {
+                response.Code = HttpStatusCode.InternalServerError;
+                response.Messages = ex.Message;
+            }
             return response;
         }
         #endregion

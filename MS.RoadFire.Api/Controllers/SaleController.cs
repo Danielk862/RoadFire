@@ -2,7 +2,6 @@
 using MS.RoadFire.Application.Contracts.Interfaces;
 using MS.RoadFire.Business.Models;
 using MS.RoadFire.Common.External;
-using MS.RoadFire.DataAccess.Contracts.Entities;
 
 namespace MS.RoadFire.Api.Controllers
 {
@@ -12,14 +11,12 @@ namespace MS.RoadFire.Api.Controllers
     {
         #region Internals
         private readonly ISaleService _saleService;
-        private readonly IGenericServices<Sale, SaleDto> _genericServices;
         #endregion
 
         #region Constructor
-        public SaleController(ISaleService saleService, IGenericServices<Sale, SaleDto> genericServices)
+        public SaleController(ISaleService saleService)
         {
             _saleService = saleService;
-            _genericServices = genericServices;
         }
         #endregion
 
@@ -48,14 +45,14 @@ namespace MS.RoadFire.Api.Controllers
         [HttpGet("paginated")]
         public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetPaginationAsync(pagination);
+            var result = await _saleService.GetPaginationAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
 
         [HttpGet("totalRecords")]
         public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
         {
-            var result = await _genericServices.GetTotalRecordsAsync(pagination);
+            var result = await _saleService.GetTotalRecordsAsync(pagination);
             return StatusCode((int)result.Code, result);
         }
         #endregion
