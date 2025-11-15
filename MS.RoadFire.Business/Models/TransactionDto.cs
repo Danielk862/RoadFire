@@ -36,6 +36,7 @@ namespace MS.RoadFire.Business.Models
         /// <example>1</example>
         [Required]
         public int UserId { get; set; }
+        public string Username { get; set; } = string.Empty;    
 
         /// <summary>
         /// Lista de detalle de los productos.

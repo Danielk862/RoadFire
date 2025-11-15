@@ -177,14 +177,30 @@ namespace MS.RoadFire.Application.Services
             return response;
         }
 
-        public async Task<ResponseDto<List<TransactionDetailDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
+        public async Task<ResponseDto<List<TransactionDto>>> GetPaginationAsync(PaginationDTO paginationDTO)
         {
-            ResponseDto<List<TransactionDetailDto>> response = new ResponseDto<List<TransactionDetailDto>>();
+            ResponseDto<List<TransactionDto>> response = new ResponseDto<List<TransactionDto>>();
 
             try
             {
                 var request = await _transactionRepository.GetPaginationAsync(paginationDTO);
-                response.Data = _mapper.Map<List<TransactionDetailDto>>(request);
+                var result = _mapper.Map<List<TransactionDto>>(request);
+
+                foreach (var item in result)
+                {
+                    var detail = await _genericTransactionDetailRepository.GetAll(x => x.TransactionId == item.Id);
+                    var transactionDetails = _mapper.Map<List<TransactionDetailDto>>(detail);
+                    item.Username = request.Where(x => x.UserId == item.UserId).Select(x => x.User!.Username).FirstOrDefault()!;
+                    item.TransactionDetailDtos.AddRange(transactionDetails);
+
+                    foreach (var product in item.TransactionDetailDtos)
+                    {
+                        var searchProduct = await _genericProductRepository.GetAsync(product.ProductId);
+                        product.ProductDescription = searchProduct.Description;
+                    }
+                }
+
+                response.Data = result;
             }
             catch (Exception ex)
             {

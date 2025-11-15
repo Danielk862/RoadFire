@@ -12,14 +12,12 @@ namespace MS.RoadFire.Api.Controllers
     {
         #region Internals
         private readonly ITransactionServices _transactionServices;
-        private readonly IGenericServices<Transaction, TransactionDto> _genericServices;
         #endregion
 
         #region Constructor
-        public TransactionController(ITransactionServices transactionServices, IGenericServices<Transaction, TransactionDto> genericServices)
+        public TransactionController(ITransactionServices transactionServices)
         {
             _transactionServices = transactionServices;
-            _genericServices = genericServices;
         }
         #endregion
 

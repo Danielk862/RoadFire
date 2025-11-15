@@ -5,7 +5,7 @@ namespace MS.RoadFire.DataAccess.Contracts.Interfaces
 {
     public interface ITransactionRepository
     {
-        Task<IEnumerable<TransactionDetail>> GetPaginationAsync(PaginationDTO pagination);
+        Task<IEnumerable<Transaction>> GetPaginationAsync(PaginationDTO pagination);
         Task<int> GetTotalRecordsAsync(PaginationDTO pagination);
     }
 }
