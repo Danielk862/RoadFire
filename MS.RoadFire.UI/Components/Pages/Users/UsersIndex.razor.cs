@@ -202,10 +202,10 @@ namespace MS.RoadFire.UI.Components.Pages.Users
 
             string path = rol.Value switch
             {
-                "Administrador" => "/Admin",
-                "Ventas" => "/Ventas",
-                "Compras" => "/Compras",
-                "Inventario" => "/Inventario",
+                "Administrador" => "/adminProfile",
+                "Ventas" => "/salesProfile",
+                "Compras" => "/purchasesProfile",
+                "Inventario" => "/inventoryProfile",
                 _ => "/Home"
             };
 

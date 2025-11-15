@@ -1,0 +1,35 @@
+﻿@page "/purchasesProfile"
+
+<div class="home-background">
+    <div class="admin-container">
+        <div class="menu-grid">
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToPurchase">
+                COMPRAS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToStocks">
+                INVENTARIOS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToMovements">
+                MOVIMIENTOS
+            </MudButton>
+        </div>
+
+        <div class="user-card">
+            <div class="user-info">
+                <h3>@(user ?? "Usuario desconocido")</h3>
+
+                <p>@currentDate</p>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Dark" Class="logout-btn" OnClick="Logout">
+                    CERRAR SESIÓN
+                </MudButton>
+            </div>
+
+            <img src="/Imagenes/user.png" class="user-img" />
+        </div>
+    </div>
+</div>

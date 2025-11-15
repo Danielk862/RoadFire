@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using MS.RoadFire.UI.Components;
+using MS.RoadFire.UI.Models;
 using MS.RoadFire.UI.Repositories;
 using MudBlazor;
 using MudBlazor.Services;
@@ -18,7 +19,7 @@ builder.Services.AddScoped<CategoriesRepository>();
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddMudServices();
-builder.Services.AddServerSideBlazor().AddCircuitOptions(opt => { opt.DetailedErrors = true; });
+builder.Services.AddServerSideBlazor().AddCircuitOptions(opt => { opt.DetailedErrors = true; }); 
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

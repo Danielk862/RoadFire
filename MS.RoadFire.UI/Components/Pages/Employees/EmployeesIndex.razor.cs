@@ -166,10 +166,10 @@ public partial class EmployeesIndex
 
         string path = rol.Value switch
         {
-            "Administrador" => "/Admin",
-            "Ventas" => "/Ventas",
-            "Compras" => "/Compras",
-            "Inventario" => "/Inventario",
+            "Administrador" => "/adminProfile",
+            "Ventas" => "/salesProfile",
+            "Compras" => "/purchasesProfile",
+            "Inventario" => "/inventoryProfile",
             _ => "/Home"
         };
 

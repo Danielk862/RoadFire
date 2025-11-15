@@ -1,44 +1,8 @@
-﻿@page "/Admin"
-@using MS.RoadFire.Business.Models
-@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+﻿@page "/adminProfile"
 
 <div class="home-background">
     <div class="admin-container">
         <div class="menu-grid">
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToTransaction">
-                INGRESO Y SALIDA
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSupplier">
-                PROVEEDOR
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToPurchase">
-                COMPRAS
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSales">
-                VENTAS
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToInventories">
-                INVENTARIOS
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToMovements">
-                MOVIMIENTOS
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCustomer">
-                CLIENTE
-            </MudButton>
-
-            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCategory">
-                CATEGORIAS
-            </MudButton>
-
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToUsers">
                 USUARIOS
             </MudButton>
@@ -47,8 +11,42 @@
                 EMPLEADOS
             </MudButton>
 
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCustomer">
+                CLIENTES
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSupplier">
+                PROVEEDORES
+            </MudButton>
+
             <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToUProducts">
                 PRODUCTOS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToCategory">
+                CATEGORIAS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToSales">
+                VENTAS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToPurchase">
+                COMPRAS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToTransaction">
+                INGRESO Y SALIDA
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning">INFORMES</MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToStocks">
+                INVENTARIOS
+            </MudButton>
+
+            <MudButton Class="menu-btn" Variant="Variant.Filled" Color="Color.Warning" OnClick="@GoToMovements">
+                MOVIMIENTOS
             </MudButton>
         </div>
 

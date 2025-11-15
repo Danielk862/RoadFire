@@ -31,31 +31,19 @@ namespace MS.RoadFire.UI.Components.Pages
                 var user = response.Response.Data;
                 await localStorage!.SetAsync("rol", user.RoleName);
                 await localStorage.SetAsync("idUser", user.Id);
+                await localStorage!.SetAsync("user", user.EmployeeName);
 
-                if (user != null && user.RoleName.Equals("Administrador"))
-                {
-                    await localStorage!.SetAsync("user", user.EmployeeName);
-                    Navigation.NavigateTo("/Admin");
-                }
-                //else if (user != null && user.RoleName.Equals("Ventas"))
-                //{
-                //    await localStorage!.SetAsync("user", user.EmployeeName);
-                //    Navigation.NavigateTo("/MenuRolVentas");
-                //}
-                //else if (user != null && user.RoleName.Equals("Compras"))
-                //{
-                //    await localStorage!.SetAsync("user", user.EmployeeName);
-                //    Navigation.NavigateTo("/MenuAdmin");
-                //}
-                //else if (user != null && user.RoleName.Equals("Inventario"))
-                //{
-                //    await localStorage!.SetAsync("user", user.EmployeeName);
-                //    Navigation.NavigateTo("/MenuInventario");
-                //}
-                //else
-                //{
-                //    Snackbar.Add("Usuario no encontrado.", Severity.Warning);
-                //}
+                if (user != null && user.RoleName.Equals("Administrador"))                
+                    Navigation.NavigateTo("/adminProfile");
+                
+                if (user != null && user.RoleName.Equals("Ventas"))                
+                    Navigation.NavigateTo("/salesProfile");
+                
+                if (user != null && user.RoleName.Equals("Compras"))                
+                    Navigation.NavigateTo("/purchasesProfile");
+                
+                if (user != null && user.RoleName.Equals("Inventario"))                
+                    Navigation.NavigateTo("/inventoryProfile");                
             }
             else
             {

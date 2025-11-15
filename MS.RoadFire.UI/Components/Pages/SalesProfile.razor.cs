@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Unity;
 
 namespace MS.RoadFire.UI.Components.Pages
 {
-    public partial class Admin
+    public partial class SalesProfile
     {
         private string? user;
         [Inject] private NavigationManager NavigatorManager { get; set; } = null!;
@@ -25,21 +24,6 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("/");
         }
 
-        private void GoToTransaction()
-        {
-            NavigatorManager.NavigateTo("../transaction");
-        }
-
-        private void GoToSupplier()
-        {
-            NavigatorManager.NavigateTo("../suppliers");
-        }
-
-        private void GoToPurchase()
-        {
-            NavigatorManager.NavigateTo("../purchase");
-        }
-
         private void GoToSales()
         {
             NavigatorManager.NavigateTo("../sales");
@@ -53,31 +37,6 @@ namespace MS.RoadFire.UI.Components.Pages
         private void GoToMovements()
         {
             NavigatorManager.NavigateTo("../movements");
-        }
-
-        private void GoToCustomer()
-        {
-            NavigatorManager.NavigateTo("../customers");
-        }
-
-        private void GoToCategory()
-        {
-            NavigatorManager.NavigateTo("../categories");
-        }
-
-        private void GoToUsers()
-        {
-            NavigatorManager.NavigateTo("../GestionUsuarios");
-        }
-
-        private void GoToUEmployees()
-        {
-            NavigatorManager.NavigateTo("../employees");
-        }
-
-        private void GoToUProducts()
-        {
-            NavigatorManager.NavigateTo("../productsIndex");
         }
 
         private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");
