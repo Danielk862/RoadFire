@@ -42,26 +42,7 @@
     background-color: transparent !important;
     font-size:30px !important;
 }
-/*.mud-typography,
-.mud-typography.h1,
-.mud-typography.h2,
-.mud-typography.h3, 
-.mud-typography.subtitle1,
-.mud-typography.body1,
-.mud-typography.body2 {
-    color: #000000 !important;
-    text-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
-}*/
-/* Cambiar el color del label de todos los MudTextField */
-/*.mud-input-label,
-.mud-input-input,
-.mud-input-underline:before,
-.mud-input-underline:after,
-.mud-input-input::placeholder {
-    color: #000000 !important; 
-    font-weight: 600;
-    text-shadow: 0 0 6px rgba(0, 0, 0, 0.5); 
-}*/
+
 /* LOGIN */
 .login-card {
     background: rgba(0, 0, 0, 0.65);
@@ -333,17 +314,30 @@ body {
     overflow-x: hidden;
 }
 
-    body::before {
-        content: "";
-        position: fixed; /* se queda fija al hacer scroll */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('/Images/pagehome.png');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        opacity: 0.7; /* <<< ajusta el nivel de transparencia (0 = invisible, 1 = opaco) */
-        z-index: -1; /* para que quede detrás del contenido */
-    }
+body::before {
+    content: "";
+    position: fixed; /* se queda fija al hacer scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/Images/pagehome.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7; /* <<< ajusta el nivel de transparencia (0 = invisible, 1 = opaco) */
+    z-index: -1; /* para que quede detrás del contenido */
+}
+
+.dialog-white-text.mud-dialog,
+.dialog-white-text .mud-dialog-content,
+.dialog-white-text .mud-dialog-content * {
+    color: white !important;
+}
+
+.dialog-white-text .mud-table *,
+.dialog-white-text .mud-table,
+.dialog-white-text .mud-td,
+.dialog-white-text .mud-th {
+    color: white !important;
+}

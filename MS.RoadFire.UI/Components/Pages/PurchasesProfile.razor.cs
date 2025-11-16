@@ -39,6 +39,11 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../movements");
         }
 
+        private void GoToInformation()
+        {
+            NavigatorManager.NavigateTo("../informationDetail");
+        }
+
         private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");
     }
 }

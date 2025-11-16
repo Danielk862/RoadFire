@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace MS.RoadFire.UI.Components.Pages
 {
-    public partial class SalesProfile
+    public partial class InformationDetail
     {
         private string? user;
         [Inject] private NavigationManager NavigatorManager { get; set; } = null!;
@@ -24,24 +24,25 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("/");
         }
 
-        private void GoToSales()
+        private void GoToInformationPurchase()
         {
-            NavigatorManager.NavigateTo("../sales");
+            NavigatorManager.NavigateTo("../informationPurchase");
         }
 
-        private void GoToStocks()
+        private async Task ReturnAction()
         {
-            NavigatorManager.NavigateTo("../stocks");
-        }
+            var rol = await localStorage.GetAsync<string>("rol");
 
-        private void GoToMovements()
-        {
-            NavigatorManager.NavigateTo("../movements");
-        }
+            string path = rol.Value switch
+            {
+                "Administrador" => "/adminProfile",
+                "Ventas" => "/salesProfile",
+                "Compras" => "/purchasesProfile",
+                "Inventario" => "/inventoryProfile",
+                _ => "/Home"
+            };
 
-        private void GoToInformation()
-        {
-            NavigatorManager.NavigateTo("../informationDetail");
+            NavigatorManager.NavigateTo(path);
         }
 
         private string currentDate = DateTime.Now.ToString("dd/MM/yyyy");

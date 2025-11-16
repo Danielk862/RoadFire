@@ -1,0 +1,36 @@
+﻿@using System.Globalization
+@using MudBlazor
+
+<MudDialog Class="dialog-white-text">
+    <DialogContent>
+
+        @if (Purchase != null && Purchase.Any())
+        {
+            <MudTable Items="Purchase" Dense="true" Hover="true">
+                <HeaderContent>
+                    <MudTh>Producto</MudTh>
+                    <MudTh>Cantidad</MudTh>
+                    <MudTh>Precio</MudTh>
+                    <MudTh>Total</MudTh>
+                </HeaderContent>
+
+                <RowTemplate Context="detail">
+                    <MudTd>@detail.ProductDescription</MudTd>
+                    <MudTd>@detail.Quantity</MudTd>
+                    <MudTd>@detail.UnitValue.ToString("C0", CultureInfo.CurrentCulture)</MudTd>
+                    <MudTd>
+                        @((detail.Quantity * detail.UnitValue)
+                                            .ToString("C0", CultureInfo.CurrentCulture))
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+                }
+        else
+        {
+            <MudText>No hay detalles</MudText>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close" Color="Color.Primary">Cerrar</MudButton>
+    </DialogActions>
+</MudDialog>
