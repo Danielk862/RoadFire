@@ -4,6 +4,7 @@ using MS.RoadFire.Business.Models;
 using MS.RoadFire.UI.Models;
 using MS.RoadFire.UI.Repositories;
 using MudBlazor;
+using Newtonsoft.Json;
 
 namespace MS.RoadFire.UI.Components.Pages.Sales
 {
@@ -169,6 +170,7 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
                 if (responseHttp.Error)
                 {
                     var message = await responseHttp.GetErrorMessageAsync();
+                    var json = JsonConvert.SerializeObject(message);
                     Snackbar.Add(message!, Severity.Error);
                     return;
                 }

@@ -146,6 +146,16 @@ namespace MS.RoadFire.UI.Components.Pages.Category
                 return;
             }
 
+            var products = await Repository.GetAsync<ResponseDto<List<ProductDto>>>($"api/Product/GetAll");
+
+            var isExist = products.Response.Data.Where(x => x.CategoryId == category.Id).FirstOrDefault();
+
+            if (isExist != null)
+            {
+                Snackbar.Add("No se puede eliminar una categoria por que tiene productos asociados.", Severity.Error);
+                return;
+            }
+
             var responseHttp = await Repository.DeleteAsync<ResponseDto<bool>>($"{baseUrl}/Delete/{category.Id}");
 
             if (responseHttp.Error)

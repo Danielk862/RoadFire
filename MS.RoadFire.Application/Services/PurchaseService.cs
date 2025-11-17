@@ -76,7 +76,9 @@ namespace MS.RoadFire.Application.Services
                 }
 
                 purchaseDto.Date = DateTime.Now;
-                var data = await _genericRepository.AddAsync(_mapper.Map<Purchase>(purchaseDto));
+                var request = _mapper.Map<Purchase>(purchaseDto);
+                request.Supplier = null;
+                var data = await _genericRepository.AddAsync(request);
 
                 foreach (var item in purchaseDto.PurchaseDetailsDtos!)
                 {

@@ -91,6 +91,16 @@ namespace MS.RoadFire.UI.Components.Pages.Users
                 State = NewUser.State
             };
 
+            var users = await Repository.GetAsync<ResponseDto<List<UserDto>>>("api/Users/GetAll");
+
+            var existUser = users.Response!.Data!.Where(x => x.Username == request.Username).FirstOrDefault();
+
+            if (existUser != null)
+            {
+                Snackbar.Add("No se puede crear por que el usuario ya existe.", Severity.Error);
+                return;
+            }
+
             var responseHttp = await Repository.PostAsync("api/Users/Add", request);
 
             if (responseHttp.Error)
