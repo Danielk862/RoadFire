@@ -170,8 +170,8 @@ namespace MS.RoadFire.UI.Components.Pages.Sales
                 if (responseHttp.Error)
                 {
                     var message = await responseHttp.GetErrorMessageAsync();
-                    var json = JsonConvert.SerializeObject(message);
-                    Snackbar.Add(message!, Severity.Error);
+                    var json = System.Text.Json.JsonSerializer.Deserialize<ApiResponse>(message!);
+                    Snackbar.Add(json!.messages, Severity.Error);
                     return;
                 }
 
