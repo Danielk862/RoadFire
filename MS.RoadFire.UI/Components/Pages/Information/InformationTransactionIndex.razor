@@ -1,4 +1,4 @@
-﻿@page "/informationPurchase"
+﻿@page "/informationTransaction"
 
 @using System.Globalization
 @using MS.RoadFire.UI.Components.Pages.Information
@@ -9,7 +9,7 @@
 }
 else
 {
-    <MudTable Items="@Purchases"
+    <MudTable Items="@Transaction"
               @ref="table"
               ServerData="LoadListAsync"
               Dense="true"
@@ -19,7 +19,7 @@ else
               FixedFooter="true">
         <ToolBarContent>
             <div class="d-flex justify-content-between">
-                <MudText Typo="Typo.h6" Class="me-4 title-table">Informe de compras</MudText>
+                <MudText Typo="Typo.h6" Class="me-4 title-table">Informe de entradas y salidas</MudText>
                 <MudButton Variant="Variant.Filled" Class="mr-4" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Info" OnClick="ReturnAction" Style="min-width: 120px; height: 45px;">Atrás</MudButton>
             </div>
             <MudSpacer />
@@ -30,15 +30,13 @@ else
             <MudTh style="width: 250px;">Fecha</MudTh>
             <MudTh style="width: 250px;">Tipo</MudTh>
             <MudTh style="width: 250px;">Usuario</MudTh>
-            <MudTh style="width: 250px;">Proveedor</MudTh>
             <MudTh style="width: 250px;">Detalle</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd>@context.Description</MudTd>
             <MudTd>@context.Date.ToString("dd/MM/yyyy")</MudTd>
             <MudTd>@context.Type</MudTd>
-            <MudTd>@context.UserName</MudTd>
-            <MudTd>@context.SupplierName</MudTd>
+            <MudTd>@context.Username</MudTd>
             <MudTd>
                 <MudTooltip Text="Detalles">
                     <MudButton Variant="Variant.Filled"

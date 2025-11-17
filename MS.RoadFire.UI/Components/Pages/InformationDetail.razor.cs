@@ -29,6 +29,16 @@ namespace MS.RoadFire.UI.Components.Pages
             NavigatorManager.NavigateTo("../informationPurchase");
         }
 
+        private void GoToInformationSale()
+        {
+            NavigatorManager.NavigateTo("../informationSale");
+        }
+
+        private void GoToInformationTransaction()
+        {
+            NavigatorManager.NavigateTo("../informationTransaction");
+        }
+
         private async Task ReturnAction()
         {
             var rol = await localStorage.GetAsync<string>("rol");
