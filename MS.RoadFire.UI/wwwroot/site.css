@@ -125,19 +125,21 @@
     padding-top: 0; /* elimina espacio extra */
     flex: 1;
 }
-    /*se usa en la tarjeta del admin*/
-    .user-info h3 {
-        margin: 0;
-        font-weight: bold;
-        font-size: 1.3rem;
-        line-height: 1.2;
-    }
-    /*se usa en la tarjeta del admin*/
-    .user-info p {
-        margin: 0;
-        font-size: 1.1rem;
-        font-weight: bold;
-    }
+/*se usa en la tarjeta del admin*/
+.user-info h3 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    color: black;
+}
+/*se usa en la tarjeta del admin*/
+.user-info p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: black;
+}
 /*se usa en la tarjeta del admin*/
 .user-img {
     width: 90px;
